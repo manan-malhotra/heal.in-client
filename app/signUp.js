@@ -3,8 +3,8 @@ import React from "react";
 
 export default function SignUp() {
     return (
-        <View>
-            <Text>SignUp</Text>
+        <View className="h-full flex-1  justify-center items-center">
+            <Text className="text-3xl">SignUp</Text>
         </View>
     );
 }
