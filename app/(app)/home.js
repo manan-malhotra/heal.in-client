@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import BlogPage from "../blog";
+import BlogPage from "./blog";
 
 export default function home() {
     return (
