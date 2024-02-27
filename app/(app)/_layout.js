@@ -9,7 +9,7 @@ export default function _layout() {
                 <Stack.Screen
                     name="home"
                     options={{
-                        headerTitle: "Test",
+                        headerTitle: "heal.in",
                     }}
                 />
             </Stack>
