@@ -1,23 +1,58 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Keyboard,
+  KeyboardAvoidingView,
+  LayoutAnimation,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import Background from "../components/Background";
 import { theme } from "../constants/Colors";
 import MyTextInput from "../components/TextInput";
 
 export default function SignIn() {
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setKeyboardVisible(false);
+      }
+    );
+
+    // cleanup function
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   return (
     <View style={styles.container}>
       <Background>
-        <View style={styles.loginView}>
+        <KeyboardAvoidingView style={[styles.loginView, keyboardVisible && { height:"90%" }]}>
           <Text style={styles.header}>heal.in</Text>
           <View style={styles.emailInputView}>
             <MyTextInput placeholderText={"Email address"} />
           </View>
           <View style={styles.passwordInputView}>
-            <MyTextInput placeholderText={"Password"} />
+            <MyTextInput placeholderText={"Password"} isPassword={true} />
           </View>
           <View style={styles.buttonView}>
-            <TouchableOpacity style={styles.loginButton} onPress={() => console.log("Login pressed")}>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => console.log("Login pressed")}
+            >
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
           </View>
@@ -31,7 +66,7 @@ export default function SignIn() {
               <Text style={styles.link}> Sign up.</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Background>
     </View>
   );
@@ -47,12 +82,12 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "500",
     color: "#1877F2",
-    paddingTop:40,
+    paddingTop: 40,
   },
   loginView: {
     width: "80%",
     maxWidth: 500,
-    height: "60%",
+    height: "70%",
     maxHeight: 600,
     backgroundColor: "white",
     justifyContent: "center",
@@ -69,7 +104,7 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     color: "#1877F2",
   },
-  dontHaveAcc:{
+  dontHaveAcc: {
     paddingTop: 20,
     fontSize: 18,
     fontWeight: 500,
@@ -100,7 +135,7 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: "#1877F2",
     paddingVertical: 12,
-    borderRadius: 10, 
+    borderRadius: 10,
     alignItems: "center",
   },
   buttonText: {
@@ -110,7 +145,7 @@ const styles = StyleSheet.create({
   },
   line: {
     width: "80%",
-    marginTop:30,
+    marginTop: 30,
     height: 1,
     backgroundColor: "black",
     marginVertical: 0,
