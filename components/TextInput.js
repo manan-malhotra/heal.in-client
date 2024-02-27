@@ -3,7 +3,7 @@ import React from 'react'
 import { TextInput as Input } from 'react-native-paper'
 import { theme } from '../constants/Colors'
 
-export default function MyTextInput({ errorInput, placeholderText, ...props }) {
+export default function MyTextInput({ errorInput, placeholderText, isPassword, ...props }) {
   return (
     <View style={styles.inputContainer}>
       <Input
@@ -11,6 +11,7 @@ export default function MyTextInput({ errorInput, placeholderText, ...props }) {
         selectionColor={theme.colors.primary}
         underlineColor="transparent"
         placeholder={placeholderText}
+        secureTextEntry={isPassword} 
         {...props}
       />
     </View>
