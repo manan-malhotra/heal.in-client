@@ -1,10 +1,19 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput as Input } from 'react-native-paper';
 import { theme } from '../constants/Colors';
 
 export default function MyTextInput({ errorInput, placeholderText, isPassword, isEmail, isNum, ...props }) {
-  const keyboardType = isEmail ? 'email-address' : isNum ? 'numeric' : 'default';
+  const [text, setText] = useState('');
+
+  const handleChangeText = (value) => {
+    if (isNum) {
+      const numericValue = value.replace(/[^0-9]/g, ''); 
+      setText(numericValue);
+    } else {
+      setText(value);
+    }
+  };
 
   return (
     <View style={styles.inputContainer}>
@@ -14,8 +23,10 @@ export default function MyTextInput({ errorInput, placeholderText, isPassword, i
         underlineColor="transparent"
         placeholder={placeholderText}
         secureTextEntry={isPassword}
-        keyboardType={keyboardType} 
+        keyboardType={isEmail ? 'email-address' : isNum ? 'numeric' : 'default'}
         autoCapitalize={isEmail ? 'none' : 'sentences'}
+        value={text}
+        onChangeText={handleChangeText}
         {...props}
       />
     </View>
