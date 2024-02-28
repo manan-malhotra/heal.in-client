@@ -5,7 +5,7 @@ import TabNavigation from "../Navigation";
 export default function home() {
     return (
         <View className="h-full">
-            <TabNavigation />
+            <TabNavigation/>
         </View>
     );
 }

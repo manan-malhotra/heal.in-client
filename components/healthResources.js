@@ -23,15 +23,17 @@ const HealthResources = () => {
                 <Text style = {{fontStyle: 'italic',textAlign: 'center'}}>Self Help Videos</Text>
               </View>
               <View style = {styles.resources_column}>
+                <TouchableOpacity onPress={()=>{router.push("journal")}}>
                 <View style={styles.resCard}>
                     <View style={styles.innerresCard}>
                           <Image source={require('../assets/images/Resources/mindnotes.png')} style={styles.resImage}/>
                     </View>
                 </View>
                 <Text style = {{fontStyle: 'italic',textAlign: 'center'}}>Journal</Text>
+                </TouchableOpacity>
               </View>
               <View style = {styles.resources_column}>
-              <TouchableOpacity onPress={()=>{router.push("blog")}}>
+                <TouchableOpacity onPress={()=>{router.push("blog")}}>
                   <View style={styles.resCard}>
                     <View style={styles.innerresCard}>
                       <Image source={require('../assets/images/Resources/blog.png')} style={styles.resImage} />
