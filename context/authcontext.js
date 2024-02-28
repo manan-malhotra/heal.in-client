@@ -10,7 +10,7 @@ export const AuthContextProvider = ({ children }) => {
         //onAuthChange
         setTimeout(() => {
             setIsAuthenticated(false);
-        }, 3000);
+        }, 1000);
     }, []);
 
     const login = async (username, password) => {
