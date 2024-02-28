@@ -43,7 +43,7 @@ const router = useRouter();
         <KeyboardAvoidingView style={[styles.loginView, keyboardVisible && { height:"90%" }]}>
           <Text style={styles.header}>heal.in</Text>
           <View style={styles.emailInputView}>
-            <MyTextInput placeholderText={"Email address"} />
+            <MyTextInput placeholderText={"Email address"} isEmail={true}/>
           </View>
           <View style={styles.passwordInputView}>
             <MyTextInput placeholderText={"Password"} isPassword={true} />

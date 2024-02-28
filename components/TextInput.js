@@ -1,9 +1,20 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
-import { TextInput as Input } from 'react-native-paper'
-import { theme } from '../constants/Colors'
+import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { TextInput as Input } from 'react-native-paper';
+import { theme } from '../constants/Colors';
 
-export default function MyTextInput({ errorInput, placeholderText, isPassword, ...props }) {
+export default function MyTextInput({ errorInput, placeholderText, isPassword, isEmail, isNum, ...props }) {
+  const [text, setText] = useState('');
+
+  const handleChangeText = (value) => {
+    if (isNum) {
+      const numericValue = value.replace(/[^0-9]/g, ''); 
+      setText(numericValue);
+    } else {
+      setText(value);
+    }
+  };
+
   return (
     <View style={styles.inputContainer}>
       <Input
@@ -11,20 +22,22 @@ export default function MyTextInput({ errorInput, placeholderText, isPassword, .
         selectionColor={theme.colors.primary}
         underlineColor="transparent"
         placeholder={placeholderText}
-        secureTextEntry={isPassword} 
+        secureTextEntry={isPassword}
+        keyboardType={isEmail ? 'email-address' : isNum ? 'numeric' : 'default'}
+        autoCapitalize={isEmail ? 'none' : 'sentences'}
+        value={text}
+        onChangeText={handleChangeText}
         {...props}
       />
     </View>
-  )
+  );
 }
-// const { width } = Dimensions.get('window');
-// const maxWidth = width - 40;
 
 const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     marginVertical: 10,
-    justifyContent:"center"
+    justifyContent: "center"
   },
   formInput: {
     backgroundColor: "#F4F4F4",
@@ -32,7 +45,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: "100%",
     paddingHorizontal: 12,
-    color: 'grey', // Set text color
+    color: 'grey', 
     borderWidth: 1,
     borderColor: "grey",
     borderRadius: 5,
