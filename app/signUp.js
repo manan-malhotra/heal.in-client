@@ -61,17 +61,17 @@ export default function SignUp() {
             </View>
           </View>
           <View style={styles.emailInputView}>
-            <MyTextInput placeholderText={"Email Address"} />
+            <MyTextInput placeholderText={"Email Address"} isEmail={true}/>
           </View>
           <View style={styles.pNoInputView}>
-            <MyTextInput placeholderText={"Phone Number"} />
+            <MyTextInput placeholderText={"Phone Number"} isNum={true}/>
           </View>
           <View style={styles.ageGenderView}>
             <View style={styles.genderInputView}>
               <MyTextInput placeholderText={"Gender"} />
             </View>
             <View style={styles.ageInputView}>
-              <MyTextInput placeholderText={"Age"} />
+              <MyTextInput placeholderText={"Age"} isNum={true}/>
             </View>
           </View>
           <View style={styles.passwordInputView}>

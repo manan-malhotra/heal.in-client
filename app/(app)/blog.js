@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import blogsData from '../blog_content.json';
+import blogsData from '../../data/blog_content.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {LinearGradient} from 'expo-linear-gradient';
 
