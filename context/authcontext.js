@@ -9,7 +9,7 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         //onAuthChange
         setTimeout(() => {
-            setIsAuthenticated(false);
+            setIsAuthenticated(true);
         }, 1000);
     }, []);
 
