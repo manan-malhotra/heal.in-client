@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#766ade',
   }, 
   toppart: {
     flexDirection: 'row',
@@ -169,18 +168,11 @@ const styles = StyleSheet.create({
   },
   blog: {
     marginBottom: 20,
-    backgroundColor: '#bab3f5',
+    backgroundColor: 'rgba(0,0,255,0.04)',
     borderRadius: 8,
     padding: 20,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    
     position: 'relative'
   },
   title: {
