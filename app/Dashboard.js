@@ -44,16 +44,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 
-
-  mainTitle: {
-    fontSize: 40,
-    marginTop: 20,
-  },
-
-
   scrollview:{
-    marginLeft: 10,
-    marginRight: 10,
   },
 
 });

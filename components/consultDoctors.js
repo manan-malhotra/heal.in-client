@@ -46,7 +46,9 @@ const ConsultDoctors = () => {
 const styles = StyleSheet.create({
 
     consulation:{
-        marginTop: 30,
+      marginTop: 30,
+      marginLeft: 10,
+      marginRight: 10
       },
       consulation_title:{
         fontSize: 35,

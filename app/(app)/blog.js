@@ -20,9 +20,11 @@ const BlogPage = () => {
   const gradientColors = ['rgba(255,255,255,0.2)', 'rgba(110,113,254,0.6)', 'rgba(4,0,207,0.4)'];
 
   return (
-    <ScrollView>
+    <>
       {/* Body */}
       <LinearGradient colors={gradientColors}  style={styles.gradient}>
+      <ScrollView>
+
       <View style={styles.body}>
         <Text style={styles.heading}>Our Blogs</Text>
         
@@ -51,8 +53,9 @@ const BlogPage = () => {
           ))}
         </View>
       </View>
-      </LinearGradient>
-    </ScrollView>
+      </ScrollView>
+    </LinearGradient>
+    </>
   );
 };
 

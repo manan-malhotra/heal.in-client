@@ -50,7 +50,9 @@ const styles = StyleSheet.create({
 
   
   resources:{
-    marginTop: 30,
+    marginTop: 20,
+    marginLeft: 10,
+    marginRight: 10
   },
   resources_title: {
     fontSize: 35,
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
   },
   resources_row: {
     flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
   resources_column:{
     flexDirection: 'column',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 const SelfAssessmentTools = () => {
 
@@ -13,24 +13,24 @@ const SelfAssessmentTools = () => {
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 16}}>DEPRESSION TEST</Text>
-                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 30}}>+</Text>
+                      <Text style = {{textAlign:'center',fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 14}}>DEPRESSION{"\n"}TEST</Text>
+                      <Text style = {{textAlign:'center',fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 25}}>+</Text>
                     </View>
                 </View>
               </View>
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 16}}>ANXIETY TEST</Text>
-                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 30}}>+</Text>
+                      <Text style = {{textAlign:'center',fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 15}}>ANXIETY{"\n"}TEST</Text>
+                      <Text style = {{textAlign:'center',fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 25}}>+</Text>
                     </View>
                 </View>
               </View>
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 16}}>ADHD{'\n'}TEST</Text>
-                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 30}}>+</Text>
+                          <Text style = {{textAlign:'center',fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 15}}>ADHD{'\n'}TEST</Text>
+                          <Text style = {{textAlign:'center',fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 25}}>+</Text>
                     </View>
                 </View>
               </View>
@@ -44,7 +44,9 @@ const styles = StyleSheet.create({
 
   
     sat:{
-        marginTop: 30,
+      marginTop: 20,
+      marginLeft: 10,
+      marginRight: 10
       },
       sat_title: {
         fontSize: 35,
@@ -53,30 +55,26 @@ const styles = StyleSheet.create({
       },
       sat_row: {
         flexDirection: 'row',
+        justifyContent: 'space-evenly'
       },
       sat_column:{
-        flexDirection: 'column'
+        flexDirection: 'column',
       },
       satCard: {
-        backgroundColor: 'rgba(87, 152, 236, 0.7)',
+        backgroundColor: 'rgba(87, 152, 250, 0.8)',
         marginTop: 30,
-        height: 94,
         flexDirection: 'column',
-        width: 94,
         borderRadius: 10,
-        marginLeft: 10,
-        marginRight: 10,
+        height: 100,
+        width: 100,
         padding: 3,
-        marginBottom: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
       },
       innersatCard: {
-        height: 85,
-        width: 85,
         borderRadius: 10,
-        justifyContent: 'center',
         padding: 3,
+        flex:1,
+        justifyContent: 'center', 
+        alignItems: 'center'
       },
       satImage: {
         width: 65,
