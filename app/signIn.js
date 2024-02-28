@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Background from "../components/Background";
-import { theme } from "../constants/Colors";
 import MyTextInput from "../components/TextInput";
-
+import { useRouter } from "expo-router";
 export default function SignIn() {
+const router = useRouter();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function SignIn() {
           <View style={styles.row}>
             <Text style={styles.dontHaveAcc}>Don't have an account?</Text>
             <TouchableOpacity>
-              <Text style={styles.link}> Sign up.</Text>
+              <Text style={styles.link} onPress={()=>{router.push("signUp")}}> Sign up.</Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>

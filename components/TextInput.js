@@ -17,17 +17,20 @@ export default function MyTextInput({ errorInput, placeholderText, isPassword, .
     </View>
   )
 }
+// const { width } = Dimensions.get('window');
+// const maxWidth = width - 40;
 
 const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
-    marginVertical: 10
+    marginVertical: 10,
+    justifyContent:"center"
   },
   formInput: {
     backgroundColor: "#F4F4F4",
     fontSize: 17,
     height: 40,
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 12,
     color: 'grey', // Set text color
     borderWidth: 1,
