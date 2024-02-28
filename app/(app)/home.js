@@ -1,11 +1,11 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React from "react";
-import BlogPage from "./blog";
+import TabNavigation from "../Navigation";
 
 export default function home() {
     return (
         <View className="h-full">
-            <BlogPage />
+            <TabNavigation />
         </View>
     );
 }

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import blogsData from '../blog_content.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {LinearGradient} from 'expo-linear-gradient';
+
 
 const BlogPage = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -15,9 +17,12 @@ const BlogPage = () => {
     console.log('Report clicked');
   };
 
+  const gradientColors = ['rgba(255,255,255,0.2)', 'rgba(110,113,254,0.6)', 'rgba(4,0,207,0.4)'];
+
   return (
     <ScrollView>
       {/* Body */}
+      <LinearGradient colors={gradientColors}  style={styles.gradient}>
       <View style={styles.body}>
         <Text style={styles.heading}>Our Blogs</Text>
         
@@ -46,6 +51,7 @@ const BlogPage = () => {
           ))}
         </View>
       </View>
+      </LinearGradient>
     </ScrollView>
   );
 };
@@ -54,7 +60,6 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#766ade',
   }, 
   heading: {
     fontSize: 18,
@@ -66,18 +71,11 @@ const styles = StyleSheet.create({
   },
   blog: {
     marginBottom: 20,
-    backgroundColor: '#bab3f5',
+    backgroundColor: 'rgba(0,0,255,0.07)',
     borderRadius: 8,
     padding: 20,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    
   },
   title: {
     fontSize: 18,
@@ -114,7 +112,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 8,
     right: 8,
-    backgroundColor: '#ff3131',
+    backgroundColor: 'rgba(255,0,0,0.7)',
     paddingVertical: 5,
     paddingHorizontal: 7,
     borderRadius: 8,
