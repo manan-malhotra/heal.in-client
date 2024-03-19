@@ -79,6 +79,14 @@ export const AuthContextProvider = ({ children }) => {
   const logout = async () => {
     try {
       await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("firstName");
+      await AsyncStorage.removeItem("age");
+      await AsyncStorage.removeItem("lastName");
+      await AsyncStorage.removeItem("email");
+      await AsyncStorage.removeItem("gender");
+      await AsyncStorage.removeItem("role");
+      await AsyncStorage.removeItem("contact");
       axios.defaults.headers.common["Authorization"] = "";
       setIsAuthenticated(false);
     } catch (error) {
