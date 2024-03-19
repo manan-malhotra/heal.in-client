@@ -1,17 +1,33 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextInput as Input } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
 import { theme } from '../constants/Colors';
 
-export default function MyTextInput({ errorInput, placeholderText, isPassword, isEmail, isNum, ...props }) {
-  const [text, setText] = useState('');
+export default function MyTextInput({
+  errorInput,
+  placeholderText,
+  isPassword,
+  isEmail,
+  isNum,
+  value,
+  onChangeText,
+  ...props
+}) {
+  const [text, setText] = useState(value);
+
+  useEffect(() => {
+    setText(value);
+  }, [value]);
 
   const handleChangeText = (value) => {
     if (isNum) {
-      const numericValue = value.replace(/[^0-9]/g, ''); 
+      const numericValue = value.replace(/[^0-9]/g, '');
       setText(numericValue);
     } else {
       setText(value);
+    }
+    if (onChangeText) {
+      onChangeText(value);
     }
   };
 
@@ -37,17 +53,17 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     marginVertical: 10,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   formInput: {
-    backgroundColor: "#F4F4F4",
+    backgroundColor: '#F4F4F4',
     fontSize: 17,
     height: 40,
-    width: "100%",
+    width: '100%',
     paddingHorizontal: 12,
-    color: 'grey', 
+    color: 'grey',
     borderWidth: 1,
-    borderColor: "grey",
+    borderColor: 'grey',
     borderRadius: 5,
   },
 });
