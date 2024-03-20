@@ -10,8 +10,11 @@ import { TouchableWithoutFeedback } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import entriesData from "../../data/journal_entries.json";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 
 const Journal = () => {
+    const router = useRouter();
+
     const gradientColors = [
         "rgba(255,255,255,0.2)",
         "rgba(110,113,254,0.6)",
@@ -24,8 +27,7 @@ const Journal = () => {
     };
 
     const handleNewEntry = () => {
-        // Handle creating a new entry
-        console.log("New Entry clicked");
+        router.push("newJournal");
     };
 
     const [showOptionsIndex, setShowOptionsIndex] = useState(null);

@@ -27,6 +27,7 @@ export const AuthContextProvider = ({ children }) => {
                         console.log(profileResponse.data);
                         const data = profileResponse.data;
                         const strAge = String(data.age);
+                        const strUserId = String(data.userId);
                         const strcontact = String(data.contact);
                         await AsyncStorage.setItem("firstName", data.firstName);
                         await AsyncStorage.setItem("age", strAge);
@@ -35,6 +36,7 @@ export const AuthContextProvider = ({ children }) => {
                         await AsyncStorage.setItem("gender", data.gender);
                         await AsyncStorage.setItem("role", data.role);
                         await AsyncStorage.setItem("contact", strcontact);
+                        await AsyncStorage.setItem("userId", strUserId);
                     }
                 } catch {
                     await AsyncStorage.removeItem("token");
@@ -45,6 +47,7 @@ export const AuthContextProvider = ({ children }) => {
                     await AsyncStorage.removeItem("gender");
                     await AsyncStorage.removeItem("role");
                     await AsyncStorage.removeItem("contact");
+                    await AsyncStorage.removeItem("userId");
                     axios.defaults.headers.common["Authorization"] = "";
                     setIsAuthenticated(false);
                 }
