@@ -5,12 +5,16 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import MyTextInput from "../../components/TextInput";
 import { TextInput } from "react-native-paper";
+import axios from "axios";
+import { useRouter } from "expo-router";
+import { Keyboard } from "react-native";
 
 export default function newJournal() {
+  const router = useRouter();
   const gradientColors = [
     "rgba(255,255,255,0.2)",
     "rgba(110,113,254,0.6)",
@@ -38,43 +42,91 @@ export default function newJournal() {
     const monthName = monthNames[monthIndex];
     return `${day} ${monthName} ${year}`;
   }
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [topPartVisible, setTopPartVisible] = useState(true);
+  const [numberOfLines, setNumberOfLines] = useState(18);
+
+  const handleSave = async () => {
+    try {
+      console.log("Save pressed.");
+      const response = await axios.post(process.env.API_HOST + "/api/journal", {
+        title: title,
+        description: description,
+      });
+      if (response.status === 200) {
+        router.push("journal");
+      }
+    } catch (error) {
+      console.log("Error saving post: " + error);
+    }
+  };
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setTopPartVisible(false);
+        setNumberOfLines(9);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setTopPartVisible(true);
+        setNumberOfLines(18);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
     <>
       <LinearGradient colors={gradientColors} style={styles.gradient}>
         <ScrollView>
           <View style={styles.body}>
-            <View style={styles.toppart}>
-              <View style={styles.toppartleft}>
-                <Text style={styles.heading}>
-                  Write your mind down.{"\n"}Clear your thoughts. {"\n"}The
-                  Safest place for your thoughts.
+            {topPartVisible && (<>
+              <View style={styles.toppart}>
+                <View style={styles.toppartleft}>
+                  <Text style={styles.heading}>
+                    Write your mind down.{"\n"}Clear your thoughts. {"\n"}The
+                    Safest place for your thoughts.
+                  </Text>
+                </View>
+                <View style={styles.toppartright}>
+                  <Text style={styles.author}>{getFormattedDate()}</Text>
+                </View>
+              </View>
+              <View style={styles.line}></View>
+              <View style={styles.header}>
+                <Text style={styles.entryHeading}>
+                  What's on your mind today?
                 </Text>
               </View>
-              <View style={styles.toppartright}>
-                <Text style={styles.author}>{getFormattedDate()}</Text>
-              </View>
-            </View>
-            <View style={styles.line}></View>
-            <View style={styles.header}>
-              <Text style={styles.entryHeading}>
-                What's on your mind today?
-              </Text>
-            </View>
+              </>
+            )}
             <View style={styles.entryArea}>
               <MyTextInput
                 placeholderText={"Title of your journal entry..."}
+                onChangeText={setTitle}
               ></MyTextInput>
               <View style={{}}>
                 <TextInput
                   placeholder="How was your day?"
                   editable
                   multiline
-                  numberOfLines={9}
-                  maxLength={300}
+                  numberOfLines={numberOfLines}
+                  maxLength={3000}
+                  onChangeText={setDescription}
                   style={styles.blogInput}
                 />
               </View>
-              <TouchableOpacity style={styles.saveButton}>
+              <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
             </View>
