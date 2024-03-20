@@ -17,7 +17,7 @@ const BlogPage = () => {
         const loadBlogs = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:8082/admin/getAllBlogs"
+                    process.env.API_HOST + "/admin/getAllBlogs"
                 );
                 const blog = response.data;
                 const blogDatas = [];
@@ -61,6 +61,7 @@ const BlogPage = () => {
                 setBlogs(blogDatas);
             } catch (error) {
                 // Handle error
+                console.log(error);
                 setBlogs(blogsData);
             }
         };

@@ -9,6 +9,7 @@ export const AuthContextProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(undefined);
 
     useEffect(() => {
+        console.log(process.env.API_HOST + "TEST");
         const loadToken = async () => {
             const token = await AsyncStorage.getItem("token");
             console.log(typeof token);
@@ -20,7 +21,7 @@ export const AuthContextProvider = ({ children }) => {
 
                 try {
                     const profileResponse = await axios.get(
-                        "https://sure-moray-actually.ngrok-free.app/api/user/getProfile"
+                        process.env.API_HOST + "/api/user/getProfile"
                     );
                     if (profileResponse.status === 200) {
                         console.log(profileResponse.data);
@@ -55,7 +56,7 @@ export const AuthContextProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const response = await axios.post(
-                "https://sure-moray-actually.ngrok-free.app/api/user/login",
+                process.env.API_HOST + "/api/user/login",
                 {
                     email: email,
                     password: password,
@@ -79,20 +80,25 @@ export const AuthContextProvider = ({ children }) => {
     const register = async (userData) => {
         console.log(userData);
         try {
-          const response = await axios.post("https://sure-moray-actually.ngrok-free.app/api/user/register", userData);
-    
-          if (response.status === 200) {
-            console.log("Registered: "+ response.data)
-            const token = response.data;
-            await AsyncStorage.setItem("token", token);
-            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-            setIsAuthenticated(true);
-          }
+            const response = await axios.post(
+                process.env.API_HOST + "/api/user/register",
+                userData
+            );
+
+            if (response.status === 200) {
+                console.log("Registered: " + response.data);
+                const token = response.data;
+                await AsyncStorage.setItem("token", token);
+                axios.defaults.headers.common[
+                    "Authorization"
+                ] = `Bearer ${token}`;
+                setIsAuthenticated(true);
+            }
         } catch (error) {
-          console.log("Error registering: ", error);
-          setIsAuthenticated(false);
+            console.log("Error registering: ", error);
+            setIsAuthenticated(false);
         }
-      };
+    };
     const logout = async () => {
         try {
             await AsyncStorage.removeItem("token");
