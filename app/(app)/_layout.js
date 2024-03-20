@@ -9,8 +9,8 @@ export default function _layout() {
                     name="home"
                     options={{
                         headerTitle: "heal.in",
-                        headerStyle:{
-                            backgroundColor: "#3340B0"
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
                         },
                         headerTintColor: "white",
                         navigationBarColor: "#3340B0",
@@ -20,14 +20,24 @@ export default function _layout() {
                     name="blog"
                     options={{
                         headerTitle: "Blogs",
-                        headerStyle:{
-                            backgroundColor: "#3340B0"
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
                         },
                         headerTintColor: "white",
                         navigationBarColor: "#3340B0",
                     }}
                 />
-                
+                <Stack.Screen
+                    name="journal"
+                    options={{
+                        headerTitle: "Journals",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
+                />
             </Stack>
         </>
     );
