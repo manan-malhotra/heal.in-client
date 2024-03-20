@@ -38,6 +38,17 @@ export default function _layout() {
                         navigationBarColor: "#3340B0",
                     }}
                 />
+                <Stack.Screen
+                    name="newJournal"
+                    options={{
+                        headerTitle: "New Journal Entry",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
+                />
             </Stack>
         </>
     );

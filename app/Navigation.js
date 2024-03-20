@@ -23,7 +23,7 @@ const TabNavigation = () => {
 
   const theme = {
     colors: {
-      primary: '#3340B0', // Change the color of the ripple effect here
+      primary: '#3340B0', 
     }
   };
 
