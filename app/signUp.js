@@ -7,14 +7,23 @@ import {
   LayoutAnimation,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Background from "../components/Background";
 import MyTextInput from "../components/TextInput";
 import { useRouter } from "expo-router";
+import { AuthContext } from "../context/authcontext";
 
 export default function SignUp() {
-
   const router = useRouter();
+  const { register } = useContext(AuthContext);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(-1);
+  const [gender, setGender] = useState("");
+  const [age, setAge] = useState(-1);
+  const [password, setPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -34,12 +43,28 @@ export default function SignUp() {
       }
     );
 
+    
+
     // cleanup function
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
   }, []);
+  const handleSignUp = () => {
+    const userData = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      contact: phoneNumber,
+      gender: gender,
+      age: age,
+      password: password,
+      role: "USER",
+    };
+    register(userData);
+  }
+
   return (
     <View style={styles.container}>
       <Background>
@@ -54,28 +79,28 @@ export default function SignUp() {
           <Text style={styles.header}>heal.in</Text>
           <View style={styles.name}>
             <View style={styles.fName}>
-              <MyTextInput placeholderText={"First Name"} />
+              <MyTextInput placeholderText={"First Name"} onChangeText={setFirstName} />
             </View>
             <View style={styles.lName}>
-              <MyTextInput placeholderText={"Last Name"} />
+              <MyTextInput placeholderText={"Last Name"} onChangeText={setLastName} />
             </View>
           </View>
           <View style={styles.emailInputView}>
-            <MyTextInput placeholderText={"Email Address"} isEmail={true}/>
+            <MyTextInput placeholderText={"Email Address"} onChangeText={setEmail} isEmail={true} />
           </View>
           <View style={styles.pNoInputView}>
-            <MyTextInput placeholderText={"Phone Number"} isNum={true}/>
+            <MyTextInput placeholderText={"Phone Number"} onChangeText={setPhoneNumber} isNum={true} />
           </View>
           <View style={styles.ageGenderView}>
             <View style={styles.genderInputView}>
-              <MyTextInput placeholderText={"Gender"} />
+              <MyTextInput placeholderText={"Gender"} onChangeText={setGender} />
             </View>
             <View style={styles.ageInputView}>
-              <MyTextInput placeholderText={"Age"} isNum={true}/>
+              <MyTextInput placeholderText={"Age"} isNum={true} onChangeText={setAge} />
             </View>
           </View>
           <View style={styles.passwordInputView}>
-            <MyTextInput placeholderText={"Password"} isPassword={true} />
+            <MyTextInput placeholderText={"Password"} onChangeText={setPassword} isPassword={true} />
           </View>
           <View style={styles.cPasswordInputView}>
             <MyTextInput
@@ -85,8 +110,8 @@ export default function SignUp() {
           </View>
           <View style={styles.buttonView}>
             <TouchableOpacity
-              style={styles.loginButton}
-              onPress={() => console.log("Login pressed")}
+              style={styles.signUpButton}
+              onPress={handleSignUp}
             >
               <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
@@ -94,7 +119,15 @@ export default function SignUp() {
           <View style={styles.row}>
             <Text style={styles.gotAccount}>Already have an account?</Text>
             <TouchableOpacity>
-              <Text style={styles.link} onPress={()=>{router.push("signIn")}}> Log in.</Text>
+              <Text
+                style={styles.link}
+                onPress={() => {
+                  router.push("signIn");
+                }}
+              >
+                {" "}
+                Log in.
+              </Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -151,11 +184,11 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   ageGenderView: {
-    marginTop:15,
-    width:"100%",
-    display:"flex",
-    flexDirection:"row",
-    justifyContent:"space-between"
+    marginTop: 15,
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   genderInputView: {
     width: "47%",
@@ -175,24 +208,24 @@ const styles = StyleSheet.create({
     marginTop: 15,
     width: "90%",
   },
-    buttonView: {
-      paddingTop: 15,
-      width: "50%",
-      marginTop: 15,
-      borderRadius: 10,
-      overflow: "hidden",
-    },
-    loginButton: {
-      backgroundColor: "#1877F2",
-      paddingVertical: 12,
-      borderRadius: 10,
-      alignItems: "center",
-    },
-    buttonText: {
-      color: "white",
-      fontSize: 18,
-      fontWeight: "bold",
-    },
+  buttonView: {
+    paddingTop: 15,
+    width: "50%",
+    marginTop: 15,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  signUpButton: {
+    backgroundColor: "#1877F2",
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
   row: {
     flexDirection: "row",
     marginTop: 4,
