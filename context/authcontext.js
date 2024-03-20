@@ -20,7 +20,7 @@ export const AuthContextProvider = ({ children }) => {
 
                 try {
                     const profileResponse = await axios.get(
-                        "http://localhost:8082/api/user/getProfile"
+                        "https://sure-moray-actually.ngrok-free.app/api/user/getProfile"
                     );
                     if (profileResponse.status === 200) {
                         console.log(profileResponse.data);
@@ -55,7 +55,7 @@ export const AuthContextProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const response = await axios.post(
-                "http://localhost:8082/api/user/login",
+                "https://sure-moray-actually.ngrok-free.app/api/user/login",
                 {
                     email: email,
                     password: password,
@@ -76,21 +76,26 @@ export const AuthContextProvider = ({ children }) => {
         }
     };
 
-    const register = async (username, password, email) => {
+    const register = async (userData) => {
+        console.log(userData);
         try {
-        } catch (error) {}
-    };
+          const response = await axios.post("https://sure-moray-actually.ngrok-free.app/api/user/register", userData);
+    
+          if (response.status === 200) {
+            console.log("Registered: "+ response.data)
+            const token = response.data;
+            await AsyncStorage.setItem("token", token);
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+            setIsAuthenticated(true);
+          }
+        } catch (error) {
+          console.log("Error registering: ", error);
+          setIsAuthenticated(false);
+        }
+      };
     const logout = async () => {
         try {
             await AsyncStorage.removeItem("token");
-            await AsyncStorage.removeItem("token");
-            await AsyncStorage.removeItem("firstName");
-            await AsyncStorage.removeItem("age");
-            await AsyncStorage.removeItem("lastName");
-            await AsyncStorage.removeItem("email");
-            await AsyncStorage.removeItem("gender");
-            await AsyncStorage.removeItem("role");
-            await AsyncStorage.removeItem("contact");
             axios.defaults.headers.common["Authorization"] = "";
             setIsAuthenticated(false);
         } catch (error) {
