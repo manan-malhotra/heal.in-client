@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
       },
       sat_row: {
         flexDirection: 'row',
+        justifyContent: 'space-between'
       },
       sat_column:{
         flexDirection: 'column'
@@ -60,12 +61,12 @@ const styles = StyleSheet.create({
       satCard: {
         backgroundColor: 'rgba(87, 152, 236, 0.7)',
         marginTop: 30,
-        height: 94,
+        height: '10%',
         flexDirection: 'column',
-        width: 94,
+        width: '80%',
         borderRadius: 10,
-        marginLeft: 10,
-        marginRight: 10,
+        marginLeft: '7.5%',
+        marginRight: '2%',
         padding: 3,
         marginBottom: 10,
         justifyContent: 'center',

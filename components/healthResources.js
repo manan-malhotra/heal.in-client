@@ -82,7 +82,7 @@ const HealthResources = () => {
 
 const styles = StyleSheet.create({
     resources: {
-        marginTop: 30,
+        marginTop: '5%',
     },
     resources_title: {
         fontSize: 35,
@@ -90,22 +90,22 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     resources_row: {
-        flexDirection: "row",
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     resources_column: {
         flexDirection: "column",
     },
     resCard: {
         backgroundColor: "#FFB68D",
-        marginTop: 30,
+        marginTop: '20%',
         height: 94,
-        flexDirection: "column",
         width: 94,
+        marginStart: '9%',
+        flexDirection: "column",
         borderRadius: 100,
-        marginLeft: 10,
-        marginRight: 10,
-        padding: 3,
-        marginBottom: 10,
+        padding: '5%',
+        marginBottom: '15%',
         alignItems: "center",
     },
     innerresCard: {
