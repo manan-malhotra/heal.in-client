@@ -5,9 +5,11 @@ import {
     StyleSheet,
     ScrollView,
     TouchableOpacity,
+    Alert,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Icon2 from "react-native-vector-icons/AntDesign";
 import entriesData from "../../data/journal_entries.json";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -27,11 +29,9 @@ const Journal = () => {
                 );
                 const journalData = [];
                 if (response.status === 200) {
-                    console.log(response.data);
                     response.data.map((entry) => {
                         const originalDateString = entry.entry_date;
                         const originalDate = new Date(originalDateString);
-                        console.log(originalDate.getMinutes());
                         const monthNames = [
                             "January",
                             "February",
@@ -51,7 +51,10 @@ const Journal = () => {
                         const day = originalDate.getDate();
                         const year = originalDate.getFullYear();
                         const hour = originalDate.getHours();
-                        const minute = originalDate.getMinutes();
+                        let minute = originalDate.getMinutes();
+                        if (minute < 10) {
+                            minute = "0" + minute;
+                        }
                         const formattedDate = `${month} ${day}, ${year} ${hour}:${minute}`;
                         journalData.push({
                             id: entry.entry_id,
@@ -85,14 +88,44 @@ const Journal = () => {
         router.push("newJournal");
     };
 
-    const [showOptionsIndex, setShowOptionsIndex] = useState(null);
-
-    const handleOptions = (index) => {
-        setShowOptionsIndex((prevIndex) =>
-            prevIndex === index ? null : index
-        );
+    const handleEdit = (index) => {
+        console.log(index);
     };
-
+    const handleDelete = (index, id) => {
+        console.log("deleting" + index);
+        Alert.alert("Are you sure?", "This action cannot be undone.", [
+            {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+            },
+            {
+                text: "Delete",
+                onPress: () => {
+                    deleteAPI(index, id);
+                },
+                style: "destructive",
+            },
+        ]);
+    };
+    async function deleteAPI(index, id) {
+        try {
+            console.log("deleteAPI" + index);
+            const response = await axios.delete(
+                process.env.API_HOST + "/api/journal/delete/" + index
+            );
+            console.log(response.status + "RES");
+            if (response.status === 200) {
+                const newEntries = [...entries];
+                newEntries.splice(id, 1);
+                console.log(entries.length);
+                console.log(newEntries.length);
+                setEntries(newEntries);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     function getFormattedDate() {
         const dateObj = new Date();
         const day = dateObj.getDate();
@@ -153,43 +186,48 @@ const Journal = () => {
 
                         {/* General Notes List */}
                         <View>
-                            {entries.map((entries, index) => (
+                            {entries.map((entry, index) => (
                                 <View style={styles.blog} key={index}>
                                     <TouchableWithoutFeedback
-                                        onPress={() => handleOptions(index)}
+                                        onPress={() => handleEdit(entry.id)}
                                     >
-                                        <View style={styles.optionsContainer}>
+                                        <View style={styles.editContainer}>
                                             <Icon
-                                                name="ellipsis-v"
+                                                name="pencil"
                                                 size={15}
-                                                color="black"
+                                                color="#333"
                                             />
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    {/* Render edit and delete options only if the current index matches the showOptionsIndex */}
-                                    {showOptionsIndex === index && (
-                                        <View style={styles.editDeleteOptions}>
-                                            <Text>Edit{"\n"}Delete</Text>
+                                    <TouchableWithoutFeedback
+                                        onPress={() =>
+                                            handleDelete(entry.id, index)
+                                        }
+                                    >
+                                        <View style={styles.deleteContainer}>
+                                            <Icon2
+                                                name="delete"
+                                                size={15}
+                                                color="#f5a"
+                                            />
                                         </View>
-                                    )}
+                                    </TouchableWithoutFeedback>
                                     <Text style={styles.title}>
-                                        {entries.title}
+                                        {entry.title}
                                     </Text>
                                     <Text style={styles.author}>
-                                        {entries.date}
+                                        {entry.date}
                                     </Text>
                                     <Text style={styles.content}>
                                         {/* Display only the first few lines of content */}
                                         {expandedIndex === index
-                                            ? entries.content
-                                            : entries.content.length > 100
-                                            ? entries.content.substring(
-                                                  0,
-                                                  100
-                                              ) + "......"
-                                            : entries.content}
+                                            ? entry.content
+                                            : entry.content.length > 100
+                                            ? entry.content.substring(0, 100) +
+                                              "......"
+                                            : entry.content}
                                         {/* Render "View More" button only if content is longer than 100 characters */}
-                                        {entries.content.length > 100 && (
+                                        {entry.content.length > 100 && (
                                             <Text
                                                 style={styles.viewMoreButton}
                                                 onPress={() =>
@@ -246,21 +284,13 @@ const styles = StyleSheet.create({
         fontWeight: "medium",
         marginBottom: 10,
     },
-    optionsContainer: {
+    editContainer: {
         position: "absolute",
         top: 10,
         right: 15,
         zIndex: 1,
     },
-    editDeleteOptions: {
-        backgroundColor: "white", // Ensure options have a background
-        borderRadius: 5,
-        padding: 5,
-        position: "absolute",
-        top: 30, // Adjust as needed to position options correctly
-        right: 15,
-        zIndex: 2, // Ensure options appear above other content
-    },
+    deleteContainer: { position: "absolute", bottom: 10, right: 15, zIndex: 1 },
     newButton: {
         marginBottom: 10,
         backgroundColor: "green",
@@ -287,6 +317,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,255,0.04)",
         borderRadius: 8,
         padding: 20,
+        paddingBottom: 30,
         marginBottom: 20,
 
         position: "relative",
