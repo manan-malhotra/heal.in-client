@@ -60,11 +60,11 @@ export default function newJournal() {
                 }
             );
             if (response.status === 200) {
-                router.navigate("journal");
+                router.dismissAll();
             }
         } catch (error) {
             console.log("Error saving post: " + error);
-            console.log(error.data);
+            console.log(error.data.message);
         }
     };
 
