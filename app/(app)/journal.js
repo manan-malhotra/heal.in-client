@@ -6,6 +6,9 @@ import {
     ScrollView,
     TouchableOpacity,
     Alert,
+    Modal,
+    Pressable,
+    Platform,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -15,63 +18,72 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import MyTextInput from "../../components/TextInput";
+import { TextInput } from "react-native-paper";
 
 const Journal = () => {
     const router = useRouter();
     const [entries, setEntries] = useState([]);
-    useEffect(() => {
-        console.log(process.env.API_HOST);
-        const getJournalEntries = async () => {
-            try {
-                const id = await AsyncStorage.getItem("userId");
-                const response = await axios.get(
-                    process.env.API_HOST + "/api/journal/findAll/" + id
-                );
-                const journalData = [];
-                if (response.status === 200) {
-                    response.data.map((entry) => {
-                        const originalDateString = entry.entry_date;
-                        const originalDate = new Date(originalDateString);
-                        const monthNames = [
-                            "January",
-                            "February",
-                            "March",
-                            "April",
-                            "May",
-                            "June",
-                            "July",
-                            "August",
-                            "September",
-                            "October",
-                            "November",
-                            "December",
-                        ];
+    const [modalVisible, setModalVisible] = useState(false);
+    const [title, setTitle] = useState(false);
+    const [description, setDescription] = useState(false);
+    const [entryId, setEntryId] = useState(false);
+    const [numberOfLines, setNumberOfLines] = useState(10);
+    const [edited, setEdited] = useState(false);
+    const getJournalEntries = async () => {
+        try {
+            const id = await AsyncStorage.getItem("userId");
+            const response = await axios.get(
+                process.env.API_HOST + "/api/journal/findAll/" + id
+            );
+            const journalData = [];
+            if (response.status === 200) {
+                response.data.map((entry) => {
+                    const originalDateString = entry.entry_date;
+                    const originalDate = new Date(originalDateString);
+                    const monthNames = [
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    ];
 
-                        const month = monthNames[originalDate.getMonth()];
-                        const day = originalDate.getDate();
-                        const year = originalDate.getFullYear();
-                        const hour = originalDate.getHours();
-                        let minute = originalDate.getMinutes();
-                        if (minute < 10) {
-                            minute = "0" + minute;
-                        }
-                        const formattedDate = `${month} ${day}, ${year} ${hour}:${minute}`;
-                        journalData.push({
-                            id: entry.entry_id,
-                            title: entry.title,
-                            content: entry.description,
-                            date: formattedDate,
-                        });
+                    const month = monthNames[originalDate.getMonth()];
+                    const day = originalDate.getDate();
+                    const year = originalDate.getFullYear();
+                    const hour = originalDate.getHours();
+                    let minute = originalDate.getMinutes();
+                    if (minute < 10) {
+                        minute = "0" + minute;
+                    }
+                    const formattedDate = `${month} ${day}, ${year} ${hour}:${minute}`;
+                    journalData.push({
+                        id: entry.entry_id,
+                        title: entry.title,
+                        content: entry.description,
+                        date: formattedDate,
                     });
-                    setEntries(journalData);
-                }
-            } catch (error) {
-                console.log(error);
-                setEntries(entriesData);
+                });
+                setEntries(journalData);
             }
-        };
+        } catch (error) {
+            console.log(error);
+            setEntries(entriesData);
+        }
+    };
+    useEffect(() => {
+        console.log(process.env.API_HOST + "t");
+
         getJournalEntries();
-    }, []);
+    }, [edited]);
 
     const gradientColors = [
         "rgba(255,255,255,0.2)",
@@ -79,7 +91,25 @@ const Journal = () => {
         "rgba(4,0,207,0.4)",
     ];
     const [expandedIndex, setExpandedIndex] = useState(null);
-
+    const handleSave = async () => {
+        try {
+            const response = await axios.put(
+                process.env.API_HOST + "/api/journal/edit",
+                {
+                    title: title,
+                    description: description,
+                    entryId: entryId,
+                }
+            );
+            console.log(response.status);
+            if (response.status === 200) {
+                setModalVisible(false);
+                getJournalEntries();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const handleViewMore = (index) => {
         setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
     };
@@ -88,8 +118,13 @@ const Journal = () => {
         router.push("newJournal");
     };
 
-    const handleEdit = (index) => {
-        console.log(index);
+    const handleEdit = (index, id) => {
+        setModalVisible(true);
+        console.log(entries);
+        setDescription(entries[id].content);
+        setTitle(entries[id].title);
+        setEntryId(index);
+        console.log(entryId);
     };
     const handleDelete = (index, id) => {
         console.log("deleting" + index);
@@ -189,7 +224,9 @@ const Journal = () => {
                             {entries.map((entry, index) => (
                                 <View style={styles.blog} key={index}>
                                     <TouchableWithoutFeedback
-                                        onPress={() => handleEdit(entry.id)}
+                                        onPress={() =>
+                                            handleEdit(entry.id, index)
+                                        }
                                     >
                                         <View style={styles.editContainer}>
                                             <Icon
@@ -245,6 +282,55 @@ const Journal = () => {
                         </View>
                     </View>
                 </ScrollView>
+                <Modal
+                    visible={modalVisible}
+                    animationType="slide"
+                    presentationStyle="pageSheet"
+                    onRequestClose={() => {
+                        setModalVisible(false);
+                    }}
+                    style={styles.modal}
+                >
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Edit your Entry</Text>
+                        <View style={styles.entryArea}>
+                            <MyTextInput
+                                placeholderText={
+                                    "Title of your journal entry..."
+                                }
+                                onChangeText={setTitle}
+                                value={title}
+                            ></MyTextInput>
+                            <TextInput
+                                placeholder="How was your day?"
+                                editable
+                                multiline
+                                numberOfLines={numberOfLines}
+                                minHeight={
+                                    Platform.OS === "ios" && numberOfLines
+                                        ? 25 * numberOfLines
+                                        : null
+                                }
+                                maxLength={3000}
+                                onChangeText={setDescription}
+                                style={styles.blogInput}
+                                value={description}
+                            />
+                            <TouchableOpacity
+                                style={styles.saveButton}
+                                onPress={handleSave}
+                            >
+                                <Text style={styles.buttonText}> Save </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.saveButton}
+                                onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                <Text style={styles.buttonText}> Cancel </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
             </LinearGradient>
         </>
     );
@@ -352,6 +438,62 @@ const styles = StyleSheet.create({
     gradient: {
         width: "100%",
         height: "100%",
+    },
+    textStyle: {
+        paddingTop: 100,
+        color: "black",
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    saveButton: {
+        backgroundColor: "blue",
+        paddingVertical: 12,
+        borderRadius: 10,
+        alignItems: "center",
+        marginTop: 20,
+    },
+    buttonText: {
+        color: "white",
+        fontSize: 18,
+        fontWeight: "900",
+        opacity: 1,
+    },
+    modalView: {
+        flex: 1,
+        backgroundColor: "white",
+        padding: 20,
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+    entryArea: {
+        margin: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: "white",
+        opacity: 0.65,
+        borderRadius: 10,
+        flexDirection: "column",
+    },
+    modal: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    blogInput: {
+        backgroundColor: "#F4F4F4",
+        width: "100%",
+        paddingHorizontal: 12,
+        color: "grey",
+        borderWidth: 1,
+        borderColor: "grey",
+        borderRadius: 5,
+        // padding: 10,
+        marginTop: 20,
+        fontSize: 17,
     },
 });
 
