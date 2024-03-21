@@ -13,16 +13,16 @@ const SelfAssessmentTools = () => {
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 16}}>DEPRESSION TEST</Text>
-                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 30}}>+</Text>
+                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 16}}>DEPRESSION{'\n'}TEST</Text>
+                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 26}}>+</Text>
                     </View>
                 </View>
               </View>
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 16}}>ANXIETY TEST</Text>
-                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 30}}>+</Text>
+                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 16}}>ANXIETY{'\n'}TEST</Text>
+                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 26}}>+</Text>
                     </View>
                 </View>
               </View>
@@ -30,7 +30,7 @@ const SelfAssessmentTools = () => {
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
                           <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 16}}>ADHD{'\n'}TEST</Text>
-                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 30}}>+</Text>
+                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 26}}>+</Text>
                     </View>
                 </View>
               </View>
@@ -53,21 +53,20 @@ const styles = StyleSheet.create({
       },
       sat_row: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-around',
+        marginRight: '2%',
+        marginLeft: '2%',
       },
       sat_column:{
-        flexDirection: 'column'
+        flexDirection: 'column',
       },
       satCard: {
         backgroundColor: 'rgba(87, 152, 236, 0.7)',
         marginTop: 30,
-        height: '10%',
+        height: 130,
         flexDirection: 'column',
-        width: '80%',
+        width: 105,
         borderRadius: 10,
-        marginLeft: '7.5%',
-        marginRight: '2%',
-        padding: 3,
         marginBottom: 10,
         justifyContent: 'center',
         alignItems: 'center',

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -11,9 +11,64 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import entriesData from "../../data/journal_entries.json";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Journal = () => {
     const router = useRouter();
+    const [entries, setEntries] = useState([]);
+    useEffect(() => {
+        console.log(process.env.API_HOST);
+        const getJournalEntries = async () => {
+            try {
+                const id = await AsyncStorage.getItem("userId");
+                const response = await axios.get(
+                    process.env.API_HOST + "/api/journal/findAll/" + id
+                );
+                const journalData = [];
+                if (response.status === 200) {
+                    console.log(response.data);
+                    response.data.map((entry) => {
+                        const originalDateString = entry.entry_date;
+                        const originalDate = new Date(originalDateString);
+                        console.log(originalDate.getMinutes());
+                        const monthNames = [
+                            "January",
+                            "February",
+                            "March",
+                            "April",
+                            "May",
+                            "June",
+                            "July",
+                            "August",
+                            "September",
+                            "October",
+                            "November",
+                            "December",
+                        ];
+
+                        const month = monthNames[originalDate.getMonth()];
+                        const day = originalDate.getDate();
+                        const year = originalDate.getFullYear();
+                        const hour = originalDate.getHours();
+                        const minute = originalDate.getMinutes();
+                        const formattedDate = `${month} ${day}, ${year} ${hour}:${minute}`;
+                        journalData.push({
+                            id: entry.entry_id,
+                            title: entry.title,
+                            content: entry.description,
+                            date: formattedDate,
+                        });
+                    });
+                    setEntries(journalData);
+                }
+            } catch (error) {
+                console.log(error);
+                setEntries(entriesData);
+            }
+        };
+        getJournalEntries();
+    }, []);
 
     const gradientColors = [
         "rgba(255,255,255,0.2)",
@@ -98,7 +153,7 @@ const Journal = () => {
 
                         {/* General Notes List */}
                         <View>
-                            {entriesData.map((entries, index) => (
+                            {entries.map((entries, index) => (
                                 <View style={styles.blog} key={index}>
                                     <TouchableWithoutFeedback
                                         onPress={() => handleOptions(index)}
@@ -262,6 +317,10 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         bottom: 10,
         right: 10,
+    },
+    gradient: {
+        width: "100%",
+        height: "100%",
     },
 });
 

@@ -23,27 +23,39 @@ const Profile = () => {
           <View style = {styles.card}>
             <View style = {styles.userData}>
               <View style = {styles.innercard}>
+                <View style = {styles.leftinnercardpart}>
+                  <Image style={styles.icon} source={require('../assets/images/name.png')}/>
+                  <Text style={{paddingLeft:'2%',fontSize: 14,alignSelf:'center',color:'grey',fontWeight:'bold'}}>Username</Text>
+                </View>
                 <Text style={styles.info}>Manan Malhotra</Text>
-                <Image style={styles.icon}
-        source={require('../assets/images/name.png')}/>
               </View>
               <View style = {styles.innercard}>
+                <View style = {styles.leftinnercardpart}>
+                  <Image style={styles.icon} source={require('../assets/images/mail.png')}/>
+                  <Text style={{paddingLeft:'2%',fontSize: 14,alignSelf:'center',color:'grey',fontWeight:'bold'}}>E-Mail</Text>
+                </View>
                 <Text style={styles.info}>manan@gmail.com</Text>
-                <Image style={styles.icon}
-        source={require('../assets/images/mail.png')}/>
               </View>
               <View style = {styles.innercard}>
+                <View style = {styles.leftinnercardpart}>
+                  <Image style={styles.icon} source={require('../assets/images/contact_number.png')}/>
+                  <Text style={{paddingLeft:'2%',fontSize: 14,alignSelf:'center',color:'grey',fontWeight:'bold'}}>Phone No.</Text>
+                </View>
                 <Text style={styles.info}>+91 - 1231264211</Text>
-                <Image style={styles.icon}
-        source={require('../assets/images/contact_number.png')}/>
               </View>
-              <View style = {styles.rowcard}>
-                <View style = {styles.innercard}>
-                    <Text style={styles.info}>24 yr</Text>
-                </View>
-                <View style = {styles.innercard}>
-                    <Text style={styles.info}>Male</Text>
-                </View>
+              <View style = {styles.innercard}>
+                  <View style = {styles.leftinnercardpart}>
+                    <Image style={styles.icon} source={require('../assets/images/age.png')}/>
+                    <Text style={{paddingLeft:'2%',fontSize: 14,alignSelf:'center',color:'grey',fontWeight:'bold'}}>Age</Text>
+                  </View>
+                  <Text style={styles.info}>24 yr</Text>
+              </View>
+              <View style = {styles.innercard}>
+                  <View style = {styles.leftinnercardpart}>
+                    <Image style={styles.icon} source={require('../assets/images/gender.png')}/>
+                    <Text style={{paddingLeft:'2%',fontSize: 14,alignSelf:'center',color:'grey',fontWeight:'bold'}}>Gender</Text>
+                  </View>
+                  <Text style={styles.info}>Male</Text>
               </View>
             </View>
           </View> 
@@ -64,6 +76,9 @@ const styles = StyleSheet.create({
     paddingRight: '2%',
     justifyContent: 'center'
   },
+  leftinnercardpart: {
+    flexDirection: "row",
+  },
   card: {
     backgroundColor: 'white',
     color: 'black',
@@ -78,10 +93,11 @@ const styles = StyleSheet.create({
   },
   innercard: {
     borderRadius: 10,
-    borderColor: 'black',
-    backgroundColor: 'rgba(200,200,200,0.15)',
+    borderColor: 'rgba(0,0,0,0.28)',
     borderWidth: 1,
     borderRadius: 10,
+    paddingLeft: '2%',
+    paddingRight: '2%',
     paddingTop: '3%',
     paddingBottom: '3%',
     flexDirection: 'row',
@@ -99,10 +115,9 @@ const styles = StyleSheet.create({
     marginBottom: '3%'
   }, 
   icon: {
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
     alignSelf: 'center',
-    marginRight: '5%'
   },
   userData: {
     paddingTop: '2%',
@@ -114,6 +129,7 @@ const styles = StyleSheet.create({
     alignSelf : 'center',
     fontSize: 32,
     marginBottom: '10%',
+    fontWeight: 'bold'
   },  
   logoutButton: {
     backgroundColor: '#1877F2',
@@ -125,13 +141,13 @@ const styles = StyleSheet.create({
   buttonText: {
     alignSelf: 'center',
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'white'
   },
   info: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
     alignContents: 'center',
-    marginLeft: '5%',
     color: 'gray',
   },
   avatar: {
