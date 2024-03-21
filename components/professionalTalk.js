@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   leftpartblog:{
-    marginRight: 2,
+    marginRight: '5%',
   },
   rightpartimage:{
     width: 145,
@@ -70,16 +70,16 @@ const styles = StyleSheet.create({
   blogimage:{
     width: 15,
     height: 15,
+    marginRight: '1%'
   },
   innerBlogCard:{
-    marginLeft: 7,
     backgroundColor: '#fff',
     borderRadius: 25,
     padding: 5,
     width: 145
   },
   blogCard: {
-    justifyContent: 'space-evenly',
+    justifyContent:'space-around',
     backgroundColor: '#FFB68D',
     flexDirection: 'row',
     borderRadius: 25,
