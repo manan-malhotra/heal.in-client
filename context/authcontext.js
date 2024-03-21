@@ -9,7 +9,7 @@ export const AuthContextProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(undefined);
 
     useEffect(() => {
-        console.log(process.env.API_HOST + "TEST");
+        console.log(process.env.API_HOST + "T");
         const loadToken = async () => {
             const token = await AsyncStorage.getItem("token");
             console.log(typeof token);
