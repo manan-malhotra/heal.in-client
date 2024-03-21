@@ -29,6 +29,8 @@ export const AuthContextProvider = ({ children }) => {
                         const strAge = String(data.age);
                         const strUserId = String(data.userId);
                         const strcontact = String(data.contact);
+                        const userId = String(data.userId);
+                        await AsyncStorage.setItem("userId", userId);
                         await AsyncStorage.setItem("firstName", data.firstName);
                         await AsyncStorage.setItem("age", strAge);
                         await AsyncStorage.setItem("lastName", data.lastName);
