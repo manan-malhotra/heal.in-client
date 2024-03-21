@@ -33,14 +33,14 @@ const TabNavigation = () => {
         navigationState={{ index, routes }}
         onIndexChange={setIndex}
         renderScene={renderScene}
-        barStyle={{ backgroundColor: '#3340B0', height: 77 }} 
+        barStyle={{ backgroundColor: '#3340B0', height: '15%' }} 
         activeColor="white" 
         inactiveColor="grey" 
         shifting={false}
         renderIcon={({ route, focused, color }) => (
           <Image
             source={route.icon}
-            style={{ width: 24, height: 31, tintColor: focused ? color : 'grey' }}
+            style={{height:'100%',width:'70%', tintColor: focused ? color : 'grey' }}
           />
         )}
       />
