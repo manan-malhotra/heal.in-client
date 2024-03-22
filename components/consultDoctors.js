@@ -27,22 +27,14 @@ const ConsultDoctors = () => {
               </View>
               <View style={styles.consulation_inner_card_right}>
                 <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                  }}
+                  style={styles.infoTitle}
                 >
                   Dr. Anirudh Gupta
                 </Text>
                 <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 12,
-                    fontStyle: "italic",
-                  }}
+                  style={styles.infoDetails}
                 >
-                  General Physician MBBS {"\n"} 15 years exp.
+                  General Physician MBBS {"\n"}15 years exp.
                 </Text>
               </View>
             </View>
@@ -61,22 +53,14 @@ const ConsultDoctors = () => {
               </View>
               <View style={styles.consulation_inner_card_right}>
                 <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                  }}
+                  style={styles.infoTitle}
                 >
                   Dr. Emily Watson
                 </Text>
                 <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 12,
-                    fontStyle: "italic",
-                  }}
+                  style={styles.infoDetails}
                 >
-                  Orthopedics {"\n"} MBBS, MD, 9 years exp.
+                  Orthopedics {"\n"}MBBS, MD, 9 years exp.
                 </Text>
               </View>
             </View>
@@ -95,22 +79,14 @@ const ConsultDoctors = () => {
               </View>
               <View style={styles.consulation_inner_card_right}>
                 <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                  }}
+                  style={styles.infoTitle}
                 >
                   Dr. Greg Morris
                 </Text>
                 <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 12,
-                    fontStyle: "italic",
-                  }}
+                  style={styles.infoDetails}
                 >
-                  General Physician MBBS {"\n"} 15 years exp.
+                  General Physician MBBS {"\n"}15 years exp.
                 </Text>
               </View>
             </View>
@@ -139,29 +115,36 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFB68D",
     flexDirection: "row",
     marginTop: 30,
-    height: 75,
+    alignSelf: "center",
     marginRight: 10,
     borderRadius: 40,
     marginLeft: 10,
   },
   consulation_inner_card_left: {
     backgroundColor: "#FFFFFF",
-    height: 75,
-    width: 75,
+    height: "auto",
     borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 3,
   },
   consulation_inner_card_right: {
     flexDirection: "column",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
+    alignItems: "justify",
+    marginLeft: "10%",
+    marginRight: "10%"
   },
   consulation_img: {
     borderRadius: 100,
     width: 70,
     height: 70,
+    alignSelf: "flex-start"
   },
+  infoTitle:{
+    fontSize: 18,
+    fontWeight: "bold"
+  },
+  infoDetails:{
+    fontSize: 14,
+  }
 });
 
 export default ConsultDoctors;

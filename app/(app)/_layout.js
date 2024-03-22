@@ -60,7 +60,18 @@ export default function _layout() {
             navigationBarColor: "#3340B0",
           }}
         />
-            </Stack>
+                <Stack.Screen
+                        name="Forum"
+                        options={{
+                            headerTitle: "QnA Forum",
+                            headerStyle: {
+                                backgroundColor: "#3340B0",
+                            },
+                            headerTintColor: "white",
+                            navigationBarColor: "#3340B0",
+                        }}
+                />
+        </Stack>
         </>
     );
 }

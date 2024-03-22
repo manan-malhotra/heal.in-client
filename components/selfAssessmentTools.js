@@ -13,24 +13,24 @@ const SelfAssessmentTools = () => {
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 16}}>DEPRESSION{'\n'}TEST</Text>
-                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 26}}>+</Text>
+                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 12}}>DEPRESSION{'\n'}TEST</Text>
+                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 24}}>+</Text>
                     </View>
                 </View>
               </View>
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 16}}>ANXIETY{'\n'}TEST</Text>
-                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 26}}>+</Text>
+                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 12}}>ANXIETY{'\n'}TEST</Text>
+                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 24}}>+</Text>
                     </View>
                 </View>
               </View>
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 16}}>ADHD{'\n'}TEST</Text>
-                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 26}}>+</Text>
+                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 12}}>ADHD{'\n'}TEST</Text>
+                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 24}}>+</Text>
                     </View>
                 </View>
               </View>

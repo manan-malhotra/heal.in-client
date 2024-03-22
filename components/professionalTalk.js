@@ -1,15 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
+import { useRouter } from "expo-router";
 
 const ProfessionalTalk = () => {
+  const router = useRouter();
+  const navigation = useNavigation(); // Hook for accessing navigation object
 
   return (
         <>
+        
           {/*This the part of Professional Talk Part */}
           <View style = {styles.professionaltalk}>
+            <TouchableOpacity
+                onPress={() => {
+                    router.push("Forum");
+                }}
+            >
             <View style = {styles.toppart}>
               <View style = {styles.leftpartblog}>
-                <Text style = {styles.professionaltalk_title}> Talk to a professional ...  </Text>
+                <Text style = {styles.professionaltalk_title}> Connect to a professional ...  </Text>
                 <View style={styles.blogCard}>
                   <Image source={require('../assets/images/ProfessionalTalk/profile1.png')} style={styles.blogimage}/>
                     <View style={styles.innerBlogCard}>
@@ -39,6 +49,7 @@ const ProfessionalTalk = () => {
                 <Image source = {require('../assets/images/ProfessionalTalk/forums1.png')}  style = {styles.rightpartimage}/>
               </View>
             </View>
+            </TouchableOpacity>
           </View>
         </>
   );
@@ -47,10 +58,10 @@ const ProfessionalTalk = () => {
 const styles = StyleSheet.create({
 
   professionaltalk:{
-    marginTop: 10,
+    marginTop: "2%",
   },
   professionaltalk_title:{
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 15,
   },
@@ -58,33 +69,40 @@ const styles = StyleSheet.create({
     textAlign:"left",
     flexDirection: 'row',
     justifyContent:'center',
-    marginTop: 30
+    marginTop: 30,
+    marginLeft: "2%",
+    marginRight: "2%"
   },
   leftpartblog:{
-    marginRight: '5%',
+    marginRight: '2%',
+    width: "55%",
+    height: "100%"
   },
   rightpartimage:{
+    justifyContent: "center",
+    marginTop: "20%",
     width: 145,
-    height: 170
+    height: 160,
   },
   blogimage:{
-    width: 15,
-    height: 15,
-    marginRight: '1%'
+    width: "16%",
+    alignSelf: "center",
+    height: "90%",
   },
   innerBlogCard:{
     backgroundColor: '#fff',
     borderRadius: 25,
-    padding: 5,
-    width: 145
+    padding: 10,
+    width: "80%",
+    height: "100%"
   },
   blogCard: {
-    justifyContent:'space-around',
+    justifyContent:'space-evenly',
     backgroundColor: '#FFB68D',
     flexDirection: 'row',
     borderRadius: 25,
     padding: 5,
-    marginBottom: 10,
+    marginBottom: "5%",
   },
   blogTitle: {
     fontSize: 10,
