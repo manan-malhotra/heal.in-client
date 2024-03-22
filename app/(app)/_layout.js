@@ -70,7 +70,28 @@ export default function _layout() {
                             headerTintColor: "white",
                             navigationBarColor: "#3340B0",
                         }}
-                />
+                /><Stack.Screen
+                name="self_help_videos"
+                options={{
+                    headerTitle: "Self Help Videos",
+                    headerStyle: {
+                        backgroundColor: "#3340B0",
+                    },
+                    headerTintColor: "white",
+                    navigationBarColor: "#3340B0",
+                }}
+            />
+            <Stack.Screen
+                name="depression"
+                options={{
+                    headerTitle: "Depression Test",
+                    headerStyle: {
+                        backgroundColor: "#3340B0",
+                    },
+                    headerTintColor: "white",
+                    navigationBarColor: "#3340B0",
+                }}
+            />
         </Stack>
         </>
     );
