@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
 } from "react-native";
 import blogsData from "../../data/blog_content.json";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
 
@@ -128,7 +128,11 @@ const BlogPage = () => {
                                     style={styles.reportButton}
                                     onPress={handleReportClick}
                                 >
-                                    <Icon name="flag" size={15} color="#ccc" />
+                                    <Icon
+                                        name="flag"
+                                        size={15}
+                                        color="#dd342c"
+                                    />
                                 </TouchableOpacity>
                             </View>
                         ))}
@@ -194,11 +198,6 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: 8,
         right: 8,
-        backgroundColor: "rgba(255,0,0,0.7)",
-        paddingVertical: 5,
-        paddingHorizontal: 7,
-        borderRadius: 8,
-        elevation: 5,
     },
     report: {
         color: "#ff3131",
