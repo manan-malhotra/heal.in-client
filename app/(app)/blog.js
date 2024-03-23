@@ -13,6 +13,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ReportModal from "../../components/reportModal";
 
 const BlogPage = () => {
     const [blogs, setBlogs] = useState([]);
@@ -104,6 +105,13 @@ const BlogPage = () => {
         setModalVisible(true);
         setReportIndex(index);
     };
+    const handleReportReason = (text) => {
+        if (reportReason.includes(text)) {
+            setReportReason("");
+        } else {
+            setReportReason(text);
+        }
+    };
 
     const gradientColors = [
         "rgba(255,255,255,0.2)",
@@ -182,7 +190,16 @@ const BlogPage = () => {
                 }}
                 style={styles.modal}
             >
-                <View style={styles.modalView}>
+                <ReportModal
+                    currentUserId={currentUserId}
+                    setModalVisible={setModalVisible}
+                    reportIndex={reportIndex}
+                    reportReason={reportReason}
+                    setReportReason={setReportReason}
+                    setReportIndex={setReportIndex}
+                    api="Blogs"
+                />
+                {/* <View style={styles.modalView}>
                     <Text style={styles.modalText}>Report</Text>
                     <Text style={styles.modalInnerText}>
                         We understand your concerns. Please select the reason
@@ -195,7 +212,9 @@ const BlogPage = () => {
                                     ? styles.modalButtonDisabled
                                     : styles.modalButton
                             }
-                            onPress={() => setReportReason("Hateful Content")}
+                            onPress={() =>
+                                handleReportReason("Hateful Content")
+                            }
                         >
                             <Text style={styles.options}>Hateful Content</Text>
                         </TouchableOpacity>
@@ -205,7 +224,7 @@ const BlogPage = () => {
                                     ? styles.modalButtonDisabled
                                     : styles.modalButton
                             }
-                            onPress={() => setReportReason("Irrelevancy")}
+                            onPress={() => handleReportReason("Irrelevancy")}
                         >
                             <Text style={styles.options}>Irrelevancy</Text>
                         </TouchableOpacity>
@@ -215,7 +234,7 @@ const BlogPage = () => {
                                     ? styles.modalButtonDisabled
                                     : styles.modalButton
                             }
-                            onPress={() => setReportReason("Spam")}
+                            onPress={() => handleReportReason("Spam")}
                         >
                             <Text style={styles.options}>Spam</Text>
                         </TouchableOpacity>
@@ -225,7 +244,7 @@ const BlogPage = () => {
                                     ? styles.modalButtonDisabled
                                     : styles.modalButton
                             }
-                            onPress={() => setReportReason("Other")}
+                            onPress={() => handleReportReason("Other")}
                         >
                             <Text style={styles.options}>Other</Text>
                         </TouchableOpacity>
@@ -246,7 +265,7 @@ const BlogPage = () => {
                             <Text style={styles.options}>Report</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
             </Modal>
         </>
     );
