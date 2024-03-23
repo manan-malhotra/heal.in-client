@@ -5,17 +5,26 @@ import {
     StyleSheet,
     ScrollView,
     TouchableOpacity,
+    Modal,
+    Alert,
 } from "react-native";
 import blogsData from "../../data/blog_content.json";
 import Icon from "react-native-vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ReportModal from "../../components/reportModal";
 
 const BlogPage = () => {
     const [blogs, setBlogs] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [reportReason, setReportReason] = useState("");
+    const [reportIndex, setReportIndex] = useState("");
+    const [currentUserId, setCurrentUserId] = useState("");
     useEffect(() => {
         const loadBlogs = async () => {
             try {
+                setCurrentUserId(await AsyncStorage.getItem("userId"));
                 const response = await axios.get(
                     process.env.API_HOST + "/admin/getAllBlogs"
                 );
@@ -69,14 +78,39 @@ const BlogPage = () => {
     }, []);
 
     const [expandedIndex, setExpandedIndex] = useState(null);
-
+    const handleReport = async () => {
+        try {
+            console.log(reportIndex);
+            console.log(reportReason);
+            console.log(currentUserId);
+            const response = await axios.post(
+                process.env.API_HOST + "/flag/blogs/addFlaggedBlogs",
+                {
+                    blog_id: reportIndex,
+                    reason: reportReason,
+                    user_id: currentUserId,
+                }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const handleViewMore = (index) => {
         setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
     };
 
-    const handleReportClick = () => {
+    const handleReportClick = (index) => {
         // Handle report click action here
-        console.log("Report clicked");
+        console.log("Report clicked for index: " + index);
+        setModalVisible(true);
+        setReportIndex(index);
+    };
+    const handleReportReason = (text) => {
+        if (reportReason.includes(text)) {
+            setReportReason("");
+        } else {
+            setReportReason(text);
+        }
     };
 
     const gradientColors = [
@@ -86,60 +120,154 @@ const BlogPage = () => {
     ];
 
     return (
-        <LinearGradient colors={gradientColors} style={styles.gradient}>
-            <ScrollView>
-                {/* Body */}
-                <View style={styles.body}>
-                    <Text style={styles.heading}>Our Blogs</Text>
+        <>
+            <LinearGradient colors={gradientColors} style={styles.gradient}>
+                <ScrollView>
+                    {/* Body */}
+                    <View style={styles.body}>
+                        <Text style={styles.heading}>Our Blogs</Text>
 
-                    {/* Blog List */}
-                    <View style={styles.blogList}>
-                        {/* Map through the blogsData array and render each blog */}
-                        {blogs.map((blog, index) => (
-                            <View style={styles.blog} key={index}>
-                                <Text style={styles.title}>{blog.title}</Text>
-                                <Text style={styles.author}>
-                                    - {blog.author}
-                                </Text>
-                                <Text>
-                                    {/* Display only the first few lines of content */}
-                                    {expandedIndex === index
-                                        ? blog.content
-                                        : blog.content.length > 100
-                                        ? blog.content.substring(0, 100) +
-                                          "......"
-                                        : blog.content}
-                                    {/* Render "View More" button only if content is longer than 100 characters */}
-                                    {blog.content.length > 100 && (
-                                        <Text
-                                            style={styles.viewMoreButton}
-                                            onPress={() =>
-                                                handleViewMore(index)
-                                            }
-                                        >
-                                            {expandedIndex === index
-                                                ? "View Less"
-                                                : " View More"}
-                                        </Text>
-                                    )}
-                                </Text>
-                                <Text style={styles.date}>{blog.date}</Text>
-                                <TouchableOpacity
-                                    style={styles.reportButton}
-                                    onPress={handleReportClick}
-                                >
-                                    <Icon
-                                        name="flag"
-                                        size={15}
-                                        color="#dd342c"
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        ))}
+                        {/* Blog List */}
+                        <View style={styles.blogList}>
+                            {/* Map through the blogsData array and render each blog */}
+                            {blogs.map((blog, index) => (
+                                <View style={styles.blog} key={index}>
+                                    <Text style={styles.title}>
+                                        {blog.title}
+                                    </Text>
+                                    <Text style={styles.author}>
+                                        - {blog.author}
+                                    </Text>
+                                    <Text>
+                                        {/* Display only the first few lines of content */}
+                                        {expandedIndex === index
+                                            ? blog.content
+                                            : blog.content.length > 100
+                                            ? blog.content.substring(0, 100) +
+                                              "......"
+                                            : blog.content}
+                                        {/* Render "View More" button only if content is longer than 100 characters */}
+                                        {blog.content.length > 100 && (
+                                            <Text
+                                                style={styles.viewMoreButton}
+                                                onPress={() =>
+                                                    handleViewMore(index)
+                                                }
+                                            >
+                                                {expandedIndex === index
+                                                    ? "View Less"
+                                                    : " View More"}
+                                            </Text>
+                                        )}
+                                    </Text>
+                                    <Text style={styles.date}>{blog.date}</Text>
+                                    <TouchableOpacity
+                                        style={styles.reportButton}
+                                        onPress={() =>
+                                            handleReportClick(blog.index)
+                                        }
+                                    >
+                                        <Icon
+                                            name="flag"
+                                            size={15}
+                                            color="#dd342c"
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                        </View>
                     </View>
-                </View>
-            </ScrollView>
-        </LinearGradient>
+                </ScrollView>
+            </LinearGradient>
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                presentationStyle="pageSheet"
+                onRequestClose={() => {
+                    setModalVisible(false);
+                    setReportReason("");
+                    setReportIndex("");
+                }}
+                style={styles.modal}
+            >
+                <ReportModal
+                    currentUserId={currentUserId}
+                    setModalVisible={setModalVisible}
+                    reportIndex={reportIndex}
+                    reportReason={reportReason}
+                    setReportReason={setReportReason}
+                    setReportIndex={setReportIndex}
+                    api="Blogs"
+                />
+                {/* <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Report</Text>
+                    <Text style={styles.modalInnerText}>
+                        We understand your concerns. Please select the reason
+                        for reporting.
+                    </Text>
+                    <View style={styles.modalButtons}>
+                        <TouchableOpacity
+                            style={
+                                reportReason.includes("Hateful")
+                                    ? styles.modalButtonDisabled
+                                    : styles.modalButton
+                            }
+                            onPress={() =>
+                                handleReportReason("Hateful Content")
+                            }
+                        >
+                            <Text style={styles.options}>Hateful Content</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={
+                                reportReason.includes("Irrelevancy")
+                                    ? styles.modalButtonDisabled
+                                    : styles.modalButton
+                            }
+                            onPress={() => handleReportReason("Irrelevancy")}
+                        >
+                            <Text style={styles.options}>Irrelevancy</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={
+                                reportReason.includes("Spam")
+                                    ? styles.modalButtonDisabled
+                                    : styles.modalButton
+                            }
+                            onPress={() => handleReportReason("Spam")}
+                        >
+                            <Text style={styles.options}>Spam</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={
+                                reportReason.includes("Other")
+                                    ? styles.modalButtonDisabled
+                                    : styles.modalButton
+                            }
+                            onPress={() => handleReportReason("Other")}
+                        >
+                            <Text style={styles.options}>Other</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.submitButton}
+                            onPress={() => {
+                                console.log("Reported");
+                                handleReport();
+                                Alert.alert(
+                                    "Reported",
+                                    "Your report has been submitted. We will review it and take appropriate action."
+                                );
+                                setReportIndex("");
+                                setReportReason("");
+                                setModalVisible(false);
+                            }}
+                        >
+                            <Text style={styles.options}>Report</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View> */}
+            </Modal>
+        </>
     );
 };
 
@@ -204,6 +332,55 @@ const styles = StyleSheet.create({
         fontSize: 5,
         fontWeight: "bold",
         marginTop: 10,
+    },
+    modal: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    modalText: {
+        marginTop: 15,
+        marginBottom: 15,
+        textAlign: "center",
+        fontSize: 20,
+        fontWeight: "bold",
+    },
+    modalInnerText: {
+        marginTop: 15,
+        marginBottom: 15,
+        textAlign: "center",
+        fontSize: 16,
+    },
+    modalView: {
+        flex: 1,
+        backgroundColor: "white",
+        padding: 20,
+    },
+    modalButton: {
+        backgroundColor: "gray",
+        paddingVertical: 8,
+        borderRadius: 10,
+        alignItems: "center",
+        marginTop: 8,
+    },
+    modalButtonDisabled: {
+        backgroundColor: "black",
+        paddingVertical: 8,
+        borderRadius: 10,
+        alignItems: "center",
+        marginTop: 8,
+    },
+    options: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+    submitButton: {
+        backgroundColor: "red",
+        paddingVertical: 10,
+        borderRadius: 10,
+        alignItems: "center",
+        marginTop: 88,
     },
 });
 

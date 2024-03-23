@@ -15,14 +15,20 @@ const HealthResources = () => {
                 <Text style={styles.resources_title}> Resources </Text>
                 <View style={styles.resources_row}>
                     <View style={styles.resources_column}>
-                        <View style={styles.resCard}>
-                            <View style={styles.innerresCard}>
-                                <Image
-                                    source={require("../assets/images/Resources/image1.png")}
-                                    style={styles.resImage}
-                                />
-                            </View>
-                        </View>
+                        <TouchableOpacity
+                                onPress={() => {
+                                    router.push("self_help_videos");
+                                }}
+                            >
+                                <View style={styles.resCard}>
+                                    <View style={styles.innerresCard}>
+                                        <Image
+                                            source={require("../assets/images/Resources/image1.png")}
+                                            style={styles.resImage}
+                                        />
+                                    </View>
+                                </View>
+                        </TouchableOpacity>
                         <Text
                             style={{ fontStyle: "italic", textAlign: "center" }}
                         >
@@ -82,7 +88,7 @@ const HealthResources = () => {
 
 const styles = StyleSheet.create({
     resources: {
-        marginTop: '5%',
+        marginTop: 30,
     },
     resources_title: {
         fontSize: 35,
@@ -90,9 +96,9 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     resources_row: {
-        flexDirection: 'row',
+        flexDirection: "row",
         justifyContent: 'space-between',
-        marginLeft: '4%',
+        marginLeft: '2%',
         marginRight: '2%'
     },
     resources_column: {
@@ -100,13 +106,15 @@ const styles = StyleSheet.create({
     },
     resCard: {
         backgroundColor: "#FFB68D",
-        marginTop: '20%',
+        marginTop: 30,
         height: 94,
-        width: 94,
         flexDirection: "column",
+        width: 94,
         borderRadius: 100,
-        padding: '5%',
-        marginBottom: '15%',
+        marginLeft: 10,
+        marginRight: 10,
+        padding: 3,
+        marginBottom: 10,
         alignItems: "center",
     },
     innerresCard: {

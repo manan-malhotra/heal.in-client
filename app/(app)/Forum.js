@@ -1,77 +1,111 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Pressable,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native";
-import { Button, TextInput } from "react-native-paper";
-import axios from "axios";
+import { TextInput } from "react-native-paper";
+import MyTextInput from "../../components/TextInput";
 import Icon from "react-native-vector-icons/Ionicons";
-import { AntDesign } from "@expo/vector-icons";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-const Forum = () => {
+import { router } from "expo-router";
+
+const forum = () => {
     const [blogs, setBlogs] = useState([]);
+    const [expandedIndex, setExpandedIndex] = useState(null);
+    const [role, setRole] = useState("User");
+
     useEffect(() => {
-        const loadBlogs = async () => {
-            try {
-                const response = await axios.get(
-                    process.env.API_HOST + "/admin/getAllBlogs"
-                );
-                const blog = response.data;
-                const blogDatas = [];
-                blog.map((blog) => {
-                    const index = blog.blog_id;
-                    const title = blog.title;
-                    const author =
-                        blog.user_id.first_name + " " + blog.user_id.last_name;
-                    const originalDateString = blog.post_date;
-                    const originalDate = new Date(originalDateString);
-
-                    const monthNames = [
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December",
-                    ];
-
-                    const month = monthNames[originalDate.getMonth()];
-                    const day = originalDate.getDate();
-                    const year = originalDate.getFullYear();
-                    const formattedDate = `${month} ${day}, ${year}`;
-                    const date = formattedDate;
-                    const content = blog.description;
-                    blogDatas.push({
-                        index,
-                        title,
-                        author,
-                        date,
-                        content,
-                    });
-                });
-                setBlogs(blogDatas);
-            } catch (error) {
-                // Handle error
-                console.log(error);
-                setBlogs(blogsData);
-            }
-        };
-        loadBlogs();
+        // Simulate loading blogs from an API
+        const blog = [
+            {
+                index: 1,
+                title: "Sample Blog Title 1",
+                author: "John Doe",
+                date: "March 20, 2024",
+                content:
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+                comments: [
+                    {
+                        comment_id: 1,
+                        user_id: {
+                            user_id: 23,
+                            first_name: "Manan",
+                            last_name: "Malhotra",
+                            contact_number: 123456789,
+                            age: 23,
+                            gender: "Male",
+                            depression_test_score: null,
+                            anxiety_test_score: null,
+                            adhd_test_score: null,
+                        },
+                        comment: "Test question",
+                        comment_date: "2024-03-22T04:32:35.094+00:00",
+                    },
+                ],
+            },
+            {
+                index: 2,
+                title: "Sample Blog Title 2",
+                author: "Jane Smith",
+                date: "March 21, 2024",
+                content:
+                    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...t",
+                comments: [
+                    {
+                        comment_id: 2,
+                        user_id: {
+                            user_id: 24,
+                            first_name: "Alice",
+                            last_name: "Johnson",
+                            contact_number: 987654321,
+                            age: 30,
+                            gender: "Female",
+                            depression_test_score: null,
+                            anxiety_test_score: null,
+                            adhd_test_score: null,
+                        },
+                        comment: "Another test question",
+                        comment_date: "2024-03-22T04:35:12.094+00:00",
+                    },
+                ],
+            },
+        ];
+        setBlogs(blog);
     }, []);
 
-    const [expandedIndex, setExpandedIndex] = useState(null);
-
     const handleViewMore = (index) => {
-        setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+        setBlogs((prevBlogs) =>
+            prevBlogs.map((blog, i) =>
+                i === index
+                    ? { ...blog, expandedContent: !blog.expandedContent }
+                    : blog
+            )
+        );
+    };
+
+    const handleAddComment = () => {
+        console.log("Add Comment Hit..");
+    };
+
+    const handleViewMoreComments = (blogIndex) => {
+        setBlogs((prevBlogs) =>
+            prevBlogs.map((blog, index) =>
+                index === blogIndex
+                    ? {
+                          ...blog,
+                          expandedComments: !blog.expandedComments,
+                      }
+                    : blog
+            )
+        );
     };
 
     const handleReportClick = () => {
-        // Handle report click action here
         console.log("Report clicked");
     };
 
@@ -84,10 +118,11 @@ const Forum = () => {
         "rgba(110,113,254,0.6)",
         "rgba(4,0,207,0.4)",
     ];
+
     return (
         <View>
             <LinearGradient colors={gradientColors} style={styles.gradient}>
-                <ScrollView style={styles.scrollview}>
+                <ScrollView>
                     <View style={styles.body}>
                         <View style={styles.title}>
                             <Text style={{ fontSize: 20 }}>Q&A Forum</Text>
@@ -96,12 +131,20 @@ const Forum = () => {
                         <View style={styles.notes}>
                             <Text style={{ fontSize: 12 }}>
                                 Please note: Whatever asked here will be visible
-                                to the world. Need private guidance? Click here
+                                to the world. Need private guidance?{" "}
+                                <TouchableOpacity
+                                    style={styles.linkContainer}
+                                    onPress={() => {
+                                        router.push("/chats");
+                                    }}
+                                >
+                                    <Text style={styles.link}>Click here</Text>
+                                </TouchableOpacity>
                             </Text>
                         </View>
-                        <View style={styles.searchBarContainer}>
+                        {/* <View style={styles.searchBarContainer}>
                             <TextInput
-                                style={styles.searchBar} // Customize styles based on your desired search bar appearance
+                                style={styles.searchBar}
                                 placeholder="Search your problem"
                                 onChangeText={handleSearch}
                                 value=""
@@ -114,57 +157,189 @@ const Forum = () => {
                                     Add Question
                                 </Text>
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                         <View style={styles.qnA}>
+                            {/* Blog List */}
                             <View style={styles.blogList}>
                                 {/* Map through the blogsData array and render each blog */}
                                 {blogs.map((blog, index) => (
-                                    <View style={styles.blog} key={index}>
-                                        <Text style={styles.blogTitle}>
-                                            {blog.title}
-                                        </Text>
-                                        <Text style={styles.author}>
-                                            - {blog.author}
-                                        </Text>
-                                        <Text>
-                                            {/* Display only the first few lines of content */}
-                                            {expandedIndex === index
-                                                ? blog.content
-                                                : blog.content.length > 100
-                                                ? blog.content.substring(
-                                                      0,
-                                                      100
-                                                  ) + "......"
-                                                : blog.content}
-                                            {/* Render "View More" button only if content is longer than 100 characters */}
-                                            {blog.content.length > 100 && (
-                                                <Text
-                                                    style={
-                                                        styles.viewMoreButton
-                                                    }
+                                    <View key={index}>
+                                        <View style={styles.blog}>
+                                            {/*Render Flag Content button for User*/}
+                                            {role === "User" && (
+                                                <TouchableOpacity
+                                                    style={styles.reportButton}
                                                     onPress={() =>
-                                                        handleViewMore(index)
+                                                        handleReportClick(
+                                                            blog.index
+                                                        )
                                                     }
                                                 >
-                                                    {expandedIndex === index
-                                                        ? "View Less"
-                                                        : " View More"}
-                                                </Text>
+                                                    <Icon
+                                                        name="flag"
+                                                        size={15}
+                                                        color="#dd342c"
+                                                    />
+                                                </TouchableOpacity>
                                             )}
-                                        </Text>
-                                        <Text style={styles.date}>
-                                            {blog.date}
-                                        </Text>
-                                        <TouchableOpacity
-                                            style={styles.reportButton}
-                                            onPress={handleReportClick}
-                                        >
-                                            <Icon
-                                                name="flag"
-                                                size={15}
-                                                color="#dd342c"
-                                            />
-                                        </TouchableOpacity>
+                                            <Text style={styles.blogTitle}>
+                                                {blog.title}
+                                            </Text>
+                                            <Text style={styles.author}>
+                                                - {blog.author}
+                                            </Text>
+                                            <Text>
+                                                {blog.expandedContent ||
+                                                expandedIndex === index
+                                                    ? blog.content
+                                                    : blog.content.length > 100
+                                                    ? blog.content.substring(
+                                                          0,
+                                                          100
+                                                      ) + "..."
+                                                    : blog.content}
+                                                {/* Render "View More" button only if content is longer than 100 characters */}
+                                                {blog.content.length > 100 && (
+                                                    <Text
+                                                        style={
+                                                            styles.viewMoreButton
+                                                        }
+                                                        onPress={() =>
+                                                            handleViewMore(
+                                                                index
+                                                            )
+                                                        }
+                                                    >
+                                                        {blog.expandedContent ||
+                                                        expandedIndex === index
+                                                            ? "View Less"
+                                                            : "View More"}
+                                                    </Text>
+                                                )}
+                                            </Text>
+                                            <Text style={styles.date}>
+                                                {blog.date}
+                                            </Text>
+                                            <View
+                                                style={
+                                                    styles.commentButtonContainer
+                                                }
+                                            >
+                                                <TouchableOpacity
+                                                    style={
+                                                        styles.viewCommentsButton
+                                                    }
+                                                    onPress={() =>
+                                                        handleViewMoreComments(
+                                                            index
+                                                        )
+                                                    }
+                                                >
+                                                    <Text
+                                                        style={
+                                                            styles.viewCommentsButtonText
+                                                        }
+                                                    >
+                                                        {blog.expandedComments
+                                                            ? "Hide Comments"
+                                                            : "View Comments"}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                                {/* {role === "Responder" && (
+                                                    <TouchableOpacity
+                                                        style={
+                                                            styles.commentButton
+                                                        }
+                                                        onPress={() =>
+                                                            handleAddComment()
+                                                        }
+                                                    >
+                                                        <Text
+                                                            style={
+                                                                styles.commentButtonText
+                                                            }
+                                                        >
+                                                            Add Comment
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                )} */}
+                                            </View>
+                                            {/* Display comments if expanded */}
+                                            {blog.expandedComments && (
+                                                <View
+                                                    style={
+                                                        styles.commentsContainer
+                                                    }
+                                                >
+                                                    {blog.comments.map(
+                                                        (
+                                                            comment,
+                                                            commentIndex
+                                                        ) => (
+                                                            <View
+                                                                key={
+                                                                    commentIndex
+                                                                }
+                                                                style={
+                                                                    styles.commentContainer
+                                                                }
+                                                            >
+                                                                <Text
+                                                                    style={
+                                                                        styles.comment
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        comment.comment
+                                                                    }
+                                                                </Text>
+                                                                <Text
+                                                                    style={
+                                                                        styles.commentDate
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        comment.comment_date
+                                                                    }
+                                                                </Text>
+                                                                <Text
+                                                                    style={
+                                                                        styles.commentAuthor
+                                                                    }
+                                                                >
+                                                                    -{" "}
+                                                                    {
+                                                                        comment
+                                                                            .user_id
+                                                                            .first_name
+                                                                    }{" "}
+                                                                    {
+                                                                        comment
+                                                                            .user_id
+                                                                            .last_name
+                                                                    }
+                                                                </Text>
+                                                            </View>
+                                                        )
+                                                    )}
+                                                </View>
+                                            )}
+                                            {role === "Responder" && (
+                                                <View
+                                                    style={
+                                                        styles.commentInputContainer
+                                                    }
+                                                >
+                                                    <MyTextInput
+                                                        placeholder="Add Comment"
+                                                        style={
+                                                            styles.commentInput
+                                                        }
+                                                    />
+                                                </View>
+                                            )}
+                                            {/* Render Add Comment section for Responder */}
+                                        </View>
                                     </View>
                                 ))}
                             </View>
@@ -175,7 +350,6 @@ const Forum = () => {
         </View>
     );
 };
-
 const styles = StyleSheet.create({
     gradient: {
         width: "100%",
@@ -190,10 +364,9 @@ const styles = StyleSheet.create({
         marginLeft: "5%",
         marginRight: "5%",
     },
-
     verticalLine: {
         height: 0.7,
-        backgroundColor: "black", // Change the color of the line as needed
+        backgroundColor: "black",
         marginVertical: 5,
     },
     notes: {
@@ -208,9 +381,6 @@ const styles = StyleSheet.create({
         marginTop: "5%",
         marginLeft: "5%",
         marginRight: "5%",
-    },
-    searchIcon: {
-        alignSelf: "center",
     },
     searchBar: {
         flex: 1,
@@ -232,7 +402,6 @@ const styles = StyleSheet.create({
     searchButtonText: {
         color: "white",
         fontWeight: "bold",
-        // height: hp(4.4),
         paddingLeft: "2%",
         paddingRight: "2%",
     },
@@ -277,20 +446,55 @@ const styles = StyleSheet.create({
         bottom: 10,
         right: 10,
     },
-    viewMore: {
-        color: "green",
-    },
     reportButton: {
         position: "absolute",
-        bottom: 8,
-        right: 8,
+        top: 10,
+        right: 10,
     },
-    report: {
-        color: "#ff3131",
-        fontSize: 5,
+    viewCommentsButton: {
+        paddingVertical: "1.53%",
+        justifyContent: "left",
+        borderRadius: 11,
+        marginTop: "2%",
+        marginBottom: "2%",
+    },
+    viewCommentsButtonText: {
+        color: "rgb(0, 91, 85)",
         fontWeight: "bold",
-        marginTop: 10,
+    },
+    commentButton: {
+        paddingVertical: "1%",
+        marginLeft: "5%",
+    },
+    commentButtonText: {
+        color: "rgb(0, 91, 85)",
+        fontWeight: "bold",
+    },
+    commentButtonContainer: {
+        flexDirection: "row",
+        justifyContent: "inside",
+        alignItems: "center",
+        // marginTop: "2%",
+        // marginBottom: "2%",
+    },
+    commentInputContainer: {
+        flexDirection: "row",
+        justifyContent: "inside",
+        alignItems: "center",
+    },
+    commentInput: {
+        flex: 1,
+        backgroundColor: "white",
+        height: hp(4),
+        fontSize: 14,
+        // borderRadius: 11,
+    },
+    linkContainer: { fontSize: 12, transform: [{ translateY: 2 }] },
+    link: {
+        fontSize: 12,
+        textDecorationLine: "underline",
+        textDecorationStyle: "solid",
     },
 });
 
-export default Forum;
+export default forum;
