@@ -197,7 +197,7 @@ const BlogPage = () => {
                     reportReason={reportReason}
                     setReportReason={setReportReason}
                     setReportIndex={setReportIndex}
-                    api="Blogs"
+                    api="blogs"
                 />
                 {/* <View style={styles.modalView}>
                     <Text style={styles.modalText}>Report</Text>

@@ -13,77 +13,70 @@ import MyTextInput from "../../components/TextInput";
 import Icon from "react-native-vector-icons/Ionicons";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { router } from "expo-router";
-
+import { AntDesign } from "@expo/vector-icons";
+import axios from "axios";
 const forum = () => {
-    const [blogs, setBlogs] = useState([]);
+    const [question, setQuestion] = useState([]);
+    const formatDate = (inputDate) => {
+        const originalDateString = inputDate;
+        const originalDate = new Date(originalDateString);
+
+        const monthNames = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ];
+
+        const month = monthNames[originalDate.getMonth()];
+        const day = originalDate.getDate();
+        const year = originalDate.getFullYear();
+        const formattedDate = `${month} ${day}, ${year}`;
+        const date = formattedDate;
+        return date;
+    };
+    const getQuestions = async () => {
+        try {
+            const response = await axios.get(
+                process.env.API_HOST + "/api/user/allQuestions"
+            );
+            console.log(response.data);
+            setQuestion(response.data);
+            setQuestions(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    useEffect(() => {
+        getQuestions();
+    }, []);
+    const [questions, setQuestions] = useState(question);
     const [expandedIndex, setExpandedIndex] = useState(null);
     const [role, setRole] = useState("User");
 
     useEffect(() => {
-        // Simulate loading blogs from an API
-        const blog = [
-            {
-                index: 1,
-                title: "Sample Blog Title 1",
-                author: "John Doe",
-                date: "March 20, 2024",
-                content:
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                comments: [
-                    {
-                        comment_id: 1,
-                        user_id: {
-                            user_id: 23,
-                            first_name: "Manan",
-                            last_name: "Malhotra",
-                            contact_number: 123456789,
-                            age: 23,
-                            gender: "Male",
-                            depression_test_score: null,
-                            anxiety_test_score: null,
-                            adhd_test_score: null,
-                        },
-                        comment: "Test question",
-                        comment_date: "2024-03-22T04:32:35.094+00:00",
-                    },
-                ],
-            },
-            {
-                index: 2,
-                title: "Sample Blog Title 2",
-                author: "Jane Smith",
-                date: "March 21, 2024",
-                content:
-                    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...t",
-                comments: [
-                    {
-                        comment_id: 2,
-                        user_id: {
-                            user_id: 24,
-                            first_name: "Alice",
-                            last_name: "Johnson",
-                            contact_number: 987654321,
-                            age: 30,
-                            gender: "Female",
-                            depression_test_score: null,
-                            anxiety_test_score: null,
-                            adhd_test_score: null,
-                        },
-                        comment: "Another test question",
-                        comment_date: "2024-03-22T04:35:12.094+00:00",
-                    },
-                ],
-            },
-        ];
-        setBlogs(blog);
+        // Simulate loading questions from an API
+
+        setQuestions(question);
     }, []);
 
     const handleViewMore = (index) => {
-        setBlogs((prevBlogs) =>
-            prevBlogs.map((blog, i) =>
+        setQuestions((prevQuestions) =>
+            prevQuestions.map((question, i) =>
                 i === index
-                    ? { ...blog, expandedContent: !blog.expandedContent }
-                    : blog
+                    ? {
+                          ...question,
+                          expandedContent: !question.expandedContent,
+                      }
+                    : question
             )
         );
     };
@@ -92,25 +85,34 @@ const forum = () => {
         console.log("Add Comment Hit..");
     };
 
-    const handleViewMoreComments = (blogIndex) => {
-        setBlogs((prevBlogs) =>
-            prevBlogs.map((blog, index) =>
-                index === blogIndex
+    const handleViewMoreComments = (questionIndex) => {
+        setQuestions((prevQuestions) =>
+            prevQuestions.map((question, index) =>
+                index === questionIndex
                     ? {
-                          ...blog,
-                          expandedComments: !blog.expandedComments,
+                          ...question,
+                          expandedComments: !question.expandedComments,
                       }
-                    : blog
+                    : question
             )
         );
     };
 
-    const handleReportClick = () => {
-        console.log("Report clicked");
+    const handleReportClick = (index) => {
+        console.log("Report clicked " + index);
     };
-
-    const handleSearch = () => {
-        console.log("Searching Hit..");
+    const [searchText, setSearchText] = useState(""); // State for search term
+    const handleSearch = (text) => {
+        setSearchText(text);
+        let tempData = [...question];
+        tempData.forEach((question) => {
+            console.log(question.question);
+        });
+        tempData = tempData.filter((question) =>
+            question.question.toLowerCase().includes(text.toLowerCase())
+        );
+        setQuestions(tempData);
+        console.log("Searching Hit.." + text);
     };
 
     const gradientColors = [
@@ -142,36 +144,35 @@ const forum = () => {
                                 </TouchableOpacity>
                             </Text>
                         </View>
-                        {/* <View style={styles.searchBarContainer}>
-                            <TextInput
-                                style={styles.searchBar}
-                                placeholder="Search your problem"
-                                onChangeText={handleSearch}
-                                value=""
+                        <View style={styles.searchBarContainer}>
+                            <AntDesign
+                                name="search1"
+                                size={24}
+                                color="black"
+                                style={styles.searchIcon}
                             />
-                            <TouchableOpacity
-                                style={styles.searchButton}
-                                onPress={() => handleSearch("")}
-                            >
-                                <Text style={styles.searchButtonText}>
-                                    Add Question
-                                </Text>
-                            </TouchableOpacity>
-                        </View> */}
+                            <TextInput
+                                style={styles.searchBar} // Customize styles based on your desired search bar appearance
+                                placeholder="Search Videos"
+                                placeholderTextColor="black"
+                                onChangeText={handleSearch}
+                                value={searchText}
+                            />
+                        </View>
                         <View style={styles.qnA}>
-                            {/* Blog List */}
-                            <View style={styles.blogList}>
-                                {/* Map through the blogsData array and render each blog */}
-                                {blogs.map((blog, index) => (
+                            {/* Question List */}
+                            <View style={styles.questionList}>
+                                {/* Map through the questionsData array and render each question */}
+                                {questions.map((question, index) => (
                                     <View key={index}>
-                                        <View style={styles.blog}>
+                                        <View style={styles.question}>
                                             {/*Render Flag Content button for User*/}
                                             {role === "User" && (
                                                 <TouchableOpacity
                                                     style={styles.reportButton}
                                                     onPress={() =>
                                                         handleReportClick(
-                                                            blog.index
+                                                            question.public_qna_id
                                                         )
                                                     }
                                                 >
@@ -182,24 +183,27 @@ const forum = () => {
                                                     />
                                                 </TouchableOpacity>
                                             )}
-                                            <Text style={styles.blogTitle}>
-                                                {blog.title}
+                                            <Text style={styles.questionTitle}>
+                                                {question.question}
                                             </Text>
                                             <Text style={styles.author}>
-                                                - {blog.author}
+                                                - {question.user_id.first_name}{" "}
+                                                {question.user_id.last_name}
                                             </Text>
                                             <Text>
-                                                {blog.expandedContent ||
+                                                {question.expandedContent ||
                                                 expandedIndex === index
-                                                    ? blog.content
-                                                    : blog.content.length > 100
-                                                    ? blog.content.substring(
+                                                    ? question.description
+                                                    : question.description
+                                                          .length > 100
+                                                    ? question.description.substring(
                                                           0,
                                                           100
                                                       ) + "..."
-                                                    : blog.content}
+                                                    : question.description}
                                                 {/* Render "View More" button only if content is longer than 100 characters */}
-                                                {blog.content.length > 100 && (
+                                                {question.description.length >
+                                                    100 && (
                                                     <Text
                                                         style={
                                                             styles.viewMoreButton
@@ -210,7 +214,7 @@ const forum = () => {
                                                             )
                                                         }
                                                     >
-                                                        {blog.expandedContent ||
+                                                        {question.expandedContent ||
                                                         expandedIndex === index
                                                             ? "View Less"
                                                             : "View More"}
@@ -218,7 +222,9 @@ const forum = () => {
                                                 )}
                                             </Text>
                                             <Text style={styles.date}>
-                                                {blog.date}
+                                                {formatDate(
+                                                    question.added_date
+                                                )}
                                             </Text>
                                             <View
                                                 style={
@@ -240,7 +246,7 @@ const forum = () => {
                                                             styles.viewCommentsButtonText
                                                         }
                                                     >
-                                                        {blog.expandedComments
+                                                        {question.expandedComments
                                                             ? "Hide Comments"
                                                             : "View Comments"}
                                                     </Text>
@@ -265,13 +271,13 @@ const forum = () => {
                                                 )} */}
                                             </View>
                                             {/* Display comments if expanded */}
-                                            {blog.expandedComments && (
+                                            {question.expandedComments && (
                                                 <View
                                                     style={
                                                         styles.commentsContainer
                                                     }
                                                 >
-                                                    {blog.comments.map(
+                                                    {question.comments.map(
                                                         (
                                                             comment,
                                                             commentIndex
@@ -298,9 +304,9 @@ const forum = () => {
                                                                         styles.commentDate
                                                                     }
                                                                 >
-                                                                    {
+                                                                    {formatDate(
                                                                         comment.comment_date
-                                                                    }
+                                                                    )}
                                                                 </Text>
                                                                 <Text
                                                                     style={
@@ -375,12 +381,13 @@ const styles = StyleSheet.create({
     searchBarContainer: {
         flexDirection: "row",
         alignItems: "center",
+        borderWidth: 0.4,
         borderColor: "gray",
         borderRadius: 10,
-        marginBottom: "5%",
-        marginTop: "5%",
-        marginLeft: "5%",
-        marginRight: "5%",
+        marginBottom: 30,
+        marginRight: 20,
+        marginLeft: 10,
+        backgroundColor: "white",
     },
     searchBar: {
         flex: 1,
@@ -409,16 +416,16 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
     },
-    blogList: {
+    questionList: {
         marginBottom: "15%",
     },
-    blog: {
+    question: {
         backgroundColor: "rgba(0,0,255,0.07)",
         borderRadius: 8,
         padding: 20,
         marginBottom: 20,
     },
-    blogTitle: {
+    questionTitle: {
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 5,

@@ -23,14 +23,27 @@ const ReportModal = ({
             console.log(reportIndex);
             console.log(reportReason);
             console.log(currentUserId);
-            const response = await axios.post(
-                process.env.API_HOST + "/flag/blogs/addFlagged" + api,
-                {
-                    blog_id: reportIndex,
-                    reason: reportReason,
-                    user_id: currentUserId,
-                }
-            );
+            if (api == "blogs") {
+                const response = await axios.post(
+                    process.env.API_HOST + "/flag/blogs/addFlaggedBlogs",
+                    {
+                        blog_id: reportIndex,
+                        reason: reportReason,
+                        user_id: currentUserId,
+                    }
+                );
+                console.log("working");
+            } else {
+                const response = await axios.post(
+                    process.env.API_HOST +
+                        "/flag/publicQNA/addFlaggedPublicQNA",
+                    {
+                        public_qna_id: reportIndex,
+                        reason: reportReason,
+                        user_id: currentUserId,
+                    }
+                );
+            }
         } catch (error) {
             console.log(error);
         }
