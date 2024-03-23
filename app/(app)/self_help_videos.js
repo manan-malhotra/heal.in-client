@@ -98,6 +98,7 @@ const SelfHelpVideo = () => {
                         <TextInput
                             style={styles.searchBar} // Customize styles based on your desired search bar appearance
                             placeholder="Search Videos"
+                            placeholderTextColor="black"
                             onChangeText={handleSearch}
                             value={searchText}
                         />

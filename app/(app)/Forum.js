@@ -448,8 +448,8 @@ const styles = StyleSheet.create({
     },
     reportButton: {
         position: "absolute",
-        top: 10,
-        right: 10,
+        top: 15,
+        right: 15,
     },
     viewCommentsButton: {
         paddingVertical: "1.53%",
