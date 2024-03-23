@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
+import { useRouter } from "expo-router";
 const SelfAssessmentTools = () => {
-
+  const router = useRouter();
+  const navigation = useNavigation();
   return (
         <>
           {/*This the part of Self Help Tools Part */}
@@ -13,24 +15,30 @@ const SelfAssessmentTools = () => {
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 12}}>DEPRESSION{'\n'}TEST</Text>
-                      <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 24}}>+</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            router.push("depression");
+                          }}
+                        >
+                          <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 14}}>DEPRESSION TEST</Text>
+                          <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 30}}>+</Text>
+                    </TouchableOpacity>
                     </View>
                 </View>
               </View>
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 12}}>ANXIETY{'\n'}TEST</Text>
-                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 24}}>+</Text>
+                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 14}}>ANXIETY{'\n'}TEST</Text>
+                      <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 30}}>+</Text>
                     </View>
                 </View>
               </View>
               <View style = {styles.sat_column}>
                 <View style={styles.satCard}>
                     <View style={styles.innersatCard}>
-                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 12}}>ADHD{'\n'}TEST</Text>
-                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 24}}>+</Text>
+                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 14}}>ADHD{'\n'}TEST</Text>
+                          <Text style = {{fontWeight:'bold',color:'white',textAlign: 'center',fontSize: 30}}>+</Text>
                     </View>
                 </View>
               </View>
