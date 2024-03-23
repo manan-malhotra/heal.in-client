@@ -7,6 +7,8 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(undefined);
+    const [role, setRole] = useState('');
+    const [userId, setUserId] = useState();
 
     useEffect(() => {
         console.log(process.env.API_HOST + "T");
@@ -39,6 +41,7 @@ export const AuthContextProvider = ({ children }) => {
                         await AsyncStorage.setItem("role", data.role);
                         await AsyncStorage.setItem("contact", strcontact);
                         await AsyncStorage.setItem("userId", strUserId);
+                        if(data) setUser(data);
                     }
                 } catch {
                     await AsyncStorage.removeItem("token");
@@ -109,13 +112,14 @@ export const AuthContextProvider = ({ children }) => {
             await AsyncStorage.removeItem("token");
             axios.defaults.headers.common["Authorization"] = "";
             setIsAuthenticated(false);
+            setUser(null);
         } catch (error) {
             console.error("Error logging out: ", error);
         }
     };
     return (
         <AuthContext.Provider
-            value={{ user, isAuthenticated, login, register, logout }}
+            value={{ user, isAuthenticated, login, register, logout, role, userId }}
         >
             {children}
         </AuthContext.Provider>
@@ -125,6 +129,7 @@ export const AuthContextProvider = ({ children }) => {
 export const useAuth = () => {
     const value = useContext(AuthContext);
     const { isAuthenticated } = value;
+    const { user } = useContext(AuthContext);
     console.log(isAuthenticated + " test");
     if (!value) {
         throw new Error("useAuth must be used within an AuthProvider");
