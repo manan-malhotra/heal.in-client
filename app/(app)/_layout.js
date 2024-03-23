@@ -50,18 +50,18 @@ export default function _layout() {
                     }}
                 />
                 <Stack.Screen
-          name="chats"
-          options={{
-            headerTitle: "Doctors",
-            headerStyle: {
-              backgroundColor: "#3340B0",
-            },
-            headerTintColor: "white",
-            navigationBarColor: "#3340B0",
-          }}
-        />
+                name="chats"
+                options={{
+                    headerTitle: "Doctors",
+                    headerStyle: {
+                    backgroundColor: "#3340B0",
+                    },
+                    headerTintColor: "white",
+                    navigationBarColor: "#3340B0",
+                }}
+                />
                 <Stack.Screen
-                        name="Forum"
+                        name="forum"
                         options={{
                             headerTitle: "QnA Forum",
                             headerStyle: {
@@ -80,8 +80,8 @@ export default function _layout() {
                     headerTintColor: "white",
                     navigationBarColor: "#3340B0",
                 }}
-            />
-            <Stack.Screen
+                />
+                <Stack.Screen
                 name="depression"
                 options={{
                     headerTitle: "Depression Test",
@@ -91,7 +91,7 @@ export default function _layout() {
                     headerTintColor: "white",
                     navigationBarColor: "#3340B0",
                 }}
-            />
+                />
         </Stack>
         </>
     );

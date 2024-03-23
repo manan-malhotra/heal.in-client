@@ -13,7 +13,7 @@ const ProfessionalTalk = () => {
             <View style={styles.professionaltalk}>
                 <TouchableOpacity
                     onPress={() => {
-                        router.push("Forum");
+                        router.push("forum");
                     }}
                 >
                     <View style={styles.toppart}>

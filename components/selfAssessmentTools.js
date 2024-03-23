@@ -20,7 +20,7 @@ const SelfAssessmentTools = () => {
                             router.push("depression");
                           }}
                         >
-                          <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 14}}>DEPRESSION TEST</Text>
+                          <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 14}}>DEPRESSION{'\n'}TEST</Text>
                           <Text style = {{fontWeight:'bold',color:"white",textAlign: 'center',fontSize: 30}}>+</Text>
                     </TouchableOpacity>
                     </View>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
       },
       innersatCard: {
         height: 85,
-        width: 85,
+        width: '90%',
         borderRadius: 10,
         justifyContent: 'center',
         padding: 3,
