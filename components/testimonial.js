@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 
 const Testimonial = () => {
 
@@ -37,7 +38,7 @@ const Testimonial = () => {
 const styles = StyleSheet.create({
 
     testimonial: {
-        marginTop: 30,
+        marginTop: heightPercentageToDP(3),
       },
       testimonial_title:{
         fontSize: 35,
@@ -47,33 +48,29 @@ const styles = StyleSheet.create({
       testimonial_card:{
         flexDirection: 'column',
         backgroundColor: '#FFB68D',
-        marginTop: 30,
-        marginBottom: 30,
-        height: 'auto',
-        marginRight:10,
+        marginTop: heightPercentageToDP(3),
+        marginBottom: heightPercentageToDP(3),
         borderRadius: 20,
-        marginLeft: 10,
       },
       testimonial_inner_card:{
-        justifyContent: 'left',
         flexDirection: 'row',
-        marginRight: 60,
-        marginTop: 5,
-        marginBottom: 15,
+        width: widthPercentageToDP(78),
+        marginTop: heightPercentageToDP(1),
+        marginBottom: heightPercentageToDP(1),
       },
       testimonial_inner_card_left:{
-        marginLeft:20,
-        marginRight: 5,
+        marginLeft:widthPercentageToDP(4),
+        marginRight:widthPercentageToDP(2),
       },
       testimonial_inner_card_right:{
         flexDirection: 'column',
-        marginTop: 10,
+        marginTop: heightPercentageToDP(1),
         justifyContent: 'space-evenly',
       },
       testimonial_img: {
-        marginTop: 10,
-        height: 25,
-        width: 25,
+        marginTop: heightPercentageToDP(1.2),
+        height: heightPercentageToDP(3),
+        width: widthPercentageToDP(7),
         borderRadius: 24,
       }
   

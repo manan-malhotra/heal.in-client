@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import { useRouter } from "expo-router";
-
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 const HealthResources = () => {
     const router = useRouter();
     const navigation = useNavigation(); // Hook for accessing navigation object
@@ -88,7 +88,8 @@ const HealthResources = () => {
 
 const styles = StyleSheet.create({
     resources: {
-        marginTop: 30,
+        marginTop: heightPercentageToDP(3),
+        justifyContent: 'center'
     },
     resources_title: {
         fontSize: 35,
@@ -98,38 +99,34 @@ const styles = StyleSheet.create({
     resources_row: {
         flexDirection: "row",
         justifyContent: 'space-between',
-        marginLeft: '2%',
-        marginRight: '2%'
+        height: heightPercentageToDP(18),
     },
     resources_column: {
         flexDirection: "column",
     },
     resCard: {
         backgroundColor: "#FFB68D",
-        marginTop: 30,
-        height: 94,
+        marginTop: heightPercentageToDP(3),
+        height: heightPercentageToDP(12.5),
+        width: widthPercentageToDP(25),
         flexDirection: "column",
-        width: 94,
         borderRadius: 100,
-        marginLeft: 10,
-        marginRight: 10,
         padding: 3,
-        marginBottom: 10,
+        marginBottom: heightPercentageToDP(1.5),
         alignItems: "center",
     },
     innerresCard: {
         backgroundColor: "#FFFFFF",
-        height: 85,
-        width: 85,
+        height: heightPercentageToDP(11.7),
+        width: widthPercentageToDP(23),
         borderRadius: 100,
-        padding: 3,
         justifyContent: "center",
         alignItems: "center",
     },
     resImage: {
         borderRadius: 50,
-        width: 75,
-        height: 75,
+        height: heightPercentageToDP(10.7),
+        width: widthPercentageToDP(21),
     },
 });
 

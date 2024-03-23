@@ -2,6 +2,7 @@ import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 const ConsultDoctors = () => {
   const router = useRouter();
@@ -99,7 +100,7 @@ const ConsultDoctors = () => {
 
 const styles = StyleSheet.create({
   consulation: {
-    marginTop: 30,
+    marginTop: heightPercentageToDP(3),
   },
   consulation_title: {
     fontSize: 35,
@@ -107,18 +108,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   consulation_row: {
-    marginLeft: 40,
-    marginRight: 40,
     flexDirection: "column",
   },
   consulation_card: {
     backgroundColor: "#FFB68D",
     flexDirection: "row",
-    marginTop: 30,
+    marginTop: widthPercentageToDP(10),
     alignSelf: "center",
-    marginRight: 10,
     borderRadius: 40,
-    marginLeft: 10,
   },
   consulation_inner_card_left: {
     backgroundColor: "#FFFFFF",
@@ -129,13 +126,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "justify",
-    marginLeft: "10%",
-    marginRight: "10%"
+    marginLeft: widthPercentageToDP(10),
+    marginRight: widthPercentageToDP(10)
   },
   consulation_img: {
     borderRadius: 100,
-    width: 70,
-    height: 70,
+    width: widthPercentageToDP(18),
+    height: heightPercentageToDP(10),
     alignSelf: "flex-start"
   },
   infoTitle:{

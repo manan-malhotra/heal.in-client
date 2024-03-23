@@ -8,6 +8,7 @@ import HealthResources from '../components/healthResources';
 import SelfAssessmentTools from '../components/selfAssessmentTools';
 import ConsultDoctors from '../components/consultDoctors';
 import Testimonial from '../components/testimonial';
+import { widthPercentageToDP } from 'react-native-responsive-screen';
 
 const Dashboard = () => {
   const gradientColors = ['rgba(255,255,255,0.2)', 'rgba(110,113,254,0.6)', 'rgba(4,0,207,0.4)'];
@@ -15,6 +16,7 @@ const Dashboard = () => {
     <View>
       <LinearGradient colors={gradientColors}  style={styles.gradient}>
         <ScrollView style = {styles.scrollview}>
+          <View style = {styles.mainView}>
 
           {/*This the part of Professional Talk Part */}
           <ProfessionalTalk/>
@@ -31,6 +33,7 @@ const Dashboard = () => {
           {/*This the part of Testimonial Part */}
           <Testimonial/>
 
+          </View>
         </ScrollView>
       </LinearGradient>
     </View>
@@ -43,11 +46,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-
-
-  mainTitle: {
-    fontSize: 40,
-    marginTop: 20,
+  
+  mainView:{
+    marginLeft: widthPercentageToDP(2),
+    marginRight: widthPercentageToDP(2)
   },
 
 });

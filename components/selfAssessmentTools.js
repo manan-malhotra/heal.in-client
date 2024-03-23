@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import { useRouter } from "expo-router";
+import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
+
 const SelfAssessmentTools = () => {
   const router = useRouter();
   const navigation = useNavigation();
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
 
   
     sat:{
-        marginTop: 30,
+        marginTop: heightPercentageToDP(3),
       },
       sat_title: {
         fontSize: 35,
@@ -61,36 +63,27 @@ const styles = StyleSheet.create({
       },
       sat_row: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginRight: '2%',
-        marginLeft: '2%',
+        justifyContent: 'space-between',
+        height: heightPercentageToDP(18),
+        width: '100%',
       },
       sat_column:{
         flexDirection: 'column',
       },
       satCard: {
         backgroundColor: 'rgba(87, 152, 236, 0.7)',
-        marginTop: 30,
-        height: 130,
+        marginTop: heightPercentageToDP(3),
+        height: heightPercentageToDP(15),
         flexDirection: 'column',
-        width: 105,
+        width: widthPercentageToDP(28),
         borderRadius: 10,
-        marginBottom: 10,
         justifyContent: 'center',
         alignItems: 'center',
       },
       innersatCard: {
-        height: 85,
-        width: '90%',
         borderRadius: 10,
         justifyContent: 'center',
-        padding: 3,
       },
-      satImage: {
-        width: 65,
-        height: 65,
-      },
-
 });
 
 export default SelfAssessmentTools;
