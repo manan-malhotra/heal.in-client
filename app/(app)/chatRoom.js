@@ -7,7 +7,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import { Feather } from '@expo/vector-icons'
 import CustomKeyboardView from '../../components/CustomKeyboardView'
 import { getRoomId } from '../utils/common'
-import { Timestamp, addDoc, collection, doc, onSnapshot, orderBy, query, setDoc } from "firebase/firestore";
+import { Timestamp, addDoc, collection, doc, onSnapshot, orderBy, where, query, getDocs,  setDoc } from "firebase/firestore";
 import { db } from '../../firebaseConfig'
 
 export default function ChatRoom() {
@@ -33,10 +33,20 @@ export default function ChatRoom() {
     }, []);
     const createRoomIfNotExists = async () => {
         let roomId = getRoomId(item.userId, item.currentUserId);
-        await setDoc(doc(db, "rooms", roomId), {
-            roomId,
-            createdAt: Timestamp.fromDate(new Date())
-        });
+        const q = query(collection(db, "rooms"), where("roomId", "==", roomId));
+        const querySnapshot = await getDocs(q);
+        if(!querySnapshot.empty) {}
+        else {
+            const username = item.first_name + "_" + item.last_name;
+            await setDoc(doc(db, "rooms", roomId), {
+                roomId,
+                userId1: item.userId,
+                userId2: item.currentUserId,
+                username1: username,
+                username2: item.currentUsername,
+                createdAt: Timestamp.fromDate(new Date())
+            });
+        }
     }
 
     const handleSendMessage = async () => {

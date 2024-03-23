@@ -33,7 +33,9 @@ const Chats = () => {
   }
   const getUserName = async () => {
     try {
-      const value = await AsyncStorage.getItem('firstName');
+      const firstName = await AsyncStorage.getItem('firstName');
+      const lastName = await AsyncStorage.getItem('lastName');
+      const value = firstName + "_" + lastName
       setCurrentUsername(value);
     } catch(e) {
       console.log(e);
@@ -43,7 +45,7 @@ const Chats = () => {
   return (
     <View className="flex-1 bg-white">
       {users.length > 0 ? (
-        <ChatList users={users} currentUserId={currentUserId} currentUsername={currentUsername}/>
+        <ChatList users={users} currentUserId={currentUserId} currentUsername={currentUsername} sentFrom="Users"/>
       ) : (
         <View className="flex items-center" style={{ top: hp(30) }}>
           <ActivityIndicator size="large" color="#3340B0" />

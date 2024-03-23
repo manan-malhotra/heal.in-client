@@ -9,20 +9,19 @@ const MainLayout = () => {
     const { isAuthenticated } = useAuth();
     const segments = useSegments();
     const router = useRouter();
-    const { role } = useAuth();
+    const { user } = useAuth();
 
     useEffect(() => {
         const checkAuthentication = async () => {
+            // TODO: Add Toast Messages
             if (typeof isAuthenticated == "undefined") return;
             const inApp = segments[0] == "(app)";
             if (isAuthenticated && !inApp) {
-                console.log("ROLE: ", role);
-                if(role == '') {
-                    // TODO: Add Toast Messages
+                if(user == null || user.role == '') {
                     router.replace("signIn");
-                } else if(role == 'DOCTOR') {
-                    router.replace("doctorHome");
-                } else if(role == 'USER') {
+                } else if(user.role == 'DOCTOR') {
+                    router.replace({pathname: "/doctorHome", params: user});
+                } else if(user.role == 'USER') {
                     router.replace("home");
                 }
             } else if (isAuthenticated == false) {
@@ -30,18 +29,7 @@ const MainLayout = () => {
             }
         };
         checkAuthentication();
-    }, [isAuthenticated, role]);
-
-    const getUserRole = async () => {
-        try {
-            const value = await AsyncStorage.getItem('role');
-            console.log("VALUE : ", value)
-            setRole(value);
-          } catch(e) {
-            console.log(e);
-            return '';
-          }
-    }
+    }, [isAuthenticated, user]);
 
     return (
         <View className="h-full">

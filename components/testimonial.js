@@ -25,7 +25,7 @@ const Testimonial = () => {
                 </View>
                 <View style = {styles.testimonial_inner_card_right}>
                   <Text style = {{textAlign:"left",fontSize: 20, fontWeight: 'bold'}}>Ashu Dubey</Text>
-                  <Text style = {{textAlign:'justify',fontSize: 12, fontStyle: 'italic'}}>The Q&A forum here is so helpful. Most topics are usually covered before itself. When new questions are posted the response is very quick.</Text>
+                  <Text style = {{textAlign:'justify',fontSize: 12, fontStyle: 'italic'}}>The Q&A  here is so helpful. Most topics are usually covered before itself. When new questions are posted the response is very quick.</Text>
                 </View>
               </View>
             </View>
