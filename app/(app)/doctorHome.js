@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../../context/authcontext'
 import { useLocalSearchParams } from 'expo-router'
-import { collection, query, where, or, getDocs, onSnapshot } from 'firebase/firestore'
+import { collection, query, where, or, and, onSnapshot } from 'firebase/firestore'
 import { db } from '../../firebaseConfig'
 import { ActivityIndicator } from 'react-native-paper'
 import ChatList from '../../components/ChatList'
@@ -18,7 +18,7 @@ export default function doctorHome() {
   useEffect(() => {
     const getData = async () => {
       const userId = item.userId;
-      const q = query(collection(db, "rooms"), or(where("userId1", "==", userId), where("userId2", "==", userId)));
+      const q = query(collection(db, "rooms"), and(or(where("userId1", "==", userId), where("userId2", "==", userId)), where("messagesExist", "==", true)));
       let unsub=onSnapshot(q, (snapshot) => {
           let allRooms = snapshot.docs.map(doc => {
             const name = doc.get("username2").split("_")
@@ -46,15 +46,24 @@ export default function doctorHome() {
       {rooms.length > 0 ? (
         <View>
           <Text>{rooms[0].user_id.userId}</Text>
-          {/* <ChatList users={rooms} currentUserId={item.userId} currentUsername={item.firstName}/> */}
+          <ChatList users={rooms} currentUserId={item.userId} currentUsername={item.firstName}/>
           <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
               <Text style={styles.buttonText} >Logout</Text>
           </TouchableOpacity>
         </View>
       ) : (
-        <View className="flex items-center" style={{ top: 30 }}>
-          <ActivityIndicator size="large" color="#3340B0" />
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+        <View>
+          <View className="items-center">
+          <Text style={{ fontStyle: 'italic', fontWeight: 'normal' }}>
+            No messages available
+          </Text>
+          </View>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                <Text style={styles.buttonText} >Logout</Text>
+          </TouchableOpacity>
+          </View>
+        </SafeAreaView>
       )}
     </View>
   )

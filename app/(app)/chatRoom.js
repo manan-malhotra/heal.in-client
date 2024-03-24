@@ -44,7 +44,8 @@ export default function ChatRoom() {
                 userId2: item.currentUserId,
                 username1: username,
                 username2: item.currentUsername,
-                createdAt: Timestamp.fromDate(new Date())
+                createdAt: Timestamp.fromDate(new Date()),
+                messagesExist: false,
             });
         }
     }
@@ -56,6 +57,7 @@ export default function ChatRoom() {
             let roomId = getRoomId(item.userId, item.currentUserId);
             const docRef = doc(db, 'rooms', roomId);
             const messagesRef = collection(docRef, "messages");
+            await setDoc(doc(db, "rooms", roomId), { messagesExist: true }, {merge: true});
             textRef.current="";
             if(inputRef) inputRef?.current?.clear();
             const newDoc = await addDoc(messagesRef, {
@@ -72,7 +74,7 @@ export default function ChatRoom() {
     return (
         <CustomKeyboardView inChat={true}>
             <View style={{flex: 1, backgroundColor: 'white'}}>
-                <ChatRoomHeader user={item} router={router}/>
+                <ChatRoomHeader user={item} router={router} sentFrom={item.sentFrom}/>
                 <View style={{ flex: 1}}>
                 <View style={{ flex: 1, borderBottomWidth: 1, borderBottomColor: 'rgba(0, 0, 0, 0.1)' }}>
                     <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0)' }}>
