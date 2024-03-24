@@ -8,8 +8,7 @@ import {
     Modal,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { ScrollView } from "react-native";
-import { TextInput } from "react-native-paper";
+import { ScrollView, TextInput, Image } from "react-native";
 import MyTextInput from "../../components/TextInput";
 import Icon from "react-native-vector-icons/Ionicons";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -18,6 +17,10 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ReportModal from "../../components/reportModal";
+import { MaterialIcons } from '@expo/vector-icons';
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+
+
 const forum = () => {
     const [question, setQuestion] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -68,7 +71,7 @@ const forum = () => {
     }, []);
     const [questions, setQuestions] = useState(question);
     const [expandedIndex, setExpandedIndex] = useState(null);
-    const [role, setRole] = useState("User");
+    const [role, setRole] = useState("Responder");
 
     useEffect(() => {
         // Simulate loading questions from an API
@@ -157,7 +160,7 @@ const forum = () => {
                         <View style={styles.searchBarContainer}>
                             <AntDesign
                                 name="search1"
-                                size={24}
+                                size={20}
                                 color="black"
                                 style={styles.searchIcon}
                             />
@@ -167,6 +170,7 @@ const forum = () => {
                                 placeholderTextColor="black"
                                 onChangeText={handleSearch}
                                 value={searchText}
+                                underlineColorAndroid="transparent"
                             />
                         </View>
                         <View style={styles.qnA}>
@@ -346,12 +350,22 @@ const forum = () => {
                                                         styles.commentInputContainer
                                                     }
                                                 >
-                                                    <MyTextInput
+                                                <View style={styles.inputWrapper}>
+                                                    <TextInput
                                                         placeholder="Add Comment"
                                                         style={
                                                             styles.commentInput
                                                         }
+                                                        multiline={true}
+                                                        numberOfLines={undefined}
                                                     />
+                                                </View>
+                                                <TouchableOpacity onPress={handleAddComment}>
+                                                    <Image
+                                                    style={styles.icon}
+                                                    source={require("../../assets/images/message.png")}
+                                                    />
+                                                </TouchableOpacity>
                                                 </View>
                                             )}
                                             {/* Render Add Comment section for Responder */}
@@ -393,8 +407,7 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     body: {
-        marginLeft: "4%",
-        marginRight: "4%",
+        padding: 5,
     },
     title: {
         marginTop: "15%",
@@ -409,39 +422,34 @@ const styles = StyleSheet.create({
     notes: {
         marginLeft: "5%",
     },
+    icon_container: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    icon: {
+        width: widthPercentageToDP(4),
+        height: heightPercentageToDP(1.8),
+    },
     searchBarContainer: {
         flexDirection: "row",
         alignItems: "center",
         borderWidth: 0.4,
         borderColor: "gray",
         borderRadius: 10,
+        marginTop: 20,
         marginBottom: 30,
-        marginRight: 20,
-        marginLeft: 10,
+        marginRight: 39,
+        marginLeft: 30,
         backgroundColor: "white",
+    },
+    searchIcon: {
+        paddingLeft: 10,
     },
     searchBar: {
         flex: 1,
-        backgroundColor: "white",
-        height: hp(4.4),
-        fontSize: 14,
-        borderBottomLeftRadius: 11,
-        borderTopLeftRadius: 11,
-    },
-    searchButton: {
-        backgroundColor: "green",
-        paddingVertical: "1.53%",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-        borderBottomRightRadius: 11,
-        borderTopRightRadius: 11,
-    },
-    searchButtonText: {
-        color: "white",
-        fontWeight: "bold",
-        paddingLeft: "2%",
-        paddingRight: "2%",
+        paddingVertical: 3,
+        paddingHorizontal: 8,
+        marginRight: 20,
     },
     qnA: {
         flex: 1,
@@ -511,22 +519,28 @@ const styles = StyleSheet.create({
     },
     commentButtonContainer: {
         flexDirection: "row",
-        justifyContent: "inside",
+        justifyContent: "space-between",
         alignItems: "center",
-        // marginTop: "2%",
-        // marginBottom: "2%",
     },
     commentInputContainer: {
+
         flexDirection: "row",
-        justifyContent: "inside",
         alignItems: "center",
+        backgroundColor: 'white',
+        paddingHorizontal: widthPercentageToDP(3.2),
+        borderRadius: widthPercentageToDP(7)
+    },
+    inputWrapper: {
+        flex: 1,
     },
     commentInput: {
-        flex: 1,
         backgroundColor: "white",
-        height: hp(4),
-        fontSize: 14,
-        // borderRadius: 11,
+        justifyContent: 'center',
+        height: hp(5),
+        width: widthPercentageToDP(69),
+        marginRight: widthPercentageToDP(1.6),
+        fontSize: 12,
+        borderRadius: 15,
     },
     linkContainer: { fontSize: 12, transform: [{ translateY: 2 }] },
     link: {
