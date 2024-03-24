@@ -1,7 +1,8 @@
 import React from "react";
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 export default function _layout() {
+    const params = useLocalSearchParams();
     return (
         <>
             <Stack>
@@ -50,49 +51,61 @@ export default function _layout() {
                     }}
                 />
                 <Stack.Screen
-                name="chats"
-                options={{
-                    headerTitle: "Doctors",
-                    headerStyle: {
-                    backgroundColor: "#3340B0",
-                    },
-                    headerTintColor: "white",
-                    navigationBarColor: "#3340B0",
-                }}
+                    name="chats"
+                    options={{
+                        headerTitle: "Doctors",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
                 />
                 <Stack.Screen
-                        name="forum"
-                        options={{
-                            headerTitle: "QnA Forum",
-                            headerStyle: {
-                                backgroundColor: "#3340B0",
-                            },
-                            headerTintColor: "white",
-                            navigationBarColor: "#3340B0",
-                        }}
-                /><Stack.Screen
-                name="self_help_videos"
-                options={{
-                    headerTitle: "Self Help Videos",
-                    headerStyle: {
-                        backgroundColor: "#3340B0",
-                    },
-                    headerTintColor: "white",
-                    navigationBarColor: "#3340B0",
-                }}
+                    name="forum"
+                    options={{
+                        headerTitle: "QnA Forum",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
                 />
                 <Stack.Screen
-                name="depression"
-                options={{
-                    headerTitle: "Depression Test",
-                    headerStyle: {
-                        backgroundColor: "#3340B0",
-                    },
-                    headerTintColor: "white",
-                    navigationBarColor: "#3340B0",
-                }}
+                    name="self_help_videos"
+                    options={{
+                        headerTitle: "Self Help Videos",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
                 />
-        </Stack>
+                <Stack.Screen
+                    name="assessment/index"
+                    options={({ route }) => ({
+                        title: route.params.test + " Test",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    })}
+                />
+                <Stack.Screen
+                    name="doctorHome"
+                    options={{
+                        headerTitle: "Doctor's Home",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
+                />
+            </Stack>
         </>
     );
 }
