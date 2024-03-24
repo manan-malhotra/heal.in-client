@@ -78,23 +78,7 @@ const BlogPage = () => {
     }, []);
 
     const [expandedIndex, setExpandedIndex] = useState(null);
-    const handleReport = async () => {
-        try {
-            console.log(reportIndex);
-            console.log(reportReason);
-            console.log(currentUserId);
-            const response = await axios.post(
-                process.env.API_HOST + "/flag/blogs/addFlaggedBlogs",
-                {
-                    blog_id: reportIndex,
-                    reason: reportReason,
-                    user_id: currentUserId,
-                }
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    };
+
     const handleViewMore = (index) => {
         setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
     };
@@ -104,13 +88,6 @@ const BlogPage = () => {
         console.log("Report clicked for index: " + index);
         setModalVisible(true);
         setReportIndex(index);
-    };
-    const handleReportReason = (text) => {
-        if (reportReason.includes(text)) {
-            setReportReason("");
-        } else {
-            setReportReason(text);
-        }
     };
 
     const gradientColors = [
@@ -199,73 +176,6 @@ const BlogPage = () => {
                     setReportIndex={setReportIndex}
                     api="blogs"
                 />
-                {/* <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Report</Text>
-                    <Text style={styles.modalInnerText}>
-                        We understand your concerns. Please select the reason
-                        for reporting.
-                    </Text>
-                    <View style={styles.modalButtons}>
-                        <TouchableOpacity
-                            style={
-                                reportReason.includes("Hateful")
-                                    ? styles.modalButtonDisabled
-                                    : styles.modalButton
-                            }
-                            onPress={() =>
-                                handleReportReason("Hateful Content")
-                            }
-                        >
-                            <Text style={styles.options}>Hateful Content</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={
-                                reportReason.includes("Irrelevancy")
-                                    ? styles.modalButtonDisabled
-                                    : styles.modalButton
-                            }
-                            onPress={() => handleReportReason("Irrelevancy")}
-                        >
-                            <Text style={styles.options}>Irrelevancy</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={
-                                reportReason.includes("Spam")
-                                    ? styles.modalButtonDisabled
-                                    : styles.modalButton
-                            }
-                            onPress={() => handleReportReason("Spam")}
-                        >
-                            <Text style={styles.options}>Spam</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={
-                                reportReason.includes("Other")
-                                    ? styles.modalButtonDisabled
-                                    : styles.modalButton
-                            }
-                            onPress={() => handleReportReason("Other")}
-                        >
-                            <Text style={styles.options}>Other</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.submitButton}
-                            onPress={() => {
-                                console.log("Reported");
-                                handleReport();
-                                Alert.alert(
-                                    "Reported",
-                                    "Your report has been submitted. We will review it and take appropriate action."
-                                );
-                                setReportIndex("");
-                                setReportReason("");
-                                setModalVisible(false);
-                            }}
-                        >
-                            <Text style={styles.options}>Report</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View> */}
             </Modal>
         </>
     );

@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     Pressable,
+    Modal,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native";
@@ -15,8 +16,14 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { router } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ReportModal from "../../components/reportModal";
 const forum = () => {
     const [question, setQuestion] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [reportReason, setReportReason] = useState("");
+    const [reportIndex, setReportIndex] = useState("");
+    const [currentUserId, setCurrentUserId] = useState("");
     const formatDate = (inputDate) => {
         const originalDateString = inputDate;
         const originalDate = new Date(originalDateString);
@@ -45,6 +52,7 @@ const forum = () => {
     };
     const getQuestions = async () => {
         try {
+            setCurrentUserId(await AsyncStorage.getItem("userId"));
             const response = await axios.get(
                 process.env.API_HOST + "/api/user/allQuestions"
             );
@@ -99,7 +107,9 @@ const forum = () => {
     };
 
     const handleReportClick = (index) => {
-        console.log("Report clicked " + index);
+        console.log("Report clicked for index: " + index);
+        setModalVisible(true);
+        setReportIndex(index);
     };
     const [searchText, setSearchText] = useState(""); // State for search term
     const handleSearch = (text) => {
@@ -353,6 +363,27 @@ const forum = () => {
                     </View>
                 </ScrollView>
             </LinearGradient>
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                presentationStyle="pageSheet"
+                onRequestClose={() => {
+                    setModalVisible(false);
+                    setReportReason("");
+                    setReportIndex("");
+                }}
+                style={styles.modal}
+            >
+                <ReportModal
+                    currentUserId={currentUserId}
+                    setModalVisible={setModalVisible}
+                    reportIndex={reportIndex}
+                    reportReason={reportReason}
+                    setReportReason={setReportReason}
+                    setReportIndex={setReportIndex}
+                    api="qna"
+                />
+            </Modal>
         </View>
     );
 };
@@ -457,6 +488,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 15,
         right: 15,
+        zIndex: 100,
     },
     viewCommentsButton: {
         paddingVertical: "1.53%",
@@ -501,6 +533,11 @@ const styles = StyleSheet.create({
         fontSize: 12,
         textDecorationLine: "underline",
         textDecorationStyle: "solid",
+    },
+    modal: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 
