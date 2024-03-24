@@ -9,7 +9,8 @@ export default function ChatItem({item, router, noBorder, currentUserId, current
     'userId': item.user_id.user_id,
     'contact': item.user_id.contact,
     'currentUserId': currentUserId,
-    'currentUsername': currentUsername
+    'currentUsername': currentUsername,
+    'sentFrom': sentFrom
   }
   const openChatRoom = () => {
     router.push({pathname: '/chatRoom', params: data})
