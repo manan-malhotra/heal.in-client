@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
+    Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
@@ -12,15 +13,49 @@ import { useLocalSearchParams } from "expo-router";
 
 const assessment = () => {
     const { test } = useLocalSearchParams();
-    const handleSubmit = () => {
+    const sendScore = async (sum) => {
+        try {
+            const json = {
+                score: sum,
+                test: test.toLowerCase(),
+            };
+            console.log(json);
+            const response = await axios.post(
+                process.env.API_HOST + "/api/user/addScore",
+                json
+            );
+            console.log(response.status);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const handleSubmit = async () => {
         const sum = Object.values(selectedOptions).reduce(
             (acc, value) => acc + value,
             0
         );
         const length = Object.keys(selectedOptions).length;
-        console.log(length);
-        console.log(questions.length);
-        console.log("Sum of selected options:", sum);
+        if (length == questions.length) {
+            await sendScore(sum);
+            Alert.alert(
+                "Test Submitted",
+                "Your score is " +
+                    sum +
+                    " out of " +
+                    questions.length * 3 +
+                    " points"
+            );
+            console.log("Sum of selected options:", sum);
+        } else {
+            Alert.alert(
+                "Please complete all questions",
+                "You have submitted " +
+                    length +
+                    " out of " +
+                    questions.length +
+                    " options"
+            );
+        }
     };
     const [questions, setQuestions] = useState([]);
 
@@ -182,7 +217,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     selectedOption: {
-        backgroundColor: "darkorange", // Change color to dark yellow when selected
+        backgroundColor: "#e0f5ae", // Change color to dark yellow when selected
     },
     submitButton: {
         backgroundColor: "green",
