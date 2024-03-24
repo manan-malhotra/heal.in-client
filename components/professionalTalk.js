@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import { useRouter } from "expo-router";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 const ProfessionalTalk = () => {
     const router = useRouter();
@@ -77,50 +78,48 @@ const ProfessionalTalk = () => {
 
 const styles = StyleSheet.create({
     professionaltalk: {
-        marginTop: "2%",
+        marginTop: heightPercentageToDP(3),
     },
     professionaltalk_title: {
         fontSize: 13,
         fontWeight: "bold",
-        marginBottom: 15,
+        marginBottom: heightPercentageToDP(3.5),
     },
     toppart: {
         textAlign: "left",
         flexDirection: "row",
         justifyContent: "center",
-        marginTop: 30,
-        marginLeft: "2%",
-        marginRight: "2%",
+        marginTop: heightPercentageToDP(3),
     },
     leftpartblog: {
-        marginRight: "2%",
-        width: "55%",
+        marginRight: widthPercentageToDP(1),
+        width: widthPercentageToDP(56),
     },
     rightpartimage: {
         justifyContent: "center",
-        marginTop: "20%",
-        width: 145,
-        height: 160,
+        marginTop: heightPercentageToDP(4),
+        width: widthPercentageToDP(40),
+        height: heightPercentageToDP(22),
     },
     blogimage: {
-        width: "16%",
+        width: widthPercentageToDP(7.5),
         alignSelf: "center",
-        height: "90%",
+        height: heightPercentageToDP(3.7),
     },
     innerBlogCard: {
         backgroundColor: "#fff",
         borderRadius: 25,
-        padding: 10,
-        width: "80%",
-        height: "100%",
+        padding: widthPercentageToDP(2.8),
+        width: widthPercentageToDP(40),
+        height: heightPercentageToDP(4.3),
     },
     blogCard: {
         justifyContent: "space-evenly",
         backgroundColor: "#FFB68D",
         flexDirection: "row",
         borderRadius: 25,
-        padding: 5,
-        marginBottom: "5%",
+        padding: heightPercentageToDP(0.68),
+        marginBottom: heightPercentageToDP(1.5),
     },
     blogTitle: {
         fontSize: 10,
