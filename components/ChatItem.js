@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import UserAvatar from 'react-native-user-avatar'
 
 export default function ChatItem({item, router, noBorder, currentUserId, currentUsername, sentFrom}) {
   const data={
@@ -19,7 +20,7 @@ export default function ChatItem({item, router, noBorder, currentUserId, current
     return (
       <TouchableOpacity onPress={openChatRoom} style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }} className={`${noBorder? '': 'border-b border-b-neutral-200'}`}>
         <View style={{ width: 60, height: 60, borderRadius: 30, overflow: 'hidden', marginRight: 10 }}>
-          <Image source={require('../assets/images/ConsultDoctor/doctor1.png')} style={{ width: 60, height: 60, resizeMode: 'cover' }} />
+          <UserAvatar size={60} name={item.user_id.first_name + " " + item.user_id.last_name}/>
         </View>
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -33,7 +34,8 @@ export default function ChatItem({item, router, noBorder, currentUserId, current
     return (
       <TouchableOpacity onPress={openChatRoom} style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }} className={`${noBorder? '': 'border-b border-b-neutral-200'}`}>
         <View style={{ width: 60, height: 60, borderRadius: 30, overflow: 'hidden', marginRight: 10 }}>
-          <Image source={require('../assets/images/ConsultDoctor/doctor1.png')} style={{ width: 60, height: 60, resizeMode: 'cover' }} />
+          {/* <Image source={require('../assets/images/ConsultDoctor/doctor1.png')} style={{ width: 60, height: 60, resizeMode: 'cover' }} /> */}
+          <UserAvatar size={60} name={item.user_id.first_name + " " + item.user_id.last_name}/>
         </View>
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

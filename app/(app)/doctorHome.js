@@ -1,20 +1,24 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../../context/authcontext'
-import { useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { collection, query, where, or, and, onSnapshot } from 'firebase/firestore'
 import { db } from '../../firebaseConfig'
 import { ActivityIndicator } from 'react-native-paper'
 import ChatList from '../../components/ChatList'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function doctorHome() {
   const item = useLocalSearchParams();
   const [rooms, setRooms] = useState({});
+  const router = useRouter();
   const { logout } = useAuth();
   const handleLogout = () => {
     logout();
   }
-
+  const handleRoute = () => {
+    router.replace({pathname: "/home", params: item})
+  }
   useEffect(() => {
     const getData = async () => {
       const userId = item.userId;
@@ -37,8 +41,12 @@ export default function doctorHome() {
         return unsub;
     }
     getData();
-    console.log(rooms);
+    setDoctorBoolean();
 }, []);
+
+  const setDoctorBoolean = async () => {
+    await AsyncStorage.setItem("doctorBoolean", "true");
+  }
 
   return (
     <View className="flex-1 bg-white">
