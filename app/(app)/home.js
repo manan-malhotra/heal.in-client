@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import TabNavigation from "../Navigation";
-import AdminDashboard from "../adminDashboard";
+import AdminDashboardNavigation from "../adminDashboardNavigation";
 
 export default function home() {
     return (

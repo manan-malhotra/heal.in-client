@@ -1,18 +1,14 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Modal, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
-import Icon from "react-native-vector-icons/FontAwesome";
-import Icon2 from "react-native-vector-icons/AntDesign";
-import { Picker } from '@react-native-picker/picker'; // Import Picker component
+
 
 const AddUsers = () => {
   const [isAddUserModalVisible, setIsAddUserModalVisible] = useState(false);
   const [newUserName, setNewUserName] = useState('');
   const [newUserRole, setNewUserRole] = useState('');
-  const [selectedUserType, setSelectedUserType] = useState('user');
+  const [selectedUserRole, setSelectedUserRole] = useState('');
 
-  const gradientColors = ['rgba(255,255,255,0.2)', 'rgba(110,113,254,0.6)', 'rgba(4,0,207,0.4)'];
 
   const handleAddUser = () => {
     // Logic to add a new user
@@ -24,12 +20,12 @@ const AddUsers = () => {
     setIsAddUserModalVisible(false);
   };
 
-  // Function to render the form based on the selected user type
+  // Function to render the form based on the selected user role
   const renderUserForm = () => {
-    switch (selectedUserType) {
+    switch (selectedUserRole) {
       case 'user':
         return (
-          <View>
+          <View style={styles.formContainer}>
             {/* User form fields */}
             <TextInput
               style={styles.input}
@@ -41,7 +37,7 @@ const AddUsers = () => {
             />
             <TextInput
               style={styles.input}
-              placeholder="Email ID"
+              placeholder="Email Id"
             />
             <TextInput
               style={styles.input}
@@ -57,13 +53,13 @@ const AddUsers = () => {
             />
             <TextInput
               style={styles.input}
-              placeholder="Contact Number"
+              placeholder="Contact No"
             />
           </View>
         );
       case 'doctor':
         return (
-          <View>
+          <View style={styles.formContainer}>
             {/* Doctor form fields */}
             <TextInput
               style={styles.input}
@@ -72,14 +68,16 @@ const AddUsers = () => {
             <TextInput
               style={styles.input}
               placeholder="Last Name"
-            /><TextInput
+            />
+            <TextInput
               style={styles.input}
-              placeholder="Email ID"
+              placeholder="Email Id"
             />
             <TextInput
               style={styles.input}
               placeholder="Age"
-            /><TextInput
+            />
+            <TextInput
               style={styles.input}
               placeholder="Gender"
             />
@@ -89,53 +87,50 @@ const AddUsers = () => {
             />
             <TextInput
               style={styles.input}
-              placeholder="Contact Number"
+              placeholder="Contact No"
             />
             <TextInput
               style={styles.input}
               placeholder="Degree"
-            /><TextInput
+            />
+            <TextInput
               style={styles.input}
               placeholder="Experience"
-            /><TextInput
+            />
+            <TextInput
               style={styles.input}
               placeholder="License Number"
-            /><TextInput
+            />
+            <TextInput
               style={styles.input}
               placeholder="Specialization"
-            /><TextInput
+            />
+            <TextInput
               style={styles.input}
               placeholder="User ID"
             />
-
           </View>
-        );
+        )
       case 'responder':
         return (
-          <View>
+          <View style={styles.formContainer}>
             {/* Responder form fields */}
             <TextInput
               style={styles.input}
-              placeholder="Responder Field 1"
+              placeholder="First Name"
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Responder Field 2"
-            />
+            {/* Add other fields as needed */}
           </View>
         );
       case 'moderator':
         return (
-          <View>
+          <View style={styles.formContainer}>
             {/* Moderator form fields */}
             <TextInput
               style={styles.input}
-              placeholder="Moderator Field 1"
+              placeholder="First Name"
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Moderator Field 2"
-            />
+            {/* Add other fields as needed */}
           </View>
         );
       default:
@@ -144,98 +139,112 @@ const AddUsers = () => {
   };
 
   return (
-    <LinearGradient colors={gradientColors} style={styles.gradient}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.container}>
-          <Text style={styles.heading}>User Management</Text>
-          {/* Dropdown to select user type */}
-          <View style={styles.dropdown}>
-            <Text>Select User Type: </Text>
-            <Picker
-              selectedValue={selectedUserType}
-              style={{ width: widthPercentageToDP(40)}}
-              onValueChange={(itemValue) => setSelectedUserType(itemValue)}
-            >
-              <Picker.Item label="User" value="user" />
-              <Picker.Item label="Doctor" value="doctor" />
-              <Picker.Item label="Responder" value="responder" />
-              <Picker.Item label="Moderator" value="moderator" />
-            </Picker>
-          </View>
-          {/* Add User Button */}
+    <View style={styles.container}>
+      <Text style={styles.heading}>User Management</Text>
+      <Text style={styles.text}>Select Role</Text>
+
+      {/* Options for selecting user role */}
+      <View style={styles.optionsContainer}>
           <TouchableOpacity
-            onPress={() => setIsAddUserModalVisible(true)}
+            style={[
+              styles.option,
+              selectedUserRole === 'user' && styles.selectedOption,
+            ]}
+            onPress={() => setSelectedUserRole('user')}
           >
+            <Text style={styles.optionText}>User</Text>
           </TouchableOpacity>
-          {/* Render the user form */}
-          {renderUserForm()}
-          {/* Add User Modal */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={isAddUserModalVisible}
-            onRequestClose={() => setIsAddUserModalVisible(false)}
+          <TouchableOpacity
+            style={[
+              styles.option,
+              selectedUserRole === 'doctor' && styles.selectedOption,
+            ]}
+            onPress={() => setSelectedUserRole('doctor')}
           >
-            <View style={styles.modalBackground}>
-              <View style={styles.modalContent}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter User Name"
-                  value={newUserName}
-                  onChangeText={setNewUserName}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter User Role"
-                  value={newUserRole}
-                  onChangeText={setNewUserRole}
-                />
-                <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={handleAddUser}
-                >
-                  <Text style={styles.buttonText}>Add User</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
+            <Text style={styles.optionText}>Doctor</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.option,
+              selectedUserRole === 'responder' && styles.selectedOption,
+            ]}
+            onPress={() => setSelectedUserRole('responder')}
+          >
+            <Text style={styles.optionText}>Responder</Text>
+          </TouchableOpacity>
         </View>
+      {/* Render the user form */}
+      <ScrollView style = {styles.scrollView}>
+        {renderUserForm()}
       </ScrollView>
-    </LinearGradient>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  gradient: {
+  lg_container: {
     width: '100%',
     height: '100%',
   },
   scrollView: {
+    height: heightPercentageToDP(33),
   },
   container: {
-    flex: 1,
-    padding: widthPercentageToDP(5),
-    marginTop: heightPercentageToDP(2),
-    justifyContent: 'center'
-  },
-  dropdown: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
+    borderRadius: heightPercentageToDP(5),
+    backgroundColor: 'white',
+    opacity: 0.8,
+    marginLeft: widthPercentageToDP(5),
+    marginRight: widthPercentageToDP(5),
+    padding: heightPercentageToDP(3)
   },
   heading: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: widthPercentageToDP(1),
+    marginBottom: widthPercentageToDP(5),
     textAlign: 'center',
   },
-  scrollView: {
-    flex: 1,
+  text: {
+    fontSize : 15,
+    fontWeight: 'bold',
+    marginBottom: heightPercentageToDP(2),
+    alignSelf: 'center'
+  },
+  optionText: {
+    fontSize: 11,
+    padding: 10
+  },
+  optionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: heightPercentageToDP(2)
+  },
+  option: {
+    width: widthPercentageToDP(22),
+    height: heightPercentageToDP(4.5),
+    backgroundColor: 'rgba(0,0,255,0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+  },
+  selectedOption: {
+    backgroundColor: 'rgba(0,0,255,0.55)',
+  },
+  formContainer: {
+    marginTop: heightPercentageToDP(1),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    width: widthPercentageToDP(67),
+    height: heightPercentageToDP(5),
+    borderWidth: 0.3,
+    borderRadius: 5,
+    marginBottom: heightPercentageToDP(1),
+    paddingHorizontal: 10,
   },
   addButton: {
     backgroundColor: 'rgba(50,100,255,0.26)',
     alignSelf: 'center',
-    marginBottom: heightPercentageToDP(3),
     borderRadius: 10,
     padding: widthPercentageToDP(2),
   },
@@ -243,38 +252,6 @@ const styles = StyleSheet.create({
     color: "rgba(0,0,0,0.6)",
     fontSize: 16,
     fontWeight: 'bold',
-    alignSelf: 'center',
-  },
-  userItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: widthPercentageToDP(4),
-    backgroundColor: 'transparent',
-    borderWidth: 0.3,
-    borderRadius: 20,
-    marginBottom: heightPercentageToDP(2),
-  },
-  userInfo: {
-    flex: 1,
-  },
-  userName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  userRole: {
-    fontSize: 16,
-    color: '#777',
-  },
-  actions: {
-    flexDirection: 'row',
-  },
-  editBtn: {
-    justifyContent: 'center',
-    marginRight: widthPercentageToDP(8),
-  },
-  deleteBtn: {
-    justifyContent: 'center',
   },
   modalBackground: {
     flex: 1,
@@ -284,20 +261,10 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: 'white',
-    paddingTop: heightPercentageToDP(4),
-    paddingLeft: widthPercentageToDP(5),
-    paddingRight: widthPercentageToDP(5),
+    padding: widthPercentageToDP(5),
     borderRadius: 10,
     width: '80%',
-  },
-  input: {
-    height: heightPercentageToDP(6),
-    borderWidth: 0.3,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
   },
 });
 
 export default AddUsers;
-
