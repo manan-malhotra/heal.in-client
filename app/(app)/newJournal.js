@@ -60,7 +60,7 @@ export default function newJournal() {
                 }
             );
             if (response.status === 200) {
-                router.dismissAll();
+                router.navigate("home");
             }
         } catch (error) {
             console.log("Error saving post: " + error);

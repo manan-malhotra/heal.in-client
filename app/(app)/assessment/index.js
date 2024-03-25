@@ -39,7 +39,10 @@ const assessment = () => {
         const length = Object.keys(selectedOptions).length;
         if (length == questions.length) {
             await sendScore(sum);
-            router.push("assessment/scoreCard");
+            router.navigate({
+                pathname: "assessment/scoreCard",
+                params: { sum, total: questions.length * 3, test },
+            });
             // Alert.alert(
             //     "Test Submitted",
             //     "Your score is " +
