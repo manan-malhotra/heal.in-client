@@ -95,6 +95,17 @@ export default function _layout() {
                     })}
                 />
                 <Stack.Screen
+                    name="assessment/scoreCard"
+                    options = {{
+                        headerTitle: "Score-Card",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
+                />
+                <Stack.Screen
                     name="doctorHome"
                     options={{
                         headerTitle: "Doctor's Home",
