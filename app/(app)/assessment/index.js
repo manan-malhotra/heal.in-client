@@ -10,8 +10,10 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
+import { useRouter } from "expo-router";
 
 const assessment = () => {
+    const router = useRouter();
     const { test } = useLocalSearchParams();
     const sendScore = async (sum) => {
         try {
@@ -37,14 +39,15 @@ const assessment = () => {
         const length = Object.keys(selectedOptions).length;
         if (length == questions.length) {
             await sendScore(sum);
-            Alert.alert(
-                "Test Submitted",
-                "Your score is " +
-                    sum +
-                    " out of " +
-                    questions.length * 3 +
-                    " points"
-            );
+            router.push("assessment/scoreCard");
+            // Alert.alert(
+            //     "Test Submitted",
+            //     "Your score is " +
+            //         sum +
+            //         " out of " +
+            //         questions.length * 3 +
+            //         " points"
+            // );
             console.log("Sum of selected options:", sum);
         } else {
             Alert.alert(
