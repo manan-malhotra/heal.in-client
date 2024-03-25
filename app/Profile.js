@@ -3,18 +3,25 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../context/authcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 const Profile = () => {
+    const router = useRouter();
     const { logout } = useAuth();
     const handleLogout = () => {
         logout();
     };
+    const item = useLocalSearchParams();
+    const handleRoute = () => {
+        router.replace({pathname: "/doctorHome", params: item})
+    }
     const [firstName, setFirstName] = useState("Default");
     const [lastName, setLastName] = useState("User");
     const [email, setEmail] = useState("username@email.com");
     const [gender, setGender] = useState("Male");
     const [age, setAge] = useState("200");
     const [contact, setContact] = useState("1234567890");
+    const [doctor, setDoctor] = useState("false")
     const getUserData = async () => {
         console.log("getting user data");
         try {
@@ -24,7 +31,8 @@ const Profile = () => {
             const gender = await AsyncStorage.getItem("gender");
             const age = await AsyncStorage.getItem("age");
             const contact = await AsyncStorage.getItem("contact");
-            console.log(firstName, lastName, email, gender, age, contact);
+            const doctor = await AsyncStorage.getItem("doctorBoolean")
+            setDoctor(doctor);
             setFirstName(firstName);
             setLastName(lastName);
             setEmail(email);
@@ -160,10 +168,13 @@ const Profile = () => {
                     </View>
                     <TouchableOpacity
                         style={styles.logoutButton}
-                        onPress={handleLogout}
+                        onPress={handleRoute}
                     >
                         <Text style={styles.buttonText}>Logout</Text>
                     </TouchableOpacity>
+                    {
+                        doctor == "true" ? console.log(doctor) : console.log(doctor)
+                    }
                 </View>
             </View>
         </LinearGradient>
