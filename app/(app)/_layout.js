@@ -96,7 +96,10 @@ export default function _layout() {
                 />
                 <Stack.Screen
                     name="assessment/scoreCard"
-                    options = {{
+                    options={{
+                        // headerShown: false,
+                        headerBackTitleVisible: false,
+                        // headerBackVisible: false,
                         headerTitle: "Score-Card",
                         headerStyle: {
                             backgroundColor: "#3340B0",
