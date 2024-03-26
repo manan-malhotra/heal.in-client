@@ -55,16 +55,13 @@ export default function doctorHome() {
         <View>
         </View>
       ) : (
-        <View>
-          <View className="items-center">
+        <View style = {{justifyContent:'center', height: "100%"}}>
+          <View style = {styles.noMsg}>
           <Text style={{ fontStyle: 'italic', fontWeight: 'normal' }}>
             No messages available
           </Text>
           </View>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.buttonText} >Logout</Text>
-          </TouchableOpacity>
-          </View>
+        </View>
 
       )}
     </SafeAreaView>
@@ -84,6 +81,9 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
       color: 'white'
+    },
+    noMsg: {
+      alignSelf: 'center'
     }
   });
   

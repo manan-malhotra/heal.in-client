@@ -7,6 +7,7 @@ const AddResources = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [thumbnail, setThumbnail] = useState('');
+  const [video, setVideo] = useState('')
 
   const handleAddResource = () => {
     // Logic to add resource to the database or perform other actions
@@ -14,6 +15,7 @@ const AddResources = () => {
     console.log('Title:', title);
     console.log('Content:', content);
     console.log('Thumbnail:', thumbnail);
+    console.log('Video:', thumbnail);
   };
 
   return (
@@ -69,6 +71,11 @@ const AddResources = () => {
             placeholder="Thumbnail URL"
             value={thumbnail}
             onChangeText={setThumbnail}
+          /><TextInput
+            style={styles.input}
+            placeholder="Video URL"
+            value={video}
+            onChangeText={setVideo}
           />
         </View>
       )}
@@ -81,7 +88,6 @@ const AddResources = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     borderRadius: heightPercentageToDP(5),
     justifyContent: 'center',
     backgroundColor: 'white',
@@ -89,7 +95,7 @@ const styles = StyleSheet.create({
     marginLeft: widthPercentageToDP(5),
     marginRight: widthPercentageToDP(5),
     padding: heightPercentageToDP(3),
-    marginTop: heightPercentageToDP(5)
+    marginTop: heightPercentageToDP(0.1),
   },
   heading: {
     fontSize: 24,

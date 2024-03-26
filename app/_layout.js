@@ -21,10 +21,13 @@ const MainLayout = () => {
                 if(user == null || user.role == '') {
                     router.replace("signIn");
                 } else if(user.role == 'DOCTOR') {
-                    router.replace({pathname: "/doctorHome", params: user});
+                    router.replace({pathname: "doctorDashboardNavigation", params: user});
                 } else if(user.role == 'USER') {
                     router.replace("home");
+                } else if(user.role == 'ADMIN') {
+                    router.replace("adminDashboardNavigation");
                 }
+                
             } else if (isAuthenticated == false) {
                 router.replace("signIn");
             }

@@ -8,6 +8,8 @@ const AddUsers = () => {
   const [newUserName, setNewUserName] = useState('');
   const [newUserRole, setNewUserRole] = useState('');
   const [selectedUserRole, setSelectedUserRole] = useState('');
+  const [testName, setTestName] = useState('');
+
 
 
   const handleAddUser = () => {
@@ -18,6 +20,11 @@ const AddUsers = () => {
     setNewUserRole('');
     // Hide the modal
     setIsAddUserModalVisible(false);
+  };
+
+  const handleAddQuestion = () => {
+    // Logic to add question to the database or perform other actions
+    console.log('Test Name:', testName);
   };
 
   // Function to render the form based on the selected user role
@@ -55,6 +62,9 @@ const AddUsers = () => {
               style={styles.input}
               placeholder="Contact No"
             />
+            <TouchableOpacity style={styles.addButton} onPress={handleAddQuestion}>
+              <Text style={styles.buttonText}>Add User</Text>
+            </TouchableOpacity>
           </View>
         );
       case 'doctor':
@@ -109,17 +119,46 @@ const AddUsers = () => {
               style={styles.input}
               placeholder="User ID"
             />
+            <TouchableOpacity style={styles.addButton} onPress={handleAddQuestion}>
+              <Text style={styles.buttonText}>Add Doctor</Text>
+            </TouchableOpacity>
           </View>
         )
       case 'responder':
         return (
           <View style={styles.formContainer}>
-            {/* Responder form fields */}
+            {/* User form fields */}
             <TextInput
               style={styles.input}
               placeholder="First Name"
             />
-            {/* Add other fields as needed */}
+            <TextInput
+              style={styles.input}
+              placeholder="Last Name"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Email Id"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Age"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Gender"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Contact No"
+            />
+            <TouchableOpacity style={styles.addButton} onPress={handleAddQuestion}>
+              <Text style={styles.buttonText}>Add Responder</Text>
+            </TouchableOpacity>
           </View>
         );
       case 'moderator':
@@ -176,6 +215,7 @@ const AddUsers = () => {
       {/* Render the user form */}
       <ScrollView style = {styles.scrollView}>
         {renderUserForm()}
+        
       </ScrollView>
     </View>
   );
@@ -210,7 +250,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   optionText: {
-    fontSize: 11,
+    fontSize: 12,
     padding: 10
   },
   optionsContainer: {
@@ -219,10 +259,12 @@ const styles = StyleSheet.create({
     marginBottom: heightPercentageToDP(2)
   },
   option: {
-    width: widthPercentageToDP(22),
+    flex: 1,
     height: heightPercentageToDP(4.5),
     backgroundColor: 'rgba(0,0,255,0.3)',
     alignItems: 'center',
+    marginLeft: widthPercentageToDP(1),
+    marginRight: widthPercentageToDP(1),
     justifyContent: 'center',
     borderRadius: 15,
   },
@@ -231,11 +273,9 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     marginTop: heightPercentageToDP(1),
-    alignItems: 'center',
     justifyContent: 'center',
   },
   input: {
-    width: widthPercentageToDP(67),
     height: heightPercentageToDP(5),
     borderWidth: 0.3,
     borderRadius: 5,
@@ -243,15 +283,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   addButton: {
-    backgroundColor: 'rgba(50,100,255,0.26)',
+    backgroundColor: 'rgba(0,0,255,0.3)',
     alignSelf: 'center',
     borderRadius: 10,
-    padding: widthPercentageToDP(2),
+    padding: widthPercentageToDP(1.5),
+    marginBottom: heightPercentageToDP(1)
   },
   buttonText: {
     color: "rgba(0,0,0,0.6)",
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '500'
   },
   modalBackground: {
     flex: 1,

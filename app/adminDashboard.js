@@ -59,11 +59,9 @@ const AdminDashboard = () => {
           </TouchableOpacity>
         </View>
         {/* Render the selected page */}
-        <ScrollView>
           <View style = {styles.pageContainer}>
             {renderPage()}
           </View>
-        </ScrollView>
       </View>
     </LinearGradient>
   );
