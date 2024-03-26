@@ -292,6 +292,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 88,
     },
+    gradient: {
+        flex: 1,
+    },
 });
 
 export default BlogPage;
