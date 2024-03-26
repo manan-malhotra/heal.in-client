@@ -23,8 +23,9 @@ const ReportModal = ({
             console.log(reportIndex);
             console.log(reportReason);
             console.log(currentUserId);
+            let response;
             if (api == "blogs") {
-                const response = await axios.post(
+                response = await axios.post(
                     process.env.API_HOST + "/flag/blogs/addFlaggedBlogs",
                     {
                         blog_id: reportIndex,
@@ -34,7 +35,7 @@ const ReportModal = ({
                 );
                 console.log("working");
             } else {
-                const response = await axios.post(
+                response = await axios.post(
                     process.env.API_HOST +
                         "/flag/publicQNA/addFlaggedPublicQNA",
                     {
@@ -44,6 +45,20 @@ const ReportModal = ({
                     }
                 );
             }
+            if (response?.status === 200) {
+                Alert.alert(
+                    "Reported",
+                    "Your report has been submitted. We will review it and take appropriate action."
+                );
+            } else {
+                Alert.alert(
+                    "Already Reported!",
+                    "You have already reported this. We will review it and take appropriate action."
+                );
+            }
+            setReportIndex("");
+            setReportReason("");
+            setModalVisible(false);
         } catch (error) {
             console.log(error);
         }
@@ -99,15 +114,7 @@ const ReportModal = ({
                 <TouchableOpacity
                     style={styles.submitButton}
                     onPress={() => {
-                        console.log("Reported");
                         handleReport();
-                        Alert.alert(
-                            "Reported",
-                            "Your report has been submitted. We will review it and take appropriate action."
-                        );
-                        setReportIndex("");
-                        setReportReason("");
-                        setModalVisible(false);
                     }}
                 >
                     <Text style={styles.options}>Report</Text>
