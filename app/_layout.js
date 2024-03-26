@@ -4,6 +4,7 @@ import { Slot, Stack, useRouter, useSegments } from "expo-router";
 import "../global.css";
 import { AuthContextProvider, useAuth } from "../context/authcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const MainLayout = () => {
     const { isAuthenticated } = useAuth();
@@ -40,8 +41,10 @@ const MainLayout = () => {
 
 export default function RootLayout() {
     return (
+        <SafeAreaProvider>
         <AuthContextProvider>
             <MainLayout />
         </AuthContextProvider>
+        </SafeAreaProvider>
     );
 }
