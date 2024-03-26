@@ -11,7 +11,7 @@ export const AuthContextProvider = ({ children }) => {
     const [userId, setUserId] = useState();
 
     useEffect(() => {
-        console.log(process.env.API_HOST + "T");
+        console.log(process.env.API_HOST + "TESTS");
         const loadToken = async () => {
             const token = await AsyncStorage.getItem("token");
             console.log(typeof token);

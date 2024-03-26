@@ -27,29 +27,29 @@ const AddTests = () => {
         <TouchableOpacity
           style={[
             styles.option,
-            testName === 'Test 1' && styles.selectedOption,
+            testName === 'ADHD' && styles.selectedOption,
           ]}
-          onPress={() => setTestName('Test 1')}
+          onPress={() => setTestName('ADHD')}
         >
-          <Text style={styles.optionText}>Test 1</Text>
+          <Text style={styles.optionText}>ADHD</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.option,
-            testName === 'Test 2' && styles.selectedOption,
+            testName === 'Depression' && styles.selectedOption,
           ]}
-          onPress={() => setTestName('Test 2')}
+          onPress={() => setTestName('Depression')}
         >
-          <Text style={styles.optionText}>Test 2</Text>
+          <Text style={styles.optionText}>Depression</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.option,
-            testName === 'Test 3' && styles.selectedOption,
+            testName === 'Anxiety' && styles.selectedOption,
           ]}
-          onPress={() => setTestName('Test 3')}
+          onPress={() => setTestName('Anxiety')}
         >
-          <Text style={styles.optionText}>Test 3</Text>
+          <Text style={styles.optionText}>Anxiety</Text>
         </TouchableOpacity>
       </View>
       <TextInput
@@ -79,7 +79,7 @@ const AddTests = () => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    height: heightPercentageToDP(54),
+    height: heightPercentageToDP(55.3),
     borderRadius: heightPercentageToDP(5),
     backgroundColor: 'white',
     opacity: 0.8,

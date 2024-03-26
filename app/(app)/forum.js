@@ -71,7 +71,7 @@ const forum = () => {
     }, []);
     const [questions, setQuestions] = useState(question);
     const [expandedIndex, setExpandedIndex] = useState(null);
-    const [role, setRole] = useState("Responder");
+    const [role, setRole] = useState("User");
 
     useEffect(() => {
         // Simulate loading questions from an API
