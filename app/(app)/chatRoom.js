@@ -73,29 +73,23 @@ export default function ChatRoom() {
         }
     }
     return (
-        <CustomKeyboardView inChat={true}>
-            <View style={{flex: 1, backgroundColor: 'white'}}>
-                <ChatRoomHeader user={item} router={router} sentFrom={item.sentFrom}/>
-                <View style={{ flex: 1}}>
-                <View style={{ flex: 1, borderBottomWidth: 1, borderBottomColor: 'rgba(0, 0, 0, 0.1)' }}>
-                    <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0)' }}>
-                        <MessageList messages={messages} currentUserId={item.currentUserId} currentUsername={item.currentUsername}/>
-                    </View>
-                    <SafeAreaView>
-                    <View style={{ marginBottom: hp(1.7)}} className="pt-2">
-                        <View style={{ flexDirection: 'row', justifyContent: 'justify-between', alignItems: 'center', marginHorizontal: 10 }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'justify-between', backgroundColor: 'white', borderWidth: 1, padding: 8, borderColor: '#d3d3d3', borderRadius: 999, paddingLeft: 5}}>
-                                <TextInput ref={inputRef} onChangeText={value => textRef.current = value} placeholder='Type message...' style={{ flex: 1, marginRight: 2, fontSize: hp(1.5) }} />
-                                <TouchableOpacity onPress={handleSendMessage} style={{ backgroundColor: '#e5e5e5', padding: 2, marginRight: 1, borderRadius: 999 }}>
-                                <Feather name="send" size={hp(2.7)} color="#737373" />
-                                </TouchableOpacity>
-                            </View>
+        <View style={{flex: 1, backgroundColor: 'white'}}>
+            <ChatRoomHeader user={item} router={router} sentFrom={item.sentFrom}/>
+            <View style={{ flex: 1, borderBottomWidth: 1, borderBottomColor: 'rgba(0, 0, 0, 0.1)' }}>
+                <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0)' }}>
+                    <MessageList messages={messages} currentUserId={item.currentUserId} currentUsername={item.currentUsername}/>
+                </View>
+                <SafeAreaView style={{ marginBottom: hp(1.7)}} className="pt-2">
+                    <View style={{ flexDirection: 'row', justifyContent: 'justify-between', alignItems: 'center', marginHorizontal: 10 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'justify-between', backgroundColor: 'white', borderWidth: 1, padding: 8, borderColor: '#d3d3d3', borderRadius: 999, paddingLeft: 5}}>
+                            <TextInput ref={inputRef} onChangeText={value => textRef.current = value} placeholder='Type message...' style={{ flex: 1, marginRight: 2, fontSize: hp(1.5) }} />
+                            <TouchableOpacity onPress={handleSendMessage} style={{ backgroundColor: '#e5e5e5', padding: 2, marginRight: 1, borderRadius: 999 }}>
+                            <Feather name="send" size={hp(2.7)} color="#737373" />
+                            </TouchableOpacity>
                         </View>
                     </View>
-                    </SafeAreaView>
-                    </View>
-                </View>
+                </SafeAreaView>
             </View>
-        </CustomKeyboardView>
+        </View>
     )
 }
