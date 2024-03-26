@@ -9,6 +9,7 @@ import CustomKeyboardView from '../../components/CustomKeyboardView'
 import { getRoomId } from '../utils/common'
 import { Timestamp, addDoc, collection, doc, onSnapshot, orderBy, where, query, getDocs,  setDoc } from "firebase/firestore";
 import { db } from '../../firebaseConfig'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function ChatRoom() {
     const item = useLocalSearchParams();
@@ -80,6 +81,7 @@ export default function ChatRoom() {
                     <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0)' }}>
                         <MessageList messages={messages} currentUserId={item.currentUserId} currentUsername={item.currentUsername}/>
                     </View>
+                    <SafeAreaView>
                     <View style={{ marginBottom: hp(1.7)}} className="pt-2">
                         <View style={{ flexDirection: 'row', justifyContent: 'justify-between', alignItems: 'center', marginHorizontal: 10 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'justify-between', backgroundColor: 'white', borderWidth: 1, padding: 8, borderColor: '#d3d3d3', borderRadius: 999, paddingLeft: 5}}>
@@ -90,6 +92,7 @@ export default function ChatRoom() {
                             </View>
                         </View>
                     </View>
+                    </SafeAreaView>
                     </View>
                 </View>
             </View>
