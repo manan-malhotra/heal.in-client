@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Added
   },
   selectedTab: {
-    backgroundColor: 'rgba(110,113,254,0.6)',
+    backgroundColor: 'rgba(0,0,255,0.5)',
   },
   tabText: {
     fontSize: 11,
