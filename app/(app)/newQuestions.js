@@ -8,14 +8,78 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import MyTextInput from "../../components/TextInput";
 import { TextInput } from "react-native-paper";
 import axios from "axios";
 import { useRouter } from "expo-router";
 import { Keyboard } from "react-native";
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import {
+    heightPercentageToDP,
+    widthPercentageToDP,
+} from "react-native-responsive-screen";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function newJournal() {
+    const [topPartVisible, setTopPartVisible] = useState(true);
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            "keyboardDidShow",
+            () => {
+                setTopPartVisible(false);
+                setNumberOfLines(10);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            "keyboardDidHide",
+            () => {
+                setTopPartVisible(true);
+                setNumberOfLines(18);
+            }
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
+    const getUserId = async () => {
+        try {
+            const value = await AsyncStorage.getItem("userId");
+            return value;
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const handleSave = async () => {
+        if (title.trim() === "" || description.trim() === "") {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Title and description cannot be empty",
+                position: "top",
+                visibilityTime: 3000,
+            });
+            return;
+        }
+
+        try {
+            console.log("Save pressed.");
+            const id = await getUserId();
+            const response = await axios.post(
+                process.env.API_HOST + "/api/user/addQuestion",
+                {
+                    question: title,
+                    description: description,
+                    userId: id,
+                }
+            );
+            if (response.status === 200) {
+                router.dismissAll();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const router = useRouter();
     const gradientColors = [
         "rgba(255,255,255,0.2)",
@@ -26,31 +90,31 @@ export default function newJournal() {
     const [description, setDescription] = useState("");
     const [numberOfLines, setNumberOfLines] = useState(18);
 
-    
-
-    
-
     return (
         <>
             <LinearGradient colors={gradientColors} style={styles.gradient}>
-                <ScrollView>
+                <ScrollView keyboardShouldPersistTaps="handled">
                     <View style={styles.body}>
-                        <View style={styles.header}>
-                            <Text style={styles.entryHeading}>
-                                Add New Question
-                            </Text>
-                        </View>
-                        <View style = {styles.line}></View>
+                        {topPartVisible && (
+                            <View style={styles.topPart}>
+                                <View style={styles.header}>
+                                    <Text style={styles.entryHeading}>
+                                        Add New Question
+                                    </Text>
+                                </View>
+                                <View style={styles.line}></View>
+                            </View>
+                        )}
                         <View style={styles.entryArea}>
-                            <MyTextInput
-                                placeholderText={
-                                    "Title of Question"
-                                }
+                            <TextInput
+                                label="Question Title"
+                                value={title}
                                 onChangeText={setTitle}
-                            ></MyTextInput>
+                                style={styles.textInput}
+                            />
                             <View style={{}}>
                                 <TextInput
-                                    placeholder="Add Description"
+                                    label="Add Description"
                                     editable
                                     multiline
                                     numberOfLines={numberOfLines}
@@ -61,11 +125,14 @@ export default function newJournal() {
                                     }
                                     maxLength={3000}
                                     onChangeText={setDescription}
-                                    style={styles.blogInput}
+                                    style={[styles.textInput, styles.blogInput]}
                                 />
                             </View>
                             <TouchableOpacity
                                 style={styles.saveButton}
+                                onPress={() => {
+                                    handleSave(title, description);
+                                }}
                             >
                                 <Text style={styles.buttonText}>Save</Text>
                             </TouchableOpacity>
@@ -73,6 +140,7 @@ export default function newJournal() {
                     </View>
                 </ScrollView>
             </LinearGradient>
+            <Toast />
         </>
     );
 }
@@ -94,7 +162,6 @@ const styles = StyleSheet.create({
         opacity: 0.2,
     },
     entryArea: {
-        marginTop: heightPercentageToDP(5),
         paddingHorizontal: 20,
         paddingVertical: 10,
         backgroundColor: "white",
@@ -127,6 +194,9 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     blogInput: {
+        marginTop: 20,
+    },
+    textInput: {
         backgroundColor: "#F4F4F4",
         width: "100%",
         paddingHorizontal: 12,
@@ -135,7 +205,7 @@ const styles = StyleSheet.create({
         borderColor: "grey",
         borderRadius: 5,
         padding: 10,
-        marginTop: 20,
         fontSize: 17,
     },
+    topPart: { marginBottom: heightPercentageToDP(5) },
 });

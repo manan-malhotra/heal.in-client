@@ -96,7 +96,7 @@ export default function _layout() {
                 />
                 <Stack.Screen
                     name="assessment/scoreCard"
-                    options = {{
+                    options={{
                         headerTitle: "Score-Card",
                         headerStyle: {
                             backgroundColor: "#3340B0",
@@ -107,7 +107,7 @@ export default function _layout() {
                 />
                 <Stack.Screen
                     name="responderReview"
-                    options = {{
+                    options={{
                         headerTitle: "Responder",
                         headerStyle: {
                             backgroundColor: "#3340B0",
@@ -118,7 +118,7 @@ export default function _layout() {
                 />
                 <Stack.Screen
                     name="doctorDashboardNavigation"
-                    options = {{
+                    options={{
                         headerTitle: "Doctor's Home",
                         headerStyle: {
                             backgroundColor: "#3340B0",
@@ -129,18 +129,7 @@ export default function _layout() {
                 />
                 <Stack.Screen
                     name="adminDashboardNavigation"
-                    options = {{
-                        headerTitle: "heal.in",
-                        headerStyle: {
-                            backgroundColor: "#3340B0",
-                        },
-                        headerTintColor: "white",
-                        navigationBarColor: "#3340B0",
-                    }}
-                /> 
-                <Stack.Screen
-                    name="newQuestions"
-                    options = {{
+                    options={{
                         headerTitle: "heal.in",
                         headerStyle: {
                             backgroundColor: "#3340B0",
@@ -150,8 +139,20 @@ export default function _layout() {
                     }}
                 />
                 <Stack.Screen
+                    name="newQuestions"
+                    options={{
+                        headerTitle: "Ask a Question",
+                        headerBackTitleVisible: false,
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
+                />
+                <Stack.Screen
                     name="responderDashboardNavigation"
-                    options = {{
+                    options={{
                         headerTitle: "heal.in",
                         headerStyle: {
                             backgroundColor: "#3340B0",

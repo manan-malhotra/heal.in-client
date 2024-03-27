@@ -103,7 +103,7 @@ const forum = () => {
 
     const handleAddComment = () => {
         console.log("Add Comment Hit..");
-        router.push('newQuestions')
+        router.push("newQuestions");
     };
 
     const handleViewMoreComments = (questionIndex) => {
@@ -167,7 +167,7 @@ const forum = () => {
                                 </TouchableOpacity>
                             </Text>
                         </View>
-                        <View style = {styles.searchBarArea}>
+                        <View style={styles.searchBarArea}>
                             <View style={styles.searchBarContainer}>
                                 <AntDesign
                                     name="search1"
@@ -183,13 +183,19 @@ const forum = () => {
                                     value={searchText}
                                     underlineColorAndroid="transparent"
                                 />
-                                
                             </View>
-                            <View style = {styles.addButton}>
-                            <TouchableOpacity style={styles.addButton} onPress={handleAddComment}>
-                                <Text style={styles.buttonText}>+ New</Text>
-                            </TouchableOpacity>
-                            </View>
+                            {role === "USER" && (
+                                <View style={styles.addButton}>
+                                    <TouchableOpacity
+                                        style={styles.addButton}
+                                        onPress={handleAddComment}
+                                    >
+                                        <Text style={styles.buttonText}>
+                                            + New
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )}
                         </View>
                         <View style={styles.qnA}>
                             {/* Question List */}
@@ -437,7 +443,7 @@ const styles = StyleSheet.create({
     body: {
         padding: 5,
         marginLeft: widthPercentageToDP(4),
-        marginRight: widthPercentageToDP(4)
+        marginRight: widthPercentageToDP(4),
     },
     title: {
         marginTop: heightPercentageToDP(5),
@@ -460,29 +466,29 @@ const styles = StyleSheet.create({
         height: heightPercentageToDP(1.8),
     },
     searchBarArea: {
-        flexDirection: 'row',
+        flexDirection: "row",
         marginLeft: widthPercentageToDP(2),
         marginRight: widthPercentageToDP(2),
         marginTop: heightPercentageToDP(3),
-        marginBottom: heightPercentageToDP(3)
-    },  
+        marginBottom: heightPercentageToDP(3),
+    },
     addButton: {
-        backgroundColor: 'green',
-        alignSelf: 'center',
-        justifyContent: 'center',
+        backgroundColor: "green",
+        alignSelf: "center",
+        justifyContent: "center",
         height: heightPercentageToDP(4.5),
         width: widthPercentageToDP(15),
         borderRadius: 10,
-        alignItems: 'center',
-      },
-      buttonText: {
+        alignItems: "center",
+    },
+    buttonText: {
         color: "white",
         fontSize: 14,
-        fontWeight: 'bold',
-      },
+        fontWeight: "bold",
+    },
     searchBarContainer: {
         flexDirection: "row",
-        flex:1,
+        flex: 1,
         alignItems: "center",
         borderWidth: 0.4,
         borderColor: "gray",

@@ -50,7 +50,6 @@ const NewJournal = () => {
     const [description, setDescription] = useState("");
     const [topPartVisible, setTopPartVisible] = useState(true);
     const [numberOfLines, setNumberOfLines] = useState(18);
-    const [showErrorToast, setShowErrorToast] = useState(false);
 
     const handleSave = async () => {
         if (title.trim() === "" || description.trim() === "") {
@@ -101,7 +100,7 @@ const NewJournal = () => {
             "keyboardDidShow",
             () => {
                 setTopPartVisible(false);
-                setNumberOfLines(13);
+                setNumberOfLines(10);
             }
         );
         const keyboardDidHideListener = Keyboard.addListener(
