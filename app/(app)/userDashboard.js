@@ -3,11 +3,11 @@ import { View, StyleSheet } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import { ScrollView } from 'react-native';
 
-import ProfessionalTalk from '../components/professionalTalk';
-import HealthResources from '../components/healthResources';
-import SelfAssessmentTools from '../components/selfAssessmentTools';
-import ConsultDoctors from '../components/consultDoctors';
-import Testimonial from '../components/testimonial';
+import ProfessionalTalk from '../../components/professionalTalk';
+import HealthResources from '../../components/healthResources';
+import SelfAssessmentTools from '../../components/selfAssessmentTools';
+import ConsultDoctors from '../../components/consultDoctors';
+import Testimonial from '../../components/testimonial';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
 
 const UserDashboard = () => {
