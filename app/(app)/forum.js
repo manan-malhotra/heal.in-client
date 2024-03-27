@@ -103,6 +103,7 @@ const forum = () => {
 
     const handleAddComment = () => {
         console.log("Add Comment Hit..");
+        router.push('newQuestions')
     };
 
     const handleViewMoreComments = (questionIndex) => {
@@ -166,21 +167,29 @@ const forum = () => {
                                 </TouchableOpacity>
                             </Text>
                         </View>
-                        <View style={styles.searchBarContainer}>
-                            <AntDesign
-                                name="search1"
-                                size={20}
-                                color="black"
-                                style={styles.searchIcon}
-                            />
-                            <TextInput
-                                style={styles.searchBar} // Customize styles based on your desired search bar appearance
-                                placeholder="Search Videos"
-                                placeholderTextColor="black"
-                                onChangeText={handleSearch}
-                                value={searchText}
-                                underlineColorAndroid="transparent"
-                            />
+                        <View style = {styles.searchBarArea}>
+                            <View style={styles.searchBarContainer}>
+                                <AntDesign
+                                    name="search1"
+                                    size={20}
+                                    color="black"
+                                    style={styles.searchIcon}
+                                />
+                                <TextInput
+                                    style={styles.searchBar} // Customize styles based on your desired search bar appearance
+                                    placeholder="Search Questions"
+                                    placeholderTextColor="black"
+                                    onChangeText={handleSearch}
+                                    value={searchText}
+                                    underlineColorAndroid="transparent"
+                                />
+                                
+                            </View>
+                            <View style = {styles.addButton}>
+                            <TouchableOpacity style={styles.addButton} onPress={handleAddComment}>
+                                <Text style={styles.buttonText}>+ New</Text>
+                            </TouchableOpacity>
+                            </View>
                         </View>
                         <View style={styles.qnA}>
                             {/* Question List */}
@@ -427,19 +436,20 @@ const styles = StyleSheet.create({
     },
     body: {
         padding: 5,
+        marginLeft: widthPercentageToDP(4),
+        marginRight: widthPercentageToDP(4)
     },
     title: {
-        marginTop: "15%",
-        marginLeft: "5%",
-        marginRight: "5%",
+        marginTop: heightPercentageToDP(5),
+        marginLeft: widthPercentageToDP(4),
     },
     verticalLine: {
-        height: 0.7,
+        height: heightPercentageToDP(0.1),
         backgroundColor: "black",
         marginVertical: 5,
     },
     notes: {
-        marginLeft: "5%",
+        marginLeft: widthPercentageToDP(4),
     },
     icon_container: {
         justifyContent: "center",
@@ -449,16 +459,34 @@ const styles = StyleSheet.create({
         width: widthPercentageToDP(4),
         height: heightPercentageToDP(1.8),
     },
+    searchBarArea: {
+        flexDirection: 'row',
+        marginLeft: widthPercentageToDP(2),
+        marginRight: widthPercentageToDP(2),
+        marginTop: heightPercentageToDP(3),
+        marginBottom: heightPercentageToDP(3)
+    },  
+    addButton: {
+        backgroundColor: 'green',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        height: heightPercentageToDP(4.5),
+        width: widthPercentageToDP(15),
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      buttonText: {
+        color: "white",
+        fontSize: 14,
+        fontWeight: 'bold',
+      },
     searchBarContainer: {
         flexDirection: "row",
+        flex:1,
         alignItems: "center",
         borderWidth: 0.4,
         borderColor: "gray",
         borderRadius: 10,
-        marginTop: 20,
-        marginBottom: 30,
-        marginRight: 39,
-        marginLeft: 30,
         backgroundColor: "white",
     },
     searchIcon: {
