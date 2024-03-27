@@ -143,6 +143,7 @@ const AddUsers = () => {
             <TextInput
               style={styles.input}
               placeholder="Age"
+              value={formData.age}
               onChangeText={(text) => handleInputChange('age', text)}
               keyboardType="numeric"
             />
@@ -199,6 +200,7 @@ const AddUsers = () => {
             <TextInput
               style={styles.input}
               placeholder="Age"
+              value={formData.age}
               onChangeText={(text) => handleInputChange('age', text)}
               keyboardType="numeric"
             />
@@ -279,6 +281,7 @@ const AddUsers = () => {
             <TextInput
               style={styles.input}
               placeholder="Age"
+              value={formData.age}
               onChangeText={(text) => handleInputChange('age', text)}
               keyboardType="numeric"
             />
