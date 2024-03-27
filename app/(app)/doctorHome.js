@@ -49,31 +49,22 @@ export default function doctorHome() {
   }
 
   return (
-    <View className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white">
       <ChatList users={rooms} currentUserId={item.userId} currentUsername={item.firstName + "_" + item.lastName} sentFrom="Doctors"/>
       {rooms.length > 0 ? (
         <View>
-          <Text>{rooms[0].user_id.userId}</Text>
-          <ChatList users={rooms} currentUserId={item.userId} currentUsername={item.firstName}/>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-              <Text style={styles.buttonText} >Logout</Text>
-          </TouchableOpacity>
         </View>
       ) : (
-        <SafeAreaView style={{ flex: 1 }}>
-        <View>
-          <View className="items-center">
+        <View style = {{justifyContent:'center', height: "100%"}}>
+          <View style = {styles.noMsg}>
           <Text style={{ fontStyle: 'italic', fontWeight: 'normal' }}>
             No messages available
           </Text>
           </View>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.buttonText} >Logout</Text>
-          </TouchableOpacity>
-          </View>
-        </SafeAreaView>
+        </View>
+
       )}
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -90,6 +81,9 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
       color: 'white'
+    },
+    noMsg: {
+      alignSelf: 'center'
     }
   });
   

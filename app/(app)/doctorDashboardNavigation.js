@@ -1,24 +1,23 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigation, Provider as PaperProvider } from 'react-native-paper';
-import Users from '../assets/images/user.png';
 import { Image, StyleSheet } from 'react-native';
-import DashboardIcon from '../assets/images/dashboard.png';
-import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
-import Profile from './Profile';
-import AdminDashboard from './adminDashboard';
+import DashboardIcon from '../../assets/images/dashboard.png';
+import ProfileIcon from '../../assets/images/profile.png';
+import Profile from '../Profile';
+import doctorHome from './doctorHome';
 
 const Tab = createBottomTabNavigator();
 
-const AdminDashboardNavigation = () => {
+const DoctorDashboardNavigation = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'addUsers', title: 'Admin Dashboard', icon: DashboardIcon },
-    { key: 'profile', title: 'Profile', icon: Users },
+    { key: 'dashboard', title: 'Dashboard', icon: DashboardIcon },
+    { key: 'profile', title: 'Profile', icon: ProfileIcon },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    addUsers: AdminDashboard,
+    dashboard: doctorHome,
     profile: Profile
   });
 
@@ -34,14 +33,14 @@ const AdminDashboardNavigation = () => {
         navigationState={{ index, routes }}
         onIndexChange={setIndex}
         renderScene={renderScene}
-        barStyle={{ backgroundColor: '#3340B0', height: heightPercentageToDP(13) }} 
+        barStyle={{ backgroundColor: '#3340B0', height: '15%' }} 
         activeColor="white" 
         inactiveColor="grey" 
         shifting={false}
         renderIcon={({ route, focused, color }) => (
           <Image
             source={route.icon}
-            style={{height:heightPercentageToDP(4),width:widthPercentageToDP(8), tintColor: focused ? color : 'grey' }}
+            style={{height:'100%',width:'70%', tintColor: focused ? color : 'grey' }}
           />
         )}
       />
@@ -58,4 +57,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default AdminDashboardNavigation;
+export default DoctorDashboardNavigation;

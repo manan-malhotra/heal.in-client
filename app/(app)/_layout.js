@@ -117,9 +117,42 @@ export default function _layout() {
                     }}
                 />
                 <Stack.Screen
-                    name="doctorHome"
-                    options={{
+                    name="doctorDashboardNavigation"
+                    options = {{
                         headerTitle: "Doctor's Home",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
+                />
+                <Stack.Screen
+                    name="adminDashboardNavigation"
+                    options = {{
+                        headerTitle: "heal.in",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
+                /> 
+                <Stack.Screen
+                    name="newQuestions"
+                    options = {{
+                        headerTitle: "heal.in",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
+                />
+                <Stack.Screen
+                    name="responderDashboardNavigation"
+                    options = {{
+                        headerTitle: "heal.in",
                         headerStyle: {
                             backgroundColor: "#3340B0",
                         },

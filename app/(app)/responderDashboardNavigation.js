@@ -1,24 +1,24 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigation, Provider as PaperProvider } from 'react-native-paper';
-import Dashboard from './Dashboard';
-import DashboardIcon from '../assets/images/dashboard.png';
-import ProfileIcon from '../assets/images/profile.png';
-import { Image } from 'react-native';
-import Profile from './Profile';
+import { Image, StyleSheet } from 'react-native';
+import DashboardIcon from '../../assets/images/dashboard.png';
+import ProfileIcon from '../../assets/images/profile.png';
+import Profile from '../Profile';
+import ReviewScreen from './responderDashboard';
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigation = () => {
+const ResponderDashboardNavigation = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'dashboard', title: 'Dashboard', icon: DashboardIcon },
-    { key: 'Profile', title: 'Profile', icon: ProfileIcon},
+    { key: 'profile', title: 'Profile', icon: ProfileIcon },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    dashboard: Dashboard,
-    Profile: Profile,
+    dashboard: ReviewScreen,
+    profile: Profile
   });
 
   const theme = {
@@ -48,4 +48,13 @@ const TabNavigation = () => {
   );
 };
 
-export default TabNavigation;
+const styles = StyleSheet.create({
+
+  gradient: {
+    width: '100%',
+    height: '100%',
+  },
+
+});
+
+export default ResponderDashboardNavigation;

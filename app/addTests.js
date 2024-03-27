@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
@@ -13,11 +14,33 @@ const AddTests = () => {
     setOptions(newOptions);
   };
 
-  const handleAddQuestion = () => {
-    // Logic to add question to the database or perform other actions
-    console.log('Test Name:', testName);
-    console.log('Question:', question);
-    console.log('Options:', options);
+  const handleAddQuestion = async (testName) => {
+    var url=''
+    if(testName == 'ADHD') url = "/admin/addADHDTest"
+    else if(testName == 'Depression') url = "/admin/addDepressionTest"
+    else if(testName == 'Anxiety') url = "/admin/addAnxietyTest"
+    try {
+      const response = await axios.post(
+          process.env.API_HOST + url,
+          {
+            "question": question,
+            "option1": options[0],
+            "option2": options[1],
+            "option3": options[2],
+            "option4": options[3]
+          }
+      );
+      if (response.status === 200) {
+        console.log("SUCCESS");
+        setTestName('');
+        setQuestion('')
+        setOptions(['', '', '', ''])
+      }
+    } catch (error) {
+    
+      console.log("Error saving post: " + error);
+      console.log(error.data.message);
+    }
   };
 
   return (
@@ -27,50 +50,56 @@ const AddTests = () => {
         <TouchableOpacity
           style={[
             styles.option,
-            testName === 'Test 1' && styles.selectedOption,
+            testName === 'ADHD' && styles.selectedOption,
           ]}
-          onPress={() => setTestName('Test 1')}
+          onPress={() => setTestName('ADHD')}
         >
-          <Text style={styles.optionText}>Test 1</Text>
+          <Text style={styles.optionText}>ADHD</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.option,
-            testName === 'Test 2' && styles.selectedOption,
+            testName === 'Depression' && styles.selectedOption,
           ]}
-          onPress={() => setTestName('Test 2')}
+          onPress={() => setTestName('Depression')}
         >
-          <Text style={styles.optionText}>Test 2</Text>
+          <Text style={styles.optionText}>Depression</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.option,
-            testName === 'Test 3' && styles.selectedOption,
+            testName === 'Anxiety' && styles.selectedOption,
           ]}
-          onPress={() => setTestName('Test 3')}
+          onPress={() => setTestName('Anxiety')}
         >
-          <Text style={styles.optionText}>Test 3</Text>
+          <Text style={styles.optionText}>Anxiety</Text>
         </TouchableOpacity>
       </View>
-      <TextInput
-        style={[styles.input, { height: 50 }]}
-        placeholder="Question"
-        multiline
-        value={question}
-        onChangeText={setQuestion}
-      />
-      {options.map((option, index) => (
-        <TextInput
-          key={index}
-          style={styles.input}
-          placeholder={`Option ${index + 1}`}
-          value={option}
-          onChangeText={(value) => handleOptionChange(index, value)}
-        />
-      ))}
-      <TouchableOpacity style={styles.addButton} onPress={handleAddQuestion}>
-        <Text style={styles.buttonText}>Add Question</Text>
-      </TouchableOpacity>
+      {testName && (
+        <>
+          <TextInput
+            style={[styles.input, { height: 50 }]}
+            placeholder="Question"
+            multiline
+            value={question}
+            onChangeText={setQuestion}
+          />
+          {options.map((option, index) => (
+            <TextInput
+              key={index}
+              style={styles.input}
+              placeholder={`Option ${index + 1}`}
+              value={option}
+              onChangeText={(value) => handleOptionChange(index, value)}
+            />
+          ))}
+          <TouchableOpacity style={styles.addButton} onPress={() => {
+            handleAddQuestion(testName);
+          }}>
+            <Text style={styles.buttonText}>Add Question</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -79,7 +108,7 @@ const AddTests = () => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    height: heightPercentageToDP(54),
+    height: heightPercentageToDP(55.3),
     borderRadius: heightPercentageToDP(5),
     backgroundColor: 'white',
     opacity: 0.8,
@@ -88,7 +117,7 @@ const styles = StyleSheet.create({
     padding: heightPercentageToDP(3)
   },
   heading: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',

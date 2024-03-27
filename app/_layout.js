@@ -4,6 +4,7 @@ import { Slot, Stack, useRouter, useSegments } from "expo-router";
 import "../global.css";
 import { AuthContextProvider, useAuth } from "../context/authcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const MainLayout = () => {
     const { isAuthenticated } = useAuth();
@@ -17,12 +18,19 @@ const MainLayout = () => {
             if (typeof isAuthenticated == "undefined") return;
             const inApp = segments[0] == "(app)";
             if (isAuthenticated && !inApp) {
-                if(user == null || user.role == '') {
+                if (user == null || user.role == "") {
                     router.replace("signIn");
-                } else if(user.role == 'DOCTOR') {
-                    router.replace({pathname: "/doctorHome", params: user});
-                } else if(user.role == 'USER') {
+                } else if (user.role == "DOCTOR") {
+                    router.replace({
+                        pathname: "doctorDashboardNavigation",
+                        params: user,
+                    });
+                } else if (user.role == "USER") {
                     router.replace("home");
+                } else if (user.role == "ADMIN") {
+                    router.replace("adminDashboardNavigation");
+                } else {
+                    router.replace("responderDashboardNavigation");
                 }
             } else if (isAuthenticated == false) {
                 router.replace("signIn");
@@ -40,8 +48,10 @@ const MainLayout = () => {
 
 export default function RootLayout() {
     return (
-        <AuthContextProvider>
-            <MainLayout />
-        </AuthContextProvider>
+        <SafeAreaProvider>
+            <AuthContextProvider>
+                <MainLayout />
+            </AuthContextProvider>
+        </SafeAreaProvider>
     );
 }

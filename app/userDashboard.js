@@ -10,7 +10,7 @@ import ConsultDoctors from '../components/consultDoctors';
 import Testimonial from '../components/testimonial';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
 
-const Dashboard = () => {
+const UserDashboard = () => {
   const gradientColors = ['rgba(255,255,255,0.2)', 'rgba(110,113,254,0.6)', 'rgba(4,0,207,0.4)'];
   return (
     <View>
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Dashboard;
+export default UserDashboard;
