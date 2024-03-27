@@ -310,17 +310,6 @@ const AddUsers = () => {
             </TouchableOpacity>
           </View>
         );
-      case 'moderator':
-        return (
-          <View style={styles.formContainer}>
-            {/* Moderator form fields */}
-            <TextInput
-              style={styles.input}
-              placeholder="First Name"
-            />
-            {/* Add other fields as needed */}
-          </View>
-        );
       default:
         return null;
     }

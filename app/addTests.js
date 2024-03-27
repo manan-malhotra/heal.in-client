@@ -75,27 +75,31 @@ const AddTests = () => {
           <Text style={styles.optionText}>Anxiety</Text>
         </TouchableOpacity>
       </View>
-      <TextInput
-        style={[styles.input, { height: 50 }]}
-        placeholder="Question"
-        multiline
-        value={question}
-        onChangeText={setQuestion}
-      />
-      {options.map((option, index) => (
-        <TextInput
-          key={index}
-          style={styles.input}
-          placeholder={`Option ${index + 1}`}
-          value={option}
-          onChangeText={(value) => handleOptionChange(index, value)}
-        />
-      ))}
-      <TouchableOpacity style={styles.addButton} onPress={() => {
-        handleAddQuestion(testName);
-      }}>
-        <Text style={styles.buttonText}>Add Question</Text>
-      </TouchableOpacity>
+      {testName && (
+        <>
+          <TextInput
+            style={[styles.input, { height: 50 }]}
+            placeholder="Question"
+            multiline
+            value={question}
+            onChangeText={setQuestion}
+          />
+          {options.map((option, index) => (
+            <TextInput
+              key={index}
+              style={styles.input}
+              placeholder={`Option ${index + 1}`}
+              value={option}
+              onChangeText={(value) => handleOptionChange(index, value)}
+            />
+          ))}
+          <TouchableOpacity style={styles.addButton} onPress={() => {
+            handleAddQuestion(testName);
+          }}>
+            <Text style={styles.buttonText}>Add Question</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -113,7 +117,7 @@ const styles = StyleSheet.create({
     padding: heightPercentageToDP(3)
   },
   heading: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',

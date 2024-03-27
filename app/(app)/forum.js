@@ -17,9 +17,11 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ReportModal from "../../components/reportModal";
-import { MaterialIcons } from '@expo/vector-icons';
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-
+import { MaterialIcons } from "@expo/vector-icons";
+import {
+    heightPercentageToDP,
+    widthPercentageToDP,
+} from "react-native-responsive-screen";
 
 const forum = () => {
     const [question, setQuestion] = useState([]);
@@ -72,10 +74,17 @@ const forum = () => {
     const [questions, setQuestions] = useState(question);
     const [expandedIndex, setExpandedIndex] = useState(null);
     const [role, setRole] = useState("User");
-
+    const getRole = async () => {
+        try {
+            const value = await AsyncStorage.getItem("role");
+            setRole(value);
+        } catch (e) {
+            console.log(e);
+        }
+    };
     useEffect(() => {
         // Simulate loading questions from an API
-
+        getRole();
         setQuestions(question);
     }, []);
 
@@ -94,6 +103,7 @@ const forum = () => {
 
     const handleAddComment = () => {
         console.log("Add Comment Hit..");
+        router.push('newQuestions')
     };
 
     const handleViewMoreComments = (questionIndex) => {
@@ -157,21 +167,29 @@ const forum = () => {
                                 </TouchableOpacity>
                             </Text>
                         </View>
-                        <View style={styles.searchBarContainer}>
-                            <AntDesign
-                                name="search1"
-                                size={20}
-                                color="black"
-                                style={styles.searchIcon}
-                            />
-                            <TextInput
-                                style={styles.searchBar} // Customize styles based on your desired search bar appearance
-                                placeholder="Search Videos"
-                                placeholderTextColor="black"
-                                onChangeText={handleSearch}
-                                value={searchText}
-                                underlineColorAndroid="transparent"
-                            />
+                        <View style = {styles.searchBarArea}>
+                            <View style={styles.searchBarContainer}>
+                                <AntDesign
+                                    name="search1"
+                                    size={20}
+                                    color="black"
+                                    style={styles.searchIcon}
+                                />
+                                <TextInput
+                                    style={styles.searchBar} // Customize styles based on your desired search bar appearance
+                                    placeholder="Search Questions"
+                                    placeholderTextColor="black"
+                                    onChangeText={handleSearch}
+                                    value={searchText}
+                                    underlineColorAndroid="transparent"
+                                />
+                                
+                            </View>
+                            <View style = {styles.addButton}>
+                            <TouchableOpacity style={styles.addButton} onPress={handleAddComment}>
+                                <Text style={styles.buttonText}>+ New</Text>
+                            </TouchableOpacity>
+                            </View>
                         </View>
                         <View style={styles.qnA}>
                             {/* Question List */}
@@ -181,7 +199,7 @@ const forum = () => {
                                     <View key={index}>
                                         <View style={styles.question}>
                                             {/*Render Flag Content button for User*/}
-                                            {role === "User" && (
+                                            {role === "USER" && (
                                                 <TouchableOpacity
                                                     style={styles.reportButton}
                                                     onPress={() =>
@@ -344,28 +362,38 @@ const forum = () => {
                                                     )}
                                                 </View>
                                             )}
-                                            {role === "Responder" && (
+                                            {role === "RESPONDER" && (
                                                 <View
                                                     style={
                                                         styles.commentInputContainer
                                                     }
                                                 >
-                                                <View style={styles.inputWrapper}>
-                                                    <TextInput
-                                                        placeholder="Add Comment"
+                                                    <View
                                                         style={
-                                                            styles.commentInput
+                                                            styles.inputWrapper
                                                         }
-                                                        multiline={true}
-                                                        numberOfLines={undefined}
-                                                    />
-                                                </View>
-                                                <TouchableOpacity onPress={handleAddComment}>
-                                                    <Image
-                                                    style={styles.icon}
-                                                    source={require("../../assets/images/message.png")}
-                                                    />
-                                                </TouchableOpacity>
+                                                    >
+                                                        <TextInput
+                                                            placeholder="Add Comment"
+                                                            style={
+                                                                styles.commentInput
+                                                            }
+                                                            multiline={true}
+                                                            numberOfLines={
+                                                                undefined
+                                                            }
+                                                        />
+                                                    </View>
+                                                    <TouchableOpacity
+                                                        onPress={
+                                                            handleAddComment
+                                                        }
+                                                    >
+                                                        <Image
+                                                            style={styles.icon}
+                                                            source={require("../../assets/images/message.png")}
+                                                        />
+                                                    </TouchableOpacity>
                                                 </View>
                                             )}
                                             {/* Render Add Comment section for Responder */}
@@ -408,38 +436,57 @@ const styles = StyleSheet.create({
     },
     body: {
         padding: 5,
+        marginLeft: widthPercentageToDP(4),
+        marginRight: widthPercentageToDP(4)
     },
     title: {
-        marginTop: "15%",
-        marginLeft: "5%",
-        marginRight: "5%",
+        marginTop: heightPercentageToDP(5),
+        marginLeft: widthPercentageToDP(4),
     },
     verticalLine: {
-        height: 0.7,
+        height: heightPercentageToDP(0.1),
         backgroundColor: "black",
         marginVertical: 5,
     },
     notes: {
-        marginLeft: "5%",
+        marginLeft: widthPercentageToDP(4),
     },
     icon_container: {
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
     },
     icon: {
         width: widthPercentageToDP(4),
         height: heightPercentageToDP(1.8),
     },
+    searchBarArea: {
+        flexDirection: 'row',
+        marginLeft: widthPercentageToDP(2),
+        marginRight: widthPercentageToDP(2),
+        marginTop: heightPercentageToDP(3),
+        marginBottom: heightPercentageToDP(3)
+    },  
+    addButton: {
+        backgroundColor: 'green',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        height: heightPercentageToDP(4.5),
+        width: widthPercentageToDP(15),
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      buttonText: {
+        color: "white",
+        fontSize: 14,
+        fontWeight: 'bold',
+      },
     searchBarContainer: {
         flexDirection: "row",
+        flex:1,
         alignItems: "center",
         borderWidth: 0.4,
         borderColor: "gray",
         borderRadius: 10,
-        marginTop: 20,
-        marginBottom: 30,
-        marginRight: 39,
-        marginLeft: 30,
         backgroundColor: "white",
     },
     searchIcon: {
@@ -523,19 +570,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     commentInputContainer: {
-
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: 'white',
+        backgroundColor: "white",
         paddingHorizontal: widthPercentageToDP(3.2),
-        borderRadius: widthPercentageToDP(7)
+        borderRadius: widthPercentageToDP(7),
     },
     inputWrapper: {
         flex: 1,
     },
     commentInput: {
         backgroundColor: "white",
-        justifyContent: 'center',
+        justifyContent: "center",
         height: hp(5),
         width: widthPercentageToDP(69),
         marginRight: widthPercentageToDP(1.6),

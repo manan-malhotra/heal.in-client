@@ -112,9 +112,12 @@ const AddResources = () => {
           />
         </View>
       )}
-      <TouchableOpacity style={styles.addButton} onPress={handleAddResource}>
-        <Text style={styles.buttonText}>Add Resource</Text>
-      </TouchableOpacity>
+      {resourceType && (
+        <TouchableOpacity style={styles.addButton} onPress={handleAddResource}>
+          <Text style={styles.buttonText}>Add Resource</Text>
+        </TouchableOpacity>
+      )}
+      
     </View>
   );
 };

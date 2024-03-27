@@ -137,6 +137,28 @@ export default function _layout() {
                         headerTintColor: "white",
                         navigationBarColor: "#3340B0",
                     }}
+                /> 
+                <Stack.Screen
+                    name="newQuestions"
+                    options = {{
+                        headerTitle: "heal.in",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
+                />
+                <Stack.Screen
+                    name="responderDashboardNavigation"
+                    options = {{
+                        headerTitle: "heal.in",
+                        headerStyle: {
+                            backgroundColor: "#3340B0",
+                        },
+                        headerTintColor: "white",
+                        navigationBarColor: "#3340B0",
+                    }}
                 />
             </Stack>
         </>
