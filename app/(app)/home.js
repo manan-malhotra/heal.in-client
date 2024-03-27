@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React from "react";
 import {
     BottomNavigation,
     Provider as PaperProvider,
