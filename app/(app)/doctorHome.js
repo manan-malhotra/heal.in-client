@@ -8,7 +8,7 @@ import { ActivityIndicator } from 'react-native-paper'
 import ChatList from '../../components/ChatList'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function doctorHome() {
+export default function DoctorHome() {
   const item = useLocalSearchParams();
   const [rooms, setRooms] = useState({});
   const router = useRouter();

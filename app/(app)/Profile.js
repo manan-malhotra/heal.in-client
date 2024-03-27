@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useAuth } from "../context/authcontext";
+import { useAuth } from "../../context/authcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import UserDashboard from './userDashboard';
+import { widthPercentageToDP } from 'react-native-responsive-screen';
+import ChatRoomHeader from '../../components/ChatRoomHeader';
+import { ActivityIndicator } from 'react-native-paper';
+
+const Drawer = createDrawerNavigator();
+
 
 const Profile = () => {
     const router = useRouter();
@@ -48,6 +56,7 @@ const Profile = () => {
         getUserData();
     }, []);
     return (
+        
         <LinearGradient
             colors={[
                 "rgba(255,255,255,0.2)",
@@ -56,7 +65,9 @@ const Profile = () => {
             ]}
             style={styles.container}
         >
+        
             <View style={styles.container}>
+                
                 <Text style={styles.username}>My Profile</Text>
                 <View>
                     <View style={styles.card}>
@@ -65,7 +76,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/name.png")}
+                                        source={require("../../assets/images/name.png")}
                                     />
                                     <Text
                                         style={{
@@ -88,7 +99,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/mail.png")}
+                                        source={require("../../assets/images/mail.png")}
                                     />
                                     <Text
                                         style={{
@@ -108,7 +119,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/contact_number.png")}
+                                        source={require("../../assets/images/contact_number.png")}
                                     />
                                     <Text
                                         style={{
@@ -128,7 +139,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/age.png")}
+                                        source={require("../../assets/images/age.png")}
                                     />
                                     <Text
                                         style={{
@@ -148,7 +159,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/gender.png")}
+                                        source={require("../../assets/images/gender.png")}
                                     />
                                     <Text
                                         style={{
@@ -181,10 +192,63 @@ const Profile = () => {
     );
 };
 
+
+const DrawerNavigator = () => {
+    const router = useRouter();
+    const { user } = useAuth(); // Assuming useAuth hook provides user information including the role
+    
+    if (user.role === "DOCTOR") {
+        return (
+            <Drawer.Navigator
+                drawerType="slide" // Set drawer type to "slide"
+                drawerPosition="left" // Set drawer position to "left"
+                screenOptions={{
+                    headerShown: true,
+                    drawerStyle: {
+                        backgroundColor: '#3340B0',
+                        width: widthPercentageToDP(55),
+                    },
+                    drawerContentStyle: {
+                        flex: 1,
+                    },
+                    drawerLabelStyle: {
+                        fontSize: 16,
+                        color: 'white'
+                    },
+                    headerStyle: {
+                        backgroundColor: '#3340B0', // Customize header background color
+                    },
+                    headerTintColor: 'white', // Customize header text color
+                }}
+            >
+                <Drawer.Screen
+                    name="View Profile"
+                    component={Profile}
+                    options={{
+                        headerTitle: 'Profile',
+                        headerShown: false,
+                    }}
+                ></Drawer.Screen>
+                <Drawer.Screen
+                    name="View as User"
+                    component={UserDashboard}
+                    options={{
+                        headerTitle: 'View as User', // Set an empty string for the header title
+                        headerShown: false,
+                    }}
+                />
+            </Drawer.Navigator>
+        );
+    } else {
+        // If user role is not DOCTOR, return null or any other component as needed
+        return <Profile/>;
+    }
+};
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: "3%",
         paddingLeft: "2%",
         paddingRight: "2%",
         justifyContent: "center",
@@ -215,7 +279,8 @@ const styles = StyleSheet.create({
         paddingBottom: "3%",
         flexDirection: "row",
         justifyContent: "space-between",
-        marginBottom: "5%",
+        marginBottom: "2%",
+        marginTop: "2%"
     },
     verticalLine: {
         width: "100",
@@ -276,4 +341,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Profile;
+export default DrawerNavigator;

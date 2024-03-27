@@ -4,15 +4,16 @@ import {
     BottomNavigation,
     Provider as PaperProvider,
 } from "react-native-paper";
-import UserDashboard from "../userDashboard";
+import UserDashboard from "./userDashboard";
 import DashboardIcon from "../../assets/images/dashboard.png";
 import ProfileIcon from "../../assets/images/profile.png";
 import { Image } from "react-native";
-import Profile from "../Profile";
+import Profile from "./Profile";
 import ReviewScreen from "./responderDashboard";
 import doctorHome from "./doctorHome";
-import AdminDashboard from "../adminDashboard";
+import AdminDashboard from "./adminDashboard";
 import { useLocalSearchParams } from "expo-router";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 export default function home() {
     const { role } = useLocalSearchParams();
     const [index, setIndex] = React.useState(0);
@@ -44,7 +45,7 @@ export default function home() {
                 navigationState={{ index, routes }}
                 onIndexChange={setIndex}
                 renderScene={renderScene}
-                barStyle={{ backgroundColor: "#3340B0", height: "15%" }}
+                barStyle={{ backgroundColor: "#3340B0", height: heightPercentageToDP(17) }}
                 activeColor="white"
                 inactiveColor="grey"
                 shifting={false}
