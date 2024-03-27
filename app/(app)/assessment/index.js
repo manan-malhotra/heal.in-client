@@ -11,8 +11,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
 import { useRouter } from "expo-router";
+import Toast from 'react-native-toast-message';
 
-const assessment = () => {
+const Assessment = () => {
     const router = useRouter();
     const { test } = useLocalSearchParams();
     const sendScore = async (sum) => {
@@ -29,38 +30,6 @@ const assessment = () => {
             console.log(response.status);
         } catch (error) {
             console.log(error);
-        }
-    };
-    const handleSubmit = async () => {
-        const sum = Object.values(selectedOptions).reduce(
-            (acc, value) => acc + value,
-            0
-        );
-        const length = Object.keys(selectedOptions).length;
-        if (length == questions.length) {
-            await sendScore(sum);
-            router.navigate({
-                pathname: "assessment/scoreCard",
-                params: { sum, total: questions.length * 3, test },
-            });
-            // Alert.alert(
-            //     "Test Submitted",
-            //     "Your score is " +
-            //         sum +
-            //         " out of " +
-            //         questions.length * 3 +
-            //         " points"
-            // );
-            console.log("Sum of selected options:", sum);
-        } else {
-            Alert.alert(
-                "Please complete all questions",
-                "You have submitted " +
-                    length +
-                    " out of " +
-                    questions.length +
-                    " options"
-            );
         }
     };
     const [questions, setQuestions] = useState([]);
@@ -97,7 +66,31 @@ const assessment = () => {
         }));
     };
 
+    const handleSubmit = async () => {
+        const sum = Object.values(selectedOptions).reduce(
+            (acc, value) => acc + value,
+            0
+        );
+        const length = Object.keys(selectedOptions).length;
+        if (length === questions.length) {
+            await sendScore(sum);
+            router.navigate({
+                pathname: "assessment/scoreCard",
+                params: { sum, total: questions.length * 3, test },
+            });
+        } else {
+            Toast.show({
+                type: 'error',
+                text1: 'Incomplete Questions',
+                text2: `You have submitted ${length} out of ${questions.length} options`,
+                position: 'top',
+                visibilityTime: 3000
+            });
+        }
+    };
+
     return (
+        <>
         <LinearGradient colors={gradientColors} style={styles.gradient}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.container}>
@@ -105,13 +98,13 @@ const assessment = () => {
                     <View style={styles.line}></View>
                     <View style={styles.questionContainer}>
                         <Text style={styles.test}>Test Questions</Text>
-                        {test != "ADHD" && (
+                        {test !== "ADHD" && (
                             <Text style={styles.questionText}>
                                 Over the last 2 weeks, how often have you been
                                 bothered by any of the following problems?
                             </Text>
                         )}
-                        {test == "ADHD" && (
+                        {test === "ADHD" && (
                             <Text style={styles.questionText}>
                                 Please answer the questions below, rating
                                 yourself on each of the criteria shown. As you
@@ -165,6 +158,8 @@ const assessment = () => {
                 </View>
             </ScrollView>
         </LinearGradient>
+        <Toast ref={(ref) => Toast.setRef(ref)} />
+        </>
     );
 };
 
@@ -203,7 +198,7 @@ const styles = StyleSheet.create({
     questionHeading: {
         fontSize: 17,
         marginBottom: 20,
-        fontWeight: 500,
+        fontWeight: "500",
     },
     optionsContainer: {
         flexDirection: "row",
@@ -240,4 +235,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default assessment;
+export default Assessment;

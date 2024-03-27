@@ -12,6 +12,8 @@ import Background from "../components/Background";
 import MyTextInput from "../components/TextInput";
 import { useRouter } from "expo-router";
 import { AuthContext } from "../context/authcontext";
+import Toast from 'react-native-toast-message';
+import axios from "axios";
 
 export default function SignUp() {
   const router = useRouter();
@@ -23,7 +25,7 @@ export default function SignUp() {
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(-1);
   const [password, setPassword] = useState("");
-  // const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -52,6 +54,74 @@ export default function SignUp() {
     };
   }, []);
   const handleSignUp = () => {
+    if (
+      firstName.trim() === "" ||
+      lastName.trim() === "" ||
+      email.trim() === "" ||
+      phoneNumber === -1 ||
+      gender.trim() === "" ||
+      age === -1 ||
+      password.trim() === "" ||
+      confirmPassword.trim() === ""
+    ) {
+        // Check if any field is empty
+        Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'All fields should be filled',
+            position: 'top',
+            visibilityTime: 3000
+        });
+        return;
+    }
+
+    if (password !== confirmPassword) {
+      
+      Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Password and Confirm Password should be same',
+          position: 'top',
+          visibilityTime: 3000
+      });
+      return;
+    }
+
+    //Mobile Number Verification
+    // Trim whitespace and other characters from phone number
+    const trimmedPhoneNumber = phoneNumber.trim();
+
+    // Check if phone number length is not equal to 10
+    if (trimmedPhoneNumber.length !== 10) {
+        Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Phone number should have exactly 10 digits',
+            position: 'top',
+            visibilityTime: 3000
+        });
+        return;
+    }
+
+    //Email Verification
+    // Trim whitespace from email address
+    const trimmedEmail = email.trim();
+
+    // Regular expression pattern for email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Check if email is empty or doesn't match the pattern
+    if (trimmedEmail === "" || !emailPattern.test(trimmedEmail)) {
+        Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Please enter a valid email address',
+            position: 'top',
+            visibilityTime: 3000
+        });
+        return;
+    }
+
     const userData = {
       firstName: firstName,
       lastName: lastName,
@@ -60,12 +130,14 @@ export default function SignUp() {
       gender: gender,
       age: age,
       password: password,
+      confirmPassword: confirmPassword,
       role: "USER",
     };
     register(userData);
   }
 
   return (
+    <>
     <View style={styles.container}>
       <Background>
         <KeyboardAvoidingView
@@ -104,7 +176,7 @@ export default function SignUp() {
           </View>
           <View style={styles.cPasswordInputView}>
             <MyTextInput
-              placeholderText={"Confirm Password"}
+              placeholderText={"Confirm Password"} onChangeText={setConfirmPassword}
               isPassword={true}
             />
           </View>
@@ -116,7 +188,7 @@ export default function SignUp() {
               <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.row}>
+          <View style={styles.row}>  
             <Text style={styles.gotAccount}>Already have an account?</Text>
             <TouchableOpacity>
               <Text
@@ -133,6 +205,8 @@ export default function SignUp() {
         </KeyboardAvoidingView>
       </Background>
     </View>
+    <Toast ref={(ref) => Toast.setRef(ref)} />
+    </>
   );
 }
 

@@ -1,88 +1,90 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    ScrollView,
-    TouchableOpacity,
-    Platform,
-} from "react-native";
-import React, { useState, useEffect } from "react";
-import { LinearGradient } from "expo-linear-gradient";
-import MyTextInput from "../../components/TextInput";
-import { TextInput } from "react-native-paper";
-import axios from "axios";
-import { useRouter } from "expo-router";
-import { Keyboard } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import MyTextInput from '../../components/TextInput';
+import { TextInput } from 'react-native-paper';
+import axios from 'axios';
+import { useRouter } from 'expo-router';
+import { Keyboard } from 'react-native';
+import Toast from 'react-native-toast-message';
 
-export default function newJournal() {
+
+const NewJournal = () => {
     const router = useRouter();
     const gradientColors = [
-        "rgba(255,255,255,0.2)",
-        "rgba(110,113,254,0.6)",
-        "rgba(4,0,207,0.4)",
+        'rgba(255,255,255,0.2)',
+        'rgba(110,113,254,0.6)',
+        'rgba(4,0,207,0.4)',
     ];
+
     function getFormattedDate() {
         const dateObj = new Date();
         const day = dateObj.getDate();
         const monthIndex = dateObj.getMonth();
         const year = dateObj.getFullYear();
         const monthNames = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
         ];
         const monthName = monthNames[monthIndex];
         return `${day} ${monthName} ${year}`;
     }
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [topPartVisible, setTopPartVisible] = useState(true);
     const [numberOfLines, setNumberOfLines] = useState(18);
+    const [showErrorToast, setShowErrorToast] = useState(false);
 
     const handleSave = async () => {
+        if (title.trim() === '' || description.trim() === '') {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Title and description cannot be empty',
+                position: 'top',
+                visibilityTime: 3000
+            });
+            return;
+        }
+
         try {
-            console.log("Save pressed.");
-            const response = await axios.post(
-                process.env.API_HOST + "/api/journal",
-                {
-                    title: title,
-                    description: description,
-                }
-            );
+            console.log('Save pressed.');
+            const response = await axios.post(process.env.API_HOST + '/api/journal', {
+                title: title,
+                description: description,
+            });
             if (response.status === 200) {
-                router.navigate("home");
+                router.dismissAll();
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Journal entry saved successfully',
+                    position: 'top',
+                    visibilityTime: 3000
+                });
             }
         } catch (error) {
-            console.log("Error saving post: " + error);
+            console.log('Error saving post: ' + error);
             console.log(error.data.message);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Failed to save journal entry',
+                position: 'top',
+                visibilityTime: 3000
+            });
         }
     };
 
     useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener(
-            "keyboardDidShow",
-            () => {
-                setTopPartVisible(false);
-                setNumberOfLines(13);
-            }
-        );
-        const keyboardDidHideListener = Keyboard.addListener(
-            "keyboardDidHide",
-            () => {
-                setTopPartVisible(true);
-                setNumberOfLines(18);
-            }
-        );
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setTopPartVisible(false);
+            setNumberOfLines(13);
+        });
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setTopPartVisible(true);
+            setNumberOfLines(18);
+        });
 
         return () => {
             keyboardDidShowListener.remove();
@@ -92,6 +94,7 @@ export default function newJournal() {
 
     return (
         <>
+            <Toast/>
             <LinearGradient colors={gradientColors} style={styles.gradient}>
                 <ScrollView>
                     <View style={styles.body}>
@@ -100,8 +103,8 @@ export default function newJournal() {
                                 <View style={styles.toppart}>
                                     <View style={styles.toppartleft}>
                                         <Text style={styles.heading}>
-                                            Write your mind down.{"\n"}Clear
-                                            your thoughts. {"\n"}The Safest
+                                            Write your mind down.{'\n'}Clear
+                                            your thoughts. {'\n'}The Safest
                                             place for your thoughts.
                                         </Text>
                                     </View>
@@ -120,28 +123,20 @@ export default function newJournal() {
                             </>
                         )}
                         <View style={styles.entryArea}>
-                            <MyTextInput
-                                placeholderText={
-                                    "Title of your journal entry..."
-                                }
+                            <TextInput
+                                label="Title of your journal entry..."
+                                value={title}
                                 onChangeText={setTitle}
-                            ></MyTextInput>
-                            <View style={{}}>
-                                <TextInput
-                                    placeholder="How was your day?"
-                                    editable
-                                    multiline
-                                    numberOfLines={numberOfLines}
-                                    minHeight={
-                                        Platform.OS === "ios" && numberOfLines
-                                            ? 25 * numberOfLines
-                                            : null
-                                    }
-                                    maxLength={3000}
-                                    onChangeText={setDescription}
-                                    style={styles.blogInput}
-                                />
-                            </View>
+                                style={styles.textInput}
+                            />
+                            <TextInput
+                                label="How was your day?"
+                                value={description}
+                                onChangeText={setDescription}
+                                multiline
+                                numberOfLines={numberOfLines}
+                                style={[styles.textInput, styles.blogInput]}
+                            />
                             <TouchableOpacity
                                 style={styles.saveButton}
                                 onPress={handleSave}
@@ -152,7 +147,9 @@ export default function newJournal() {
                     </View>
                 </ScrollView>
             </LinearGradient>
+            <Toast ref={(ref) => Toast.setRef(ref)} />
         </>
+        
     );
 }
 
@@ -228,6 +225,9 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     blogInput: {
+        marginTop: 20,
+    },
+    textInput: {
         backgroundColor: "#F4F4F4",
         width: "100%",
         paddingHorizontal: 12,
@@ -236,7 +236,8 @@ const styles = StyleSheet.create({
         borderColor: "grey",
         borderRadius: 5,
         padding: 10,
-        marginTop: 20,
         fontSize: 17,
     },
 });
+
+export default NewJournal

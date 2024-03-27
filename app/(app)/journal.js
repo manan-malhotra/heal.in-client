@@ -20,13 +20,14 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MyTextInput from "../../components/TextInput";
 import { TextInput } from "react-native-paper";
+import Toast from "react-native-toast-message";
 
 const Journal = () => {
     const router = useRouter();
     const [entries, setEntries] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-    const [title, setTitle] = useState(false);
-    const [description, setDescription] = useState(false);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [entryId, setEntryId] = useState(false);
     const [numberOfLines, setNumberOfLines] = useState(10);
     const [edited, setEdited] = useState(false);
@@ -92,6 +93,17 @@ const Journal = () => {
     ];
     const [expandedIndex, setExpandedIndex] = useState(null);
     const handleSave = async () => {
+        if (!title.trim() || !description.trim()) {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Title and description cannot be empty',
+                position: 'top',
+                visibilityTime: 3000
+            });
+            return;
+        }        
+    
         try {
             const response = await axios.put(
                 process.env.API_HOST + "/api/journal/edit",
@@ -101,15 +113,28 @@ const Journal = () => {
                     entryId: entryId,
                 }
             );
-            console.log(response.status);
             if (response.status === 200) {
                 setModalVisible(false);
                 getJournalEntries();
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Journal entry saved successfully',
+                    position: 'top',
+                    visibilityTime: 3000
+                });
             }
         } catch (error) {
             console.log(error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Failed to save journal entry',
+                position: 'top',
+                visibilityTime: 3000
+            });
         }
-    };
+    };    
     const handleViewMore = (index) => {
         setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
     };
@@ -330,6 +355,7 @@ const Journal = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
+                    <Toast ref={(ref) => Toast.setRef(ref)} />
                 </Modal>
             </LinearGradient>
         </>

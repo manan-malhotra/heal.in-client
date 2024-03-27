@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
 } from 'react-native';
@@ -11,6 +12,7 @@ import Background from '../components/Background';
 import MyTextInput from '../components/TextInput';
 import { useRouter } from 'expo-router';
 import { AuthContext } from '../context/authcontext';
+import Toast from 'react-native-toast-message';
 
 export default function SignIn() {
   const router = useRouter();
@@ -35,10 +37,23 @@ export default function SignIn() {
   }, []);
 
   const handleLogin = () => {
+    // Check if email or password is empty
+    if (!email.trim() || !password.trim()) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Email or Password should not be empty',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+      return;
+    }
+
     login(email, password);
   };
 
   return (
+    <>
     <View style={styles.container}>
       <Background>
         <KeyboardAvoidingView
@@ -62,9 +77,11 @@ export default function SignIn() {
             />
           </View>
           <View style={styles.buttonView}>
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-              <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
+          <TouchableWithoutFeedback onPress={handleLogin}>
+              <View style={styles.loginButton}>
+                <Text style={styles.buttonText}>Login</Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
           <TouchableOpacity>
             <Text style={styles.forgot}>Forgot your password?</Text>
@@ -87,6 +104,8 @@ export default function SignIn() {
         </KeyboardAvoidingView>
       </Background>
     </View>
+    <Toast ref={(ref) => Toast.setRef(ref)} />
+    </>
   );
 }
 

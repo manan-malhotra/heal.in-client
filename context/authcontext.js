@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 export const AuthContext = createContext();
 
@@ -80,6 +81,45 @@ export const AuthContextProvider = ({ children }) => {
                 setIsAuthenticated(true);
             }
         } catch (error) {
+            //Wrong Username
+            if(error.response.status == 404) {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: 'Entered Username is Wrong',
+                    position: 'top',
+                    visibilityTime: 3000,
+                  });
+                  
+                  return;
+            }
+
+            // Wrong Password
+            if(error.response.status == 401) {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: 'Entered Password is Wrong',
+                    position: 'top',
+                    visibilityTime: 3000,
+                  });
+                  return;
+            }
+            
+
+            //Server Down
+            if(error.response.status == 502) {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: 'Currently Server is Down Try Again After Few Minutes',
+                    position: 'top',
+                    visibilityTime: 3000,
+                  });
+                  return;
+            }
+
+            console.log(error.response.status)
             console.log("Error logging in: ", error);
             setIsAuthenticated(false);
         }
@@ -104,6 +144,17 @@ export const AuthContextProvider = ({ children }) => {
             }
         } catch (error) {
             console.log("Error registering: ", error);
+            if(error.response.status==403){
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: 'Email already exists',
+                    position: 'top',
+                    visibilityTime: 3000,
+                  });
+                  
+                  return;
+            }
             setIsAuthenticated(false);
         }
     };
