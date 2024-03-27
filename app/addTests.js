@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
@@ -13,11 +14,33 @@ const AddTests = () => {
     setOptions(newOptions);
   };
 
-  const handleAddQuestion = () => {
-    // Logic to add question to the database or perform other actions
-    console.log('Test Name:', testName);
-    console.log('Question:', question);
-    console.log('Options:', options);
+  const handleAddQuestion = async (testName) => {
+    var url=''
+    if(testName == 'ADHD') url = "/admin/addADHDTest"
+    else if(testName == 'Depression') url = "/admin/addDepressionTest"
+    else if(testName == 'Anxiety') url = "/admin/addAnxietyTest"
+    try {
+      const response = await axios.post(
+          process.env.API_HOST + url,
+          {
+            "question": question,
+            "option1": options[0],
+            "option2": options[1],
+            "option3": options[2],
+            "option4": options[3]
+          }
+      );
+      if (response.status === 200) {
+        console.log("SUCCESS");
+        setTestName('');
+        setQuestion('')
+        setOptions(['', '', '', ''])
+      }
+    } catch (error) {
+    
+      console.log("Error saving post: " + error);
+      console.log(error.data.message);
+    }
   };
 
   return (
@@ -70,7 +93,9 @@ const AddTests = () => {
               onChangeText={(value) => handleOptionChange(index, value)}
             />
           ))}
-          <TouchableOpacity style={styles.addButton} onPress={handleAddQuestion}>
+          <TouchableOpacity style={styles.addButton} onPress={() => {
+            handleAddQuestion(testName);
+          }}>
             <Text style={styles.buttonText}>Add Question</Text>
           </TouchableOpacity>
         </>
