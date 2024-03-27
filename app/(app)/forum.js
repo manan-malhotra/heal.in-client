@@ -17,9 +17,11 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ReportModal from "../../components/reportModal";
-import { MaterialIcons } from '@expo/vector-icons';
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-
+import { MaterialIcons } from "@expo/vector-icons";
+import {
+    heightPercentageToDP,
+    widthPercentageToDP,
+} from "react-native-responsive-screen";
 
 const forum = () => {
     const [question, setQuestion] = useState([]);
@@ -72,10 +74,17 @@ const forum = () => {
     const [questions, setQuestions] = useState(question);
     const [expandedIndex, setExpandedIndex] = useState(null);
     const [role, setRole] = useState("User");
-
+    const getRole = async () => {
+        try {
+            const value = await AsyncStorage.getItem("role");
+            setRole(value);
+        } catch (e) {
+            console.log(e);
+        }
+    };
     useEffect(() => {
         // Simulate loading questions from an API
-
+        getRole();
         setQuestions(question);
     }, []);
 
@@ -181,7 +190,7 @@ const forum = () => {
                                     <View key={index}>
                                         <View style={styles.question}>
                                             {/*Render Flag Content button for User*/}
-                                            {role === "User" && (
+                                            {role === "USER" && (
                                                 <TouchableOpacity
                                                     style={styles.reportButton}
                                                     onPress={() =>
@@ -344,28 +353,38 @@ const forum = () => {
                                                     )}
                                                 </View>
                                             )}
-                                            {role === "Responder" && (
+                                            {role === "RESPONDER" && (
                                                 <View
                                                     style={
                                                         styles.commentInputContainer
                                                     }
                                                 >
-                                                <View style={styles.inputWrapper}>
-                                                    <TextInput
-                                                        placeholder="Add Comment"
+                                                    <View
                                                         style={
-                                                            styles.commentInput
+                                                            styles.inputWrapper
                                                         }
-                                                        multiline={true}
-                                                        numberOfLines={undefined}
-                                                    />
-                                                </View>
-                                                <TouchableOpacity onPress={handleAddComment}>
-                                                    <Image
-                                                    style={styles.icon}
-                                                    source={require("../../assets/images/message.png")}
-                                                    />
-                                                </TouchableOpacity>
+                                                    >
+                                                        <TextInput
+                                                            placeholder="Add Comment"
+                                                            style={
+                                                                styles.commentInput
+                                                            }
+                                                            multiline={true}
+                                                            numberOfLines={
+                                                                undefined
+                                                            }
+                                                        />
+                                                    </View>
+                                                    <TouchableOpacity
+                                                        onPress={
+                                                            handleAddComment
+                                                        }
+                                                    >
+                                                        <Image
+                                                            style={styles.icon}
+                                                            source={require("../../assets/images/message.png")}
+                                                        />
+                                                    </TouchableOpacity>
                                                 </View>
                                             )}
                                             {/* Render Add Comment section for Responder */}
@@ -423,8 +442,8 @@ const styles = StyleSheet.create({
         marginLeft: "5%",
     },
     icon_container: {
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
     },
     icon: {
         width: widthPercentageToDP(4),
@@ -523,19 +542,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     commentInputContainer: {
-
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: 'white',
+        backgroundColor: "white",
         paddingHorizontal: widthPercentageToDP(3.2),
-        borderRadius: widthPercentageToDP(7)
+        borderRadius: widthPercentageToDP(7),
     },
     inputWrapper: {
         flex: 1,
     },
     commentInput: {
         backgroundColor: "white",
-        justifyContent: 'center',
+        justifyContent: "center",
         height: hp(5),
         width: widthPercentageToDP(69),
         marginRight: widthPercentageToDP(1.6),

@@ -18,16 +18,20 @@ const MainLayout = () => {
             if (typeof isAuthenticated == "undefined") return;
             const inApp = segments[0] == "(app)";
             if (isAuthenticated && !inApp) {
-                if(user == null || user.role == '') {
+                if (user == null || user.role == "") {
                     router.replace("signIn");
-                } else if(user.role == 'DOCTOR') {
-                    router.replace({pathname: "doctorDashboardNavigation", params: user});
-                } else if(user.role == 'USER') {
+                } else if (user.role == "DOCTOR") {
+                    router.replace({
+                        pathname: "doctorDashboardNavigation",
+                        params: user,
+                    });
+                } else if (user.role == "USER") {
                     router.replace("home");
-                } else if(user.role == 'ADMIN') {
+                } else if (user.role == "ADMIN") {
                     router.replace("adminDashboardNavigation");
+                } else {
+                    router.replace("responderDashboardNavigation");
                 }
-                
             } else if (isAuthenticated == false) {
                 router.replace("signIn");
             }
@@ -45,9 +49,9 @@ const MainLayout = () => {
 export default function RootLayout() {
     return (
         <SafeAreaProvider>
-        <AuthContextProvider>
-            <MainLayout />
-        </AuthContextProvider>
+            <AuthContextProvider>
+                <MainLayout />
+            </AuthContextProvider>
         </SafeAreaProvider>
     );
 }

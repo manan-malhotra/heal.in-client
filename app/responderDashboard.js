@@ -42,6 +42,16 @@ const ReviewScreen = () => {
                         <Text style={styles.buttonText}>Review QnA</Text>
                     </TouchableOpacity>
                 </View>
+                <View style={{ marginVertical: 20 }}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                            router.push("forum");
+                        }}
+                    >
+                        <Text style={styles.buttonText}>Respond to QnA</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </LinearGradient>
     );
