@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
@@ -6,16 +7,54 @@ const AddResources = () => {
   const [resourceType, setResourceType] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [thumbnail, setThumbnail] = useState('');
   const [video, setVideo] = useState('')
 
-  const handleAddResource = () => {
-    // Logic to add resource to the database or perform other actions
-    console.log('Resource Type:', resourceType);
-    console.log('Title:', title);
-    console.log('Content:', content);
-    console.log('Thumbnail:', thumbnail);
-    console.log('Video:', thumbnail);
+  const handleAddResource = async () => {
+    if(resourceType == 'blog') 
+    {
+      try {
+        const response = await axios.post(
+            process.env.API_HOST + "/admin/addBlogs",
+            {
+              "description": content,
+              "title": title,
+              "user_id": 28
+            }
+        );
+        if (response.status === 200) {
+          console.log("SUCCESS");
+          setResourceType('');
+          setTitle('');
+          setContent('');
+        }
+      } catch (error) {
+      
+        console.log("Error saving post: " + error);
+        console.log(error.data.message);
+      }
+    }
+    else if(resourceType == 'video') {
+      try {
+        const response = await axios.post(
+            process.env.API_HOST + "/admin/addSelfHelpVideos",
+            {
+              "title": title,
+              "url": video
+            }
+        );
+        if (response.status === 200) {
+          console.log("SUCCESS");
+          setResourceType('');
+          setTitle('');
+          setVideo('');
+        }
+      } catch (error) {
+      
+        console.log("Error saving post: " + error);
+        console.log(error.data.message);
+      }
+    }
+    
   };
 
   return (
@@ -65,12 +104,6 @@ const AddResources = () => {
             placeholder="Title"
             value={title}
             onChangeText={setTitle}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Thumbnail URL"
-            value={thumbnail}
-            onChangeText={setThumbnail}
           /><TextInput
             style={styles.input}
             placeholder="Video URL"

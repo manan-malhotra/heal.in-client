@@ -1,68 +1,175 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
-
 
 const AddUsers = () => {
   const [isAddUserModalVisible, setIsAddUserModalVisible] = useState(false);
   const [newUserName, setNewUserName] = useState('');
   const [newUserRole, setNewUserRole] = useState('');
   const [selectedUserRole, setSelectedUserRole] = useState('');
-  const [testName, setTestName] = useState('');
+  
+  const [formData, setFormData] = useState({
+    role: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    age: '',
+    gender: '',
+    password: '',
+    contactNo: '',
+    degree: '',
+    specialization: '',
+    experience: '',
+    licenseNumber: ''
+  });
 
+  const handleInputChange = (name, text) => {
+    setFormData({ ...formData, [name]: text });
+  };
 
-
-  const handleAddUser = () => {
-    // Logic to add a new user
-    console.log('Add user:', newUserName, newUserRole);
-    // Clear input fields
-    setNewUserName('');
-    setNewUserRole('');
-    // Hide the modal
+  const handleSubmit = () => {
+    console.log("Form Data: ", formData);
+    handleSave(formData.role);
     setIsAddUserModalVisible(false);
   };
 
-  const handleAddQuestion = () => {
-    // Logic to add question to the database or perform other actions
-    console.log('Test Name:', testName);
+  const handleSave = async (role) => {
+    if(role == "DOCTOR") {
+      try {
+        const response = await axios.post(
+            process.env.API_HOST + "/doctors/addDoctor",
+            {
+              "firstName": formData.firstName,
+              "lastName": formData.lastName,
+              "email": formData.email,
+              "age": parseInt(formData.age),
+              "gender": formData.gender,
+              "password": formData.password,
+              "role":role,
+              "contact": formData.contactNo,
+              "degree": formData.degree,
+              "experience": formData.experience,
+              "license_number": formData.licenseNumber,
+              "specialization": formData.specialization
+            }
+        );
+        if (response.status === 200) {
+          console.log("SUCCESS");
+          setFormData({
+            role: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            age: '',
+            gender: '',
+            password: '',
+            contactNo: '',
+            degree: '',
+            specialization: '',
+            experience: '',
+            licenseNumber: ''
+          });
+        }
+      } catch (error) {
+        
+          console.log("Error saving post: " + error);
+          console.log(error.data.message);
+      }
+    } else {
+      try {
+        const response = await axios.post(
+            process.env.API_HOST + "/api/user/register",
+            {
+              "firstName": formData.firstName,
+              "lastName": formData.lastName,
+              "email": formData.email,
+              "age": parseInt(formData.age),
+              "gender": formData.gender,
+              "password": formData.password,
+              "role":role,
+              "contact": formData.contactNo
+            }
+        );
+        if (response.status === 200) {
+          console.log("SUCCESS");
+          setFormData({
+            role: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            age: '',
+            gender: '',
+            password: '',
+            contactNo: '',
+            degree: '',
+            specialization: '',
+            experience: '',
+            licenseNumber: ''
+          })
+        }
+      } catch (error) {
+        
+          console.log("Error saving post: " + error);
+          console.log(error.data.message);
+      }
+    }
   };
 
-  // Function to render the form based on the selected user role
   const renderUserForm = () => {
     switch (selectedUserRole) {
       case 'user':
         return (
           <View style={styles.formContainer}>
-            {/* User form fields */}
             <TextInput
               style={styles.input}
               placeholder="First Name"
+              value={formData.firstName}
+              onChangeText={(text) => handleInputChange('firstName', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Last Name"
+              value={formData.lastName}
+              onChangeText={(text) => handleInputChange('lastName', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Email Id"
+              value={formData.email}
+              onChangeText={(text) => handleInputChange('email', text)}
+              keyboardType="email-address"
             />
             <TextInput
               style={styles.input}
               placeholder="Age"
+              onChangeText={(text) => handleInputChange('age', text)}
+              keyboardType="numeric"
             />
             <TextInput
               style={styles.input}
               placeholder="Gender"
+              value={formData.gender}
+              onChangeText={(text) => handleInputChange('gender', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Password"
+              value={formData.password}
+              onChangeText={(text) => handleInputChange('password', text)}
+              secureTextEntry={true}
             />
             <TextInput
               style={styles.input}
               placeholder="Contact No"
+              value={formData.contactNo}
+              onChangeText={(text) => handleInputChange('contactNo', text)}
+              keyboardType="phone-pad"
             />
-            <TouchableOpacity style={styles.addButton} onPress={handleAddQuestion}>
+            <TouchableOpacity style={styles.addButton} onPress={()=>{
+              formData.role="USER",
+              handleSubmit();
+            }}>
               <Text style={styles.buttonText}>Add User</Text>
             </TouchableOpacity>
           </View>
@@ -70,56 +177,79 @@ const AddUsers = () => {
       case 'doctor':
         return (
           <View style={styles.formContainer}>
-            {/* Doctor form fields */}
             <TextInput
               style={styles.input}
               placeholder="First Name"
+              value={formData.firstName}
+              onChangeText={(text) => handleInputChange('firstName', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Last Name"
+              value={formData.lastName}
+              onChangeText={(text) => handleInputChange('lastName', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Email Id"
+              value={formData.email}
+              onChangeText={(text) => handleInputChange('email', text)}
+              keyboardType="email-address"
             />
             <TextInput
               style={styles.input}
               placeholder="Age"
+              onChangeText={(text) => handleInputChange('age', text)}
+              keyboardType="numeric"
             />
             <TextInput
               style={styles.input}
               placeholder="Gender"
+              value={formData.gender}
+              onChangeText={(text) => handleInputChange('gender', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Password"
+              value={formData.password}
+              onChangeText={(text) => handleInputChange('password', text)}
+              secureTextEntry={true}
             />
             <TextInput
               style={styles.input}
               placeholder="Contact No"
+              value={formData.contactNo}
+              onChangeText={(text) => handleInputChange('contactNo', text)}
+              keyboardType="phone-pad"
             />
             <TextInput
               style={styles.input}
               placeholder="Degree"
+              value={formData.degree}
+              onChangeText={(text) => handleInputChange('degree', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Experience"
+              value={formData.experience}
+              onChangeText={(text) => handleInputChange('experience', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="License Number"
+              value={formData.licenseNumber}
+              onChangeText={(text) => handleInputChange('licenseNumber', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Specialization"
+              value={formData.specialization}
+              onChangeText={(text) => handleInputChange('specialization', text)}
             />
-            <TextInput
-              style={styles.input}
-              placeholder="User ID"
-            />
-            <TouchableOpacity style={styles.addButton} onPress={handleAddQuestion}>
+            <TouchableOpacity style={styles.addButton} onPress={()=>{
+              formData.role="DOCTOR"
+              handleSubmit();
+            }}>
               <Text style={styles.buttonText}>Add Doctor</Text>
             </TouchableOpacity>
           </View>
@@ -127,36 +257,55 @@ const AddUsers = () => {
       case 'responder':
         return (
           <View style={styles.formContainer}>
-            {/* User form fields */}
             <TextInput
               style={styles.input}
               placeholder="First Name"
+              value={formData.firstName}
+              onChangeText={(text) => handleInputChange('firstName', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Last Name"
+              value={formData.lastName}
+              onChangeText={(text) => handleInputChange('lastName', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Email Id"
+              value={formData.email}
+              onChangeText={(text) => handleInputChange('email', text)}
+              keyboardType="email-address"
             />
             <TextInput
               style={styles.input}
               placeholder="Age"
+              onChangeText={(text) => handleInputChange('age', text)}
+              keyboardType="numeric"
             />
             <TextInput
               style={styles.input}
               placeholder="Gender"
+              value={formData.gender}
+              onChangeText={(text) => handleInputChange('gender', text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Password"
+              value={formData.password}
+              onChangeText={(text) => handleInputChange('password', text)}
+              secureTextEntry={true}
             />
             <TextInput
               style={styles.input}
               placeholder="Contact No"
+              value={formData.contactNo}
+              onChangeText={(text) => handleInputChange('contactNo', text)}
+              keyboardType="phone-pad"
             />
-            <TouchableOpacity style={styles.addButton} onPress={handleAddQuestion}>
+            <TouchableOpacity style={styles.addButton} onPress={()=>{
+              formData.role="RESPONDER",
+              handleSubmit();
+            }}>
               <Text style={styles.buttonText}>Add Responder</Text>
             </TouchableOpacity>
           </View>
