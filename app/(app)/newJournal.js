@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import MyTextInput from '../../components/TextInput';
-import { TextInput } from 'react-native-paper';
-import axios from 'axios';
-import { useRouter } from 'expo-router';
-import { Keyboard } from 'react-native';
-import Toast from 'react-native-toast-message';
-
+import React, { useState, useEffect } from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    Platform,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import MyTextInput from "../../components/TextInput";
+import { TextInput } from "react-native-paper";
+import axios from "axios";
+import { useRouter } from "expo-router";
+import { Keyboard } from "react-native";
+import Toast from "react-native-toast-message";
 
 const NewJournal = () => {
     const router = useRouter();
     const gradientColors = [
-        'rgba(255,255,255,0.2)',
-        'rgba(110,113,254,0.6)',
-        'rgba(4,0,207,0.4)',
+        "rgba(255,255,255,0.2)",
+        "rgba(110,113,254,0.6)",
+        "rgba(4,0,207,0.4)",
     ];
 
     function getFormattedDate() {
@@ -23,68 +29,88 @@ const NewJournal = () => {
         const monthIndex = dateObj.getMonth();
         const year = dateObj.getFullYear();
         const monthNames = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
         ];
         const monthName = monthNames[monthIndex];
         return `${day} ${monthName} ${year}`;
     }
 
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
     const [topPartVisible, setTopPartVisible] = useState(true);
     const [numberOfLines, setNumberOfLines] = useState(18);
     const [showErrorToast, setShowErrorToast] = useState(false);
 
     const handleSave = async () => {
-        if (title.trim() === '' || description.trim() === '') {
+        if (title.trim() === "" || description.trim() === "") {
             Toast.show({
-                type: 'error',
-                text1: 'Error',
-                text2: 'Title and description cannot be empty',
-                position: 'top',
-                visibilityTime: 3000
+                type: "error",
+                text1: "Error",
+                text2: "Title and description cannot be empty",
+                position: "top",
+                visibilityTime: 3000,
             });
             return;
         }
 
         try {
-            console.log('Save pressed.');
-            const response = await axios.post(process.env.API_HOST + '/api/journal', {
-                title: title,
-                description: description,
-            });
+            console.log("Save pressed.");
+            const response = await axios.post(
+                process.env.API_HOST + "/api/journal",
+                {
+                    title: title,
+                    description: description,
+                }
+            );
             if (response.status === 200) {
                 router.dismissAll();
                 Toast.show({
-                    type: 'success',
-                    text1: 'Success',
-                    text2: 'Journal entry saved successfully',
-                    position: 'top',
-                    visibilityTime: 3000
+                    type: "success",
+                    text1: "Success",
+                    text2: "Journal entry saved successfully",
+                    position: "top",
+                    visibilityTime: 3000,
                 });
             }
         } catch (error) {
-            console.log('Error saving post: ' + error);
+            console.log("Error saving post: " + error);
             console.log(error.data.message);
             Toast.show({
-                type: 'error',
-                text1: 'Error',
-                text2: 'Failed to save journal entry',
-                position: 'top',
-                visibilityTime: 3000
+                type: "error",
+                text1: "Error",
+                text2: "Failed to save journal entry",
+                position: "top",
+                visibilityTime: 3000,
             });
         }
     };
 
     useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setTopPartVisible(false);
-            setNumberOfLines(13);
-        });
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            setTopPartVisible(true);
-            setNumberOfLines(18);
-        });
+        const keyboardDidShowListener = Keyboard.addListener(
+            "keyboardDidShow",
+            () => {
+                setTopPartVisible(false);
+                setNumberOfLines(13);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            "keyboardDidHide",
+            () => {
+                setTopPartVisible(true);
+                setNumberOfLines(18);
+            }
+        );
 
         return () => {
             keyboardDidShowListener.remove();
@@ -94,7 +120,7 @@ const NewJournal = () => {
 
     return (
         <>
-            <Toast/>
+            <Toast />
             <LinearGradient colors={gradientColors} style={styles.gradient}>
                 <ScrollView>
                     <View style={styles.body}>
@@ -103,8 +129,8 @@ const NewJournal = () => {
                                 <View style={styles.toppart}>
                                     <View style={styles.toppartleft}>
                                         <Text style={styles.heading}>
-                                            Write your mind down.{'\n'}Clear
-                                            your thoughts. {'\n'}The Safest
+                                            Write your mind down.{"\n"}Clear
+                                            your thoughts. {"\n"}The Safest
                                             place for your thoughts.
                                         </Text>
                                     </View>
@@ -134,6 +160,12 @@ const NewJournal = () => {
                                 value={description}
                                 onChangeText={setDescription}
                                 multiline
+                                minHeight={
+                                    Platform.OS === "ios" && numberOfLines
+                                        ? 25 * numberOfLines
+                                        : null
+                                }
+                                maxLength={3000}
                                 numberOfLines={numberOfLines}
                                 style={[styles.textInput, styles.blogInput]}
                             />
@@ -147,11 +179,10 @@ const NewJournal = () => {
                     </View>
                 </ScrollView>
             </LinearGradient>
-            <Toast ref={(ref) => Toast.setRef(ref)} />
+            <Toast />
         </>
-        
     );
-}
+};
 
 const styles = StyleSheet.create({
     gradient: {
@@ -240,4 +271,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default NewJournal
+export default NewJournal;

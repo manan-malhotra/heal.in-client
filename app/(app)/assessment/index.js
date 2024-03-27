@@ -11,7 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
 import { useRouter } from "expo-router";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
 
 const Assessment = () => {
     const router = useRouter();
@@ -80,85 +80,89 @@ const Assessment = () => {
             });
         } else {
             Toast.show({
-                type: 'error',
-                text1: 'Incomplete Questions',
+                type: "error",
+                text1: "Incomplete Questions",
                 text2: `You have submitted ${length} out of ${questions.length} options`,
-                position: 'top',
-                visibilityTime: 3000
+                position: "top",
+                visibilityTime: 3000,
             });
         }
     };
 
     return (
         <>
-        <LinearGradient colors={gradientColors} style={styles.gradient}>
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                <View style={styles.container}>
-                    <Text style={styles.heading}>{test} Test</Text>
-                    <View style={styles.line}></View>
-                    <View style={styles.questionContainer}>
-                        <Text style={styles.test}>Test Questions</Text>
-                        {test !== "ADHD" && (
-                            <Text style={styles.questionText}>
-                                Over the last 2 weeks, how often have you been
-                                bothered by any of the following problems?
-                            </Text>
-                        )}
-                        {test === "ADHD" && (
-                            <Text style={styles.questionText}>
-                                Please answer the questions below, rating
-                                yourself on each of the criteria shown. As you
-                                answer each question, select the button that
-                                best describes how you have felt and conducted
-                                yourself over the past 6 months.
-                            </Text>
-                        )}
-                    </View>
-                    {questions.map((question) => (
-                        <View
-                            key={question.id}
-                            style={styles.questionContainer}
-                        >
-                            <Text style={styles.questionHeading}>
-                                {question.question}
-                            </Text>
-                            <View style={styles.optionsContainer}>
-                                {Object.keys(question)
-                                    .filter((key) => key.startsWith("option"))
-                                    .map((optionKey, optionIndex) => (
-                                        <TouchableOpacity
-                                            key={optionIndex}
-                                            style={[
-                                                styles.optionButton,
-                                                selectedOptions[question.id] ===
-                                                    optionIndex &&
-                                                    styles.selectedOption, // Apply style if option is selected
-                                            ]}
-                                            onPress={() =>
-                                                handleOptionPress(
-                                                    question.id,
-                                                    optionIndex
-                                                )
-                                            }
-                                        >
-                                            <Text style={styles.optionText}>
-                                                {question[optionKey]}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    ))}
-                            </View>
+            <LinearGradient colors={gradientColors} style={styles.gradient}>
+                <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                    <View style={styles.container}>
+                        <Text style={styles.heading}>{test} Test</Text>
+                        <View style={styles.line}></View>
+                        <View style={styles.questionContainer}>
+                            <Text style={styles.test}>Test Questions</Text>
+                            {test !== "ADHD" && (
+                                <Text style={styles.questionText}>
+                                    Over the last 2 weeks, how often have you
+                                    been bothered by any of the following
+                                    problems?
+                                </Text>
+                            )}
+                            {test === "ADHD" && (
+                                <Text style={styles.questionText}>
+                                    Please answer the questions below, rating
+                                    yourself on each of the criteria shown. As
+                                    you answer each question, select the button
+                                    that best describes how you have felt and
+                                    conducted yourself over the past 6 months.
+                                </Text>
+                            )}
                         </View>
-                    ))}
-                    <TouchableOpacity
-                        style={styles.submitButton}
-                        onPress={handleSubmit}
-                    >
-                        <Text style={styles.submitButtonText}>Submit</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
-        </LinearGradient>
-        <Toast ref={(ref) => Toast.setRef(ref)} />
+                        {questions.map((question) => (
+                            <View
+                                key={question.id}
+                                style={styles.questionContainer}
+                            >
+                                <Text style={styles.questionHeading}>
+                                    {question.question}
+                                </Text>
+                                <View style={styles.optionsContainer}>
+                                    {Object.keys(question)
+                                        .filter((key) =>
+                                            key.startsWith("option")
+                                        )
+                                        .map((optionKey, optionIndex) => (
+                                            <TouchableOpacity
+                                                key={optionIndex}
+                                                style={[
+                                                    styles.optionButton,
+                                                    selectedOptions[
+                                                        question.id
+                                                    ] === optionIndex &&
+                                                        styles.selectedOption, // Apply style if option is selected
+                                                ]}
+                                                onPress={() =>
+                                                    handleOptionPress(
+                                                        question.id,
+                                                        optionIndex
+                                                    )
+                                                }
+                                            >
+                                                <Text style={styles.optionText}>
+                                                    {question[optionKey]}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ))}
+                                </View>
+                            </View>
+                        ))}
+                        <TouchableOpacity
+                            style={styles.submitButton}
+                            onPress={handleSubmit}
+                        >
+                            <Text style={styles.submitButtonText}>Submit</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            </LinearGradient>
+            <Toast />
         </>
     );
 };
