@@ -103,9 +103,11 @@ const forum = () => {
 
     const handleAddComment = () => {
         console.log("Add Comment Hit..");
+    };
+    const handleAddNew = () => {
+        console.log("Add Comment Hit..");
         router.push("newQuestions");
     };
-
     const handleViewMoreComments = (questionIndex) => {
         setQuestions((prevQuestions) =>
             prevQuestions.map((question, index) =>
@@ -188,7 +190,7 @@ const forum = () => {
                                 <View style={styles.addButton}>
                                     <TouchableOpacity
                                         style={styles.addButton}
-                                        onPress={handleAddComment}
+                                        onPress={handleAddNew}
                                     >
                                         <Text style={styles.buttonText}>
                                             + New

@@ -77,7 +77,10 @@ const ScoreCard = () => {
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => {
-                            router.push("home");
+                            router.navigate({
+                                pathname: "home",
+                                params: { role: "USER" },
+                            });
                         }}
                     >
                         <Text style={styles.buttonText}>
