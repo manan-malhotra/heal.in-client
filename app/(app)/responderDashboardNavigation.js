@@ -1,11 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigation, Provider as PaperProvider } from 'react-native-paper';
-import Users from '../assets/images/user.png';
 import { Image, StyleSheet } from 'react-native';
-import DashboardIcon from '../assets/images/dashboard.png';
-import ProfileIcon from '../assets/images/profile.png';
-import Profile from './Profile';
+import DashboardIcon from '../../assets/images/dashboard.png';
+import ProfileIcon from '../../assets/images/profile.png';
+import Profile from '../Profile';
 import ReviewScreen from './responderDashboard';
 
 const Tab = createBottomTabNavigator();
