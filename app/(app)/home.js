@@ -3,14 +3,14 @@ import {
     BottomNavigation,
     Provider as PaperProvider,
 } from "react-native-paper";
-import UserDashboard from "../userDashboard";
+import UserDashboard from "./userDashboard";
 import DashboardIcon from "../../assets/images/dashboard.png";
 import ProfileIcon from "../../assets/images/profile.png";
 import { Image } from "react-native";
-import Profile from "../Profile";
+import Profile from "./Profile";
 import ReviewScreen from "./responderDashboard";
 import doctorHome from "./doctorHome";
-import AdminDashboard from "../adminDashboard";
+import AdminDashboard from "./adminDashboard";
 import { useLocalSearchParams } from "expo-router";
 export default function home() {
     const { role } = useLocalSearchParams();
