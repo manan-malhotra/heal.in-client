@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useAuth } from "../context/authcontext";
+import { useAuth } from "../../context/authcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
@@ -65,7 +65,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/name.png")}
+                                        source={require("../../assets/images/name.png")}
                                     />
                                     <Text
                                         style={{
@@ -88,7 +88,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/mail.png")}
+                                        source={require("../../assets/images/mail.png")}
                                     />
                                     <Text
                                         style={{
@@ -108,7 +108,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/contact_number.png")}
+                                        source={require("../../assets/images/contact_number.png")}
                                     />
                                     <Text
                                         style={{
@@ -128,7 +128,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/age.png")}
+                                        source={require("../../assets/images/age.png")}
                                     />
                                     <Text
                                         style={{
@@ -148,7 +148,7 @@ const Profile = () => {
                                 <View style={styles.leftinnercardpart}>
                                     <Image
                                         style={styles.icon}
-                                        source={require("../assets/images/gender.png")}
+                                        source={require("../../assets/images/gender.png")}
                                     />
                                     <Text
                                         style={{
