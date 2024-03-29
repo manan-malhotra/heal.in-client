@@ -1,8 +1,19 @@
 import React from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
-
+import { View, Text } from "react-native";
+import Logo from "../../components/logo";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 export default function _layout() {
     const params = useLocalSearchParams();
+    const CustomHeader = () => {
+        return (
+          <View style={{ flexDirection: "row", alignSelf: 'center', top: heightPercentageToDP(7) , justifyContent: 'center'}}>
+            <Logo width={40} height={40} /> 
+            <Text style={{ color: "white", fontSize: 30, fontWeight: "bold", marginLeft: 2 , textAlign: 'center', verticalAlign: 'middle'}}>heal.in</Text> 
+          </View>
+        );
+      };
+
     return (
         <>
             <Stack>
@@ -128,6 +139,13 @@ export default function _layout() {
                         },
                         headerTintColor: "white",
                         navigationBarColor: "#3340B0",
+                    }}
+                />
+                <Stack.Screen
+                    name="Profile"
+                    options={{
+                        headerTransparent: true, 
+                        header: () => <CustomHeader />,
                     }}
                 />
             </Stack>
