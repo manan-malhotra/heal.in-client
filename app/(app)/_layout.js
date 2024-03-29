@@ -10,9 +10,6 @@ export default function _layout() {
                     name="home"
                     options={{
                         headerTitle: "heal.in",
-                        headerStyle: {
-                            backgroundColor: "#3340B0",
-                        },
                         headerTintColor: "white",
                         navigationBarColor: "#3340B0",
                     }}
@@ -76,11 +73,16 @@ export default function _layout() {
                     name="self_help_videos"
                     options={{
                         headerTitle: "Self Help Videos",
-                        headerStyle: {
-                            backgroundColor: "#3340B0",
+                        headerTitleStyle:{
+                            fontSize: 22.5,
+                            fontWeight: 'bold'
                         },
-                        headerTintColor: "white",
-                        navigationBarColor: "#3340B0",
+                        headerTransparent: true, 
+                        headerTitleAlign: "center", 
+                        headerTintColor: "white", 
+                        headerStyle: {
+                            backgroundColor: '#456990',
+                        }
                     }}
                 />
                 <Stack.Screen
@@ -92,6 +94,7 @@ export default function _layout() {
                         },
                         headerTintColor: "white",
                         navigationBarColor: "#3340B0",
+                        
                     })}
                 />
                 <Stack.Screen
@@ -113,7 +116,6 @@ export default function _layout() {
                             backgroundColor: "#3340B0",
                         },
                         headerTintColor: "white",
-                        navigationBarColor: "#3340B0",
                     }}
                 />
                 <Stack.Screen
