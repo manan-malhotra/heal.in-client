@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    Pressable,
-    Modal,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView, TextInput, Image } from "react-native";
-import MyTextInput from "../../components/TextInput";
 import Icon from "react-native-vector-icons/Ionicons";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { router } from "expo-router";
@@ -17,7 +9,6 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ReportModal from "../../components/reportModal";
-import { MaterialIcons } from "@expo/vector-icons";
 import {
     heightPercentageToDP,
     widthPercentageToDP,
@@ -62,8 +53,13 @@ const forum = () => {
                 process.env.API_HOST + "/api/user/allQuestions"
             );
             console.log(response.data);
-            setQuestion(response.data);
-            setQuestions(response.data);
+            let data = response.data;
+            data.forEach((item) => {
+                item.comment = "";
+            });
+            console.log(data);
+            setQuestion(data);
+            setQuestions(data);
         } catch (error) {
             console.log(error);
         }
@@ -74,6 +70,7 @@ const forum = () => {
     const [questions, setQuestions] = useState(question);
     const [expandedIndex, setExpandedIndex] = useState(null);
     const [role, setRole] = useState("User");
+    const [userId, setUserId] = useState("");
     const getRole = async () => {
         try {
             const value = await AsyncStorage.getItem("role");
@@ -82,8 +79,17 @@ const forum = () => {
             console.log(e);
         }
     };
+    const getUserId = async () => {
+        try {
+            const value = await AsyncStorage.getItem("userId");
+            setUserId(value);
+        } catch (e) {
+            console.log(e);
+        }
+    };
     useEffect(() => {
         // Simulate loading questions from an API
+        getUserId();
         getRole();
         setQuestions(question);
     }, []);
@@ -101,8 +107,35 @@ const forum = () => {
         );
     };
 
-    const handleAddComment = () => {
-        console.log("Add Comment Hit..");
+    const handleAddComment = async (id) => {
+        const json = {
+            comment: questions[id].comment,
+            questionId: questions[id].public_qna_id,
+            userId,
+        };
+        try {
+            const response = await axios.post(
+                process.env.API_HOST + "/api/user/comment",
+                json
+            );
+            console.log(response.data);
+            getQuestions();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const handleCommentChange = (id, comment) => {
+        console.log(comment);
+        setQuestions((prevQuestions) =>
+            prevQuestions.map((question) =>
+                question.public_qna_id === id
+                    ? {
+                          ...question,
+                          comment: comment,
+                      }
+                    : question
+            )
+        );
     };
     const handleAddNew = () => {
         console.log("Add Comment Hit..");
@@ -291,24 +324,6 @@ const forum = () => {
                                                             : "View Comments"}
                                                     </Text>
                                                 </TouchableOpacity>
-                                                {/* {role === "Responder" && (
-                                                    <TouchableOpacity
-                                                        style={
-                                                            styles.commentButton
-                                                        }
-                                                        onPress={() =>
-                                                            handleAddComment()
-                                                        }
-                                                    >
-                                                        <Text
-                                                            style={
-                                                                styles.commentButtonText
-                                                            }
-                                                        >
-                                                            Add Comment
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                )} */}
                                             </View>
                                             {/* Display comments if expanded */}
                                             {question.expandedComments && (
@@ -330,41 +345,52 @@ const forum = () => {
                                                                     styles.commentContainer
                                                                 }
                                                             >
-                                                                <Text
+                                                                <View
                                                                     style={
-                                                                        styles.comment
+                                                                        styles.commentContent
                                                                     }
                                                                 >
-                                                                    {
-                                                                        comment.comment
-                                                                    }
-                                                                </Text>
-                                                                <Text
+                                                                    <Text
+                                                                        style={
+                                                                            styles.commentAuthor
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            comment
+                                                                                .user_id
+                                                                                .first_name
+                                                                        }{" "}
+                                                                        {
+                                                                            comment
+                                                                                .user_id
+                                                                                .last_name
+                                                                        }
+                                                                    </Text>
+                                                                    <Text
+                                                                        style={
+                                                                            styles.commentDate
+                                                                        }
+                                                                    >
+                                                                        {formatDate(
+                                                                            comment.comment_date
+                                                                        )}
+                                                                    </Text>
+                                                                </View>
+                                                                <View
                                                                     style={
-                                                                        styles.commentDate
+                                                                        styles.commentContent
                                                                     }
                                                                 >
-                                                                    {formatDate(
-                                                                        comment.comment_date
-                                                                    )}
-                                                                </Text>
-                                                                <Text
-                                                                    style={
-                                                                        styles.commentAuthor
-                                                                    }
-                                                                >
-                                                                    -{" "}
-                                                                    {
-                                                                        comment
-                                                                            .user_id
-                                                                            .first_name
-                                                                    }{" "}
-                                                                    {
-                                                                        comment
-                                                                            .user_id
-                                                                            .last_name
-                                                                    }
-                                                                </Text>
+                                                                    <Text
+                                                                        style={
+                                                                            styles.comment
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            comment.comment
+                                                                        }
+                                                                    </Text>
+                                                                </View>
                                                             </View>
                                                         )
                                                     )}
@@ -386,6 +412,17 @@ const forum = () => {
                                                             style={
                                                                 styles.commentInput
                                                             }
+                                                            value={
+                                                                question.comment
+                                                            }
+                                                            onChange={(event) =>
+                                                                handleCommentChange(
+                                                                    question.public_qna_id,
+                                                                    event
+                                                                        .nativeEvent
+                                                                        .text
+                                                                )
+                                                            }
                                                             multiline={true}
                                                             numberOfLines={
                                                                 undefined
@@ -393,9 +430,11 @@ const forum = () => {
                                                         />
                                                     </View>
                                                     <TouchableOpacity
-                                                        onPress={
-                                                            handleAddComment
-                                                        }
+                                                        onPress={() => {
+                                                            handleAddComment(
+                                                                index
+                                                            );
+                                                        }}
                                                     >
                                                         <Image
                                                             style={styles.icon}
@@ -606,6 +645,37 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    commentContainer: {
+        paddingVertical: "1.53%",
+        justifyContent: "left",
+        borderRadius: 11,
+        marginTop: "1%",
+        marginBottom: "2%",
+        backgroundColor: "white",
+    },
+    commentContent: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        flex: 1,
+        marginBottom: 10,
+    },
+    comment: {
+        paddingHorizontal: widthPercentageToDP(3.2),
+    },
+    commentDate: {
+        paddingHorizontal: widthPercentageToDP(3.2),
+        fontSize: 10,
+        fontWeight: "bold",
+        color: "#005B55",
+        marginTop: 10,
+    },
+    commentAuthor: {
+        paddingHorizontal: widthPercentageToDP(3.2),
+        fontSize: 10,
+        fontWeight: "bold",
+        color: "#005B55",
+        marginTop: 10,
     },
 });
 
