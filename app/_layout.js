@@ -21,10 +21,11 @@ const MainLayout = () => {
                 if (user == null || user.role == "") {
                     router.replace("signIn");
                 } else {
-                    router.replace({
-                        pathname: "home",
-                        params: user,
-                    });
+                    // router.replace({
+                    //     pathname: "home",
+                    //     params: user,
+                    // });
+                    router.replace("/test/home");
                 }
             } else if (isAuthenticated == false) {
                 router.replace("signIn");
