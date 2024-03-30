@@ -2,7 +2,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
 import Icon from "react-native-vector-icons/Ionicons";
-const DoctorHome = () => {
+const Doctors = () => {
     return (
         <>
             <View
@@ -19,6 +19,6 @@ const DoctorHome = () => {
     );
 };
 
-export default DoctorHome;
+export default Doctors;
 
 const styles = StyleSheet.create({});

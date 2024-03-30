@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { useAuth } from "../../context/authcontext";
 
-const profile = () => {
+const Profile = () => {
+    const { logout } = useAuth();
     return (
         <View
             style={{
@@ -11,11 +13,13 @@ const profile = () => {
                 backgroundColor: "white",
             }}
         >
-            <Text>Profile</Text>
+            <Pressable onPress={() => logout()}>
+                <Text>Profile</Text>
+            </Pressable>
         </View>
     );
 };
 
-export default profile;
+export default Profile;
 
 const styles = StyleSheet.create({});

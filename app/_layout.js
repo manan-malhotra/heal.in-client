@@ -25,7 +25,7 @@ const MainLayout = () => {
                     //     pathname: "home",
                     //     params: user,
                     // });
-                    router.replace("/test/home");
+                    router.replace("/doctor/home");
                 }
             } else if (isAuthenticated == false) {
                 router.replace("signIn");

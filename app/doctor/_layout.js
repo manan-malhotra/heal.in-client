@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import { Stack, Tabs } from "expo-router";
 import Icon from "react-native-vector-icons/AntDesign";
-import Icon3 from "react-native-vector-icons/FontAwesome";
+import Icon3 from "react-native-vector-icons/Ionicons";
 import Icon2 from "react-native-vector-icons/Feather";
 
 export default function _layout() {
@@ -29,38 +29,12 @@ export default function _layout() {
                     }}
                 />
                 <Tabs.Screen
-                    name="assessment"
+                    name="chat"
                     options={{
-                        title: "Assessment",
-                        tabBarIcon: ({ focused, color, size }) => (
-                            <Icon2
-                                name="book"
-                                size={24}
-                                color={focused ? "black" : "#adadad"}
-                            />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="doctorHome"
-                    options={{
-                        title: "DoctorHome",
+                        title: "Chat",
                         tabBarIcon: ({ focused, color, size }) => (
                             <Icon3
-                                name="stethoscope"
-                                size={24}
-                                color={focused ? "black" : "#adadad"}
-                            />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="journal"
-                    options={{
-                        title: "Journal",
-                        tabBarIcon: ({ focused, color, size }) => (
-                            <Icon2
-                                name="book-open"
+                                name="chatbubble-outline"
                                 size={24}
                                 color={focused ? "black" : "#adadad"}
                             />

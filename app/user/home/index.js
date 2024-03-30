@@ -1,13 +1,22 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Stack, router } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import {
     heightPercentageToDP,
     widthPercentageToDP,
 } from "react-native-responsive-screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
+    const [role, setRole] = useState("");
+    useEffect(() => {
+        const getRole = async () => {
+            const role = await AsyncStorage.getItem("role");
+            setRole(role);
+        };
+        getRole();
+    }, []);
     return (
         <>
             <Stack.Screen options={{ headerShown: false }} />
@@ -21,7 +30,10 @@ const Home = () => {
                         <Text style={styles.greetingHeader}>
                             Good Afternoon,
                         </Text>
-                        <Text style={styles.greetingName}>Manan Malhotra</Text>
+                        <Text style={styles.greetingName}>
+                            {role == "DOCTOR" && "Dr. "}
+                            Manan Malhotra
+                        </Text>
                     </View>
                 </View>
                 <View style={styles.row}>
@@ -30,7 +42,7 @@ const Home = () => {
                     </View>
                     <View style={styles.seeAllContainer}>
                         <Pressable
-                            onPress={() => router.push("test/home/blogs")}
+                            onPress={() => router.push("user/home/blogs")}
                         >
                             <Text style={styles.seeAll}>See All</Text>
                         </Pressable>
@@ -88,7 +100,7 @@ const Home = () => {
                         </View>
                         <Pressable
                             onPress={() =>
-                                router.push("test/home/selfHelpVideos")
+                                router.push("user/home/selfHelpVideos")
                             }
                         >
                             <View style={styles.item}>
@@ -111,7 +123,7 @@ const Home = () => {
                         </View>
                         <Pressable
                             onPress={() =>
-                                router.push("test/home/selfHelpVideos")
+                                router.push("user/home/selfHelpVideos")
                             }
                         >
                             <View style={styles.itemText}>

@@ -30,7 +30,7 @@ const SelfHelpVideo = () => {
                 <Icon name="chevron-back-outline" size={30} />
             </Pressable>
             <Pressable
-                onPress={() => router.push("test/home/blogs")}
+                onPress={() => router.push("user/home/blogs")}
                 style={{ marginTop: 20 }}
             >
                 <Text>Self Help Video Page</Text>
