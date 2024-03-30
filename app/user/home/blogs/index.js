@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { theme } from "../../../../constants/Colors";
-import Icon from "react-native-vector-icons/AntDesign";
 import ArticleCard from "../../../../components/articleCard";
 import { router } from "expo-router";
+import SearchBar from "../../../../components/searchBar";
 const blogData = [
     {
         id: 1,
@@ -51,7 +51,7 @@ const Blog = () => {
     return (
         <View style={styles.body}>
             <ScrollView>
-                <View style={styles.searchBar}>
+                {/* <View style={styles.searchBar}>
                     <View style={styles.searchBarIcon}>
                         <Icon
                             name="search1"
@@ -68,7 +68,11 @@ const Blog = () => {
                             onChangeText={handleSearch}
                         />
                     </View>
-                </View>
+                </View> */}
+                <SearchBar
+                    handleSearch={handleSearch}
+                    searchText={searchText}
+                />
                 {renderData.map((blog) => (
                     <Pressable
                         key={blog.id}
@@ -100,40 +104,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 20,
         color: theme.colors.secondary,
-    },
-    searchBar: {
-        width: "81%",
-        height: 50,
-        marginLeft: "auto",
-        marginRight: "auto",
-        borderRadius: 10,
-        marginVertical: 10,
-        shadowColor: "#000",
-        borderColor: "rgba(69,105,144,0.8)",
-        backgroundColor: theme.colors.background,
-        borderWidth: 1,
-        flexDirection: "row",
-    },
-    searchBarIcon: {
-        width: "15%",
-        height: "100%",
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    searchBarInput: {
-        width: "85%",
-        height: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    searchBarInputText: {
-        width: "100%",
-        height: "100%",
-        marginLeft: "auto",
-        marginRight: "auto",
-        color: theme.colors.primary,
     },
     articles: {
         height: "75%",
@@ -177,5 +147,8 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: "600",
         color: theme.colors.primary,
+    },
+    searchBar: {
+        height: 150,
     },
 });

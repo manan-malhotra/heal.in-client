@@ -73,10 +73,7 @@ const Home = () => {
                                 router.push(`user/home/blogs/${blog.id}`)
                             }
                         >
-                            <ArticleCard
-                                title={blog.title}
-                                post_date={blog.post_date}
-                            />
+                            <ArticleCard {...blog} />
                         </Pressable>
                     ))}
                 </View>
