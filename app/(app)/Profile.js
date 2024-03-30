@@ -1,20 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../../context/authcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import { MaterialCommunityIcons , Feather } from '@expo/vector-icons';
+
+import bear from '../../assets/images/SvgIcons/bear.png'
+import cactus from '../../assets/images/SvgIcons/cactus.png'
+import sloth from '../../assets/images/SvgIcons/sloth.png'
+
+const ProfileCardItem = ({ description, info, iconComponent, iconName }) => {
+    const Icon = iconComponent === "Feather" ? Feather : MaterialCommunityIcons;
+    const router = useRouter();
+    return (
+            <View style={styles.frontCardContainerRowContainer}>
+                <Icon name={iconName} size={24} color="black" style={styles.icon} />
+                <Text style={styles.frontCardContainerRowContainerDescriptionText}>{description}</Text>
+                <Text style={styles.frontCardContainerRowContainerInfo}>{info}</Text>
+            </View>
+    );
+};
+
+const PrivacyLogoutSection = ({ onLogout }) => {
+    return (
+        <View style={[styles.frontCardContainer, {height: heightPercentageToDP(15)}]}>
+            <ProfileCardItem description="Privacy Policy" iconComponent="Feather" iconName="shield" />
+            <View style ={styles.verticalLine} />
+            <TouchableOpacity onPress={onLogout} style={styles.frontCardContainerRowContainer}>
+                <MaterialCommunityIcons name="logout" size={24} color="red" style={styles.icon} />
+                <Text style={[styles.frontCardContainerRowContainerDescriptionText , {color: 'red'}]}>Logout</Text>
+            </TouchableOpacity>
+        </View>
+    );
+};
 
 const Profile = () => {
     const router = useRouter();
     const { logout } = useAuth();
-    const handleLogout = () => {
-        logout();
-    };
     const item = useLocalSearchParams();
-    const handleRoute = () => {
-        router.replace({pathname: "/doctorHome", params: item})
-    }
+
     const [firstName, setFirstName] = useState("Default");
     const [lastName, setLastName] = useState("User");
     const [email, setEmail] = useState("username@email.com");
@@ -22,8 +47,8 @@ const Profile = () => {
     const [age, setAge] = useState("200");
     const [contact, setContact] = useState("1234567890");
     const [doctor, setDoctor] = useState("false")
+    
     const getUserData = async () => {
-        console.log("getting user data");
         try {
             const firstName = await AsyncStorage.getItem("firstName");
             const lastName = await AsyncStorage.getItem("lastName");
@@ -39,240 +64,154 @@ const Profile = () => {
             setGender(gender);
             setAge(age);
             setContact(contact);
-            console.log(email);
         } catch (error) {
             console.log(error);
         }
     };
+    
     useEffect(() => {
         getUserData();
     }, []);
-    return (
-        <LinearGradient
-            colors={[
-                "rgba(255,255,255,0.2)",
-                "rgba(110,113,254,0.6)",
-                "rgba(4,0,207,0.4)",
-            ]}
-            style={styles.container}
-        >
-            <View style={styles.container}>
-                <Text style={styles.username}>My Profile</Text>
-                <View>
-                    <View style={styles.card}>
-                        <View style={styles.userData}>
-                            <View style={styles.innercard}>
-                                <View style={styles.leftinnercardpart}>
-                                    <Image
-                                        style={styles.icon}
-                                        source={require("../../assets/images/name.png")}
-                                    />
-                                    <Text
-                                        style={{
-                                            paddingLeft: "2%",
-                                            fontSize: 14,
-                                            alignSelf: "center",
-                                            color: "grey",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        Username
-                                    </Text>
-                                </View>
 
-                                <Text style={styles.info}>
-                                    {firstName} {lastName}
-                                </Text>
+    const handleLogout = () => {
+        logout();
+    };
+
+    return (
+        <View style={styles.blackContainer}>
+            <View style={styles.whiteBackContainer}>
+                <View style={styles.container}>
+                    <View style={styles.secondFrontCardContainer}>
+                        <View style={styles.firstFrontCardContainerRow}>
+                            <View style={styles.firstFrontCardContainerProfileIconContainer}>
+                                <Image source={bear} style={styles.firstFrontCardContainerProfileIcon}/>
                             </View>
-                            <View style={styles.innercard}>
-                                <View style={styles.leftinnercardpart}>
-                                    <Image
-                                        style={styles.icon}
-                                        source={require("../../assets/images/mail.png")}
-                                    />
-                                    <Text
-                                        style={{
-                                            paddingLeft: "2%",
-                                            fontSize: 14,
-                                            alignSelf: "center",
-                                            color: "grey",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        E-Mail
-                                    </Text>
-                                </View>
-                                <Text style={styles.info}>{email}</Text>
-                            </View>
-                            <View style={styles.innercard}>
-                                <View style={styles.leftinnercardpart}>
-                                    <Image
-                                        style={styles.icon}
-                                        source={require("../../assets/images/contact_number.png")}
-                                    />
-                                    <Text
-                                        style={{
-                                            paddingLeft: "2%",
-                                            fontSize: 14,
-                                            alignSelf: "center",
-                                            color: "grey",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        Phone No.
-                                    </Text>
-                                </View>
-                                <Text style={styles.info}>+91 - {contact}</Text>
-                            </View>
-                            <View style={styles.innercard}>
-                                <View style={styles.leftinnercardpart}>
-                                    <Image
-                                        style={styles.icon}
-                                        source={require("../../assets/images/age.png")}
-                                    />
-                                    <Text
-                                        style={{
-                                            paddingLeft: "2%",
-                                            fontSize: 14,
-                                            alignSelf: "center",
-                                            color: "grey",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        Age
-                                    </Text>
-                                </View>
-                                <Text style={styles.info}>{age} yr</Text>
-                            </View>
-                            <View style={styles.innercard}>
-                                <View style={styles.leftinnercardpart}>
-                                    <Image
-                                        style={styles.icon}
-                                        source={require("../../assets/images/gender.png")}
-                                    />
-                                    <Text
-                                        style={{
-                                            paddingLeft: "2%",
-                                            fontSize: 14,
-                                            alignSelf: "center",
-                                            color: "grey",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        Gender
-                                    </Text>
-                                </View>
-                                <Text style={styles.info}>{gender}</Text>
+                            <View style={styles.firstFrontCardContainerUserNameContainer}>
+                                <Text style={styles.firstFrontCardInnerContainerUserName}> Jay Rathod </Text>
                             </View>
                         </View>
                     </View>
-                    <TouchableOpacity
-                        style={styles.logoutButton}
-                        onPress={handleLogout}
-                    >
-                        <Text style={styles.buttonText}>Logout</Text>
-                    </TouchableOpacity>
-                    {
-                        doctor == "true" ? console.log(doctor) : console.log(doctor)
-                    }
+                    <View style={styles.frontCardContainer}>
+                        <ProfileCardItem description="Mail" info={email} iconComponent="Feather" iconName="mail" />
+                        <View style ={styles.verticalLine} />
+                        <ProfileCardItem description="Phone" info={contact} iconComponent="Feather" iconName="phone" />
+                        <View style ={styles.verticalLine} />
+                        <ProfileCardItem description="Age" info={age} iconComponent="Feather" iconName="calendar" />
+                        <View style ={styles.verticalLine} />
+                        <ProfileCardItem description="Gender" info={gender} iconComponent="MaterialCommunityIcons" iconName="gender-male-female" />
+                    </View>
+                    <PrivacyLogoutSection onLogout={handleLogout} />
                 </View>
             </View>
-        </LinearGradient>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    blackContainer:{
+        backgroundColor: "#456990",
         flex: 1,
-        marginTop: "3%",
-        paddingLeft: "2%",
-        paddingRight: "2%",
-        justifyContent: "center",
     },
-    leftinnercardpart: {
-        flexDirection: "row",
+    whiteBackContainer: {
+        top: heightPercentageToDP(20),
+        backgroundColor: "#f9fcf9",
+        borderRadius: widthPercentageToDP(8),
+        flex: 1
     },
-    card: {
-        backgroundColor: "white",
-        color: "black",
-        borderRadius: 10,
-        marginBottom: "5%",
+    container: {
+        top:heightPercentageToDP(-4.0),
     },
-    icon: {
-        alignSelf: "center",
-        width: 15,
-        height: 15,
-        justifyContent: "flex-end",
+    firstFrontCardContainer: {
+        position: 'absolute',
+        justifyContent: 'center',
+        top: heightPercentageToDP(8),
+        alignSelf: 'center',
+        height: heightPercentageToDP(8),
+        width: widthPercentageToDP(92),
+        padding: 5
     },
-    innercard: {
-        borderRadius: 10,
-        borderColor: "rgba(0,0,0,0.28)",
-        borderWidth: 1,
-        borderRadius: 10,
-        paddingLeft: "2%",
-        paddingRight: "2%",
-        paddingTop: "3%",
-        paddingBottom: "3%",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginBottom: "5%",
+    firstFrontCardContainerRow: {
+        flexDirection: 'row',
+        padding: 3,
+        flex: 1
     },
-    verticalLine: {
-        width: "100",
-        height: "1%", // Adjust the height of the line as needed
-        backgroundColor: "rgba(120, 100, 255, 0.45)", // Change the color of the line as needed
-        marginVertical: 10,
+    firstFrontCardContainerProfileIconContainer:{
+        width: widthPercentageToDP(14),
+        justifyContent: 'center'
     },
-    title: {
-        fontSize: 20,
-        marginBottom: "3%",
+    firstFrontCardContainerProfileIcon: {
+        fontSize: 16,
+        alignSelf: 'center',
+        width:  widthPercentageToDP(10),
+        height: heightPercentageToDP(5)
     },
-    icon: {
-        width: 20,
-        height: 20,
-        alignSelf: "center",
+    firstFrontCardContainerUserNameContainer: {
+        flex: 1,
+        justifyContent: 'center'
     },
-    userData: {
-        paddingTop: "2%",
-        paddingBottom: "2%",
-        paddingLeft: "5%",
-        paddingRight: "5%",
+    firstFrontCardInnerContainerUserName: {
+        color: 'black',
+        fontSize: 18,
     },
-    username: {
-        alignSelf: "center",
-        fontSize: 32,
-        marginBottom: "10%",
-        fontWeight: "bold",
+    secondFrontCardContainer:{
+        position: 'relative',
+        borderRadius: 30,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        elevation: 5,
+        marginLeft: widthPercentageToDP(10),
+        marginRight: widthPercentageToDP(10),
+        padding: widthPercentageToDP(2)
     },
-    logoutButton: {
-        backgroundColor: "#1877F2",
-        paddingVertical: "3%",
+    frontCardContainer: {
         borderRadius: 20,
-        alignSelf: "center",
-        width: "30%",
+        shadowColor: 'black',
+        backgroundColor: 'white',
+        height: heightPercentageToDP(30),
+        marginTop: heightPercentageToDP(5),
+        marginLeft: widthPercentageToDP(10),
+        marginRight: widthPercentageToDP(10),
+        paddingTop: heightPercentageToDP(1),
+        paddingBottom: heightPercentageToDP(1),
+        paddingLeft: 20,
+        paddingRight: 20,
+        justifyContent: 'center',
+        elevation: 5,
     },
-    buttonText: {
-        alignSelf: "center",
+    frontCardContainerRowContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        height: heightPercentageToDP(4.5),
+        padding: widthPercentageToDP(1),
+        justifyContent: 'space-between',
+    },
+    frontCardContainerRowContainerDescriptionText: {
         fontSize: 16,
-        fontWeight: "bold",
-        color: "white",
+        flex:1,
+        color: 'gray',
+        textAlignVertical: 'center',
+        marginLeft: widthPercentageToDP(1),
+        marginRight: widthPercentageToDP(1)
+        
     },
-    info: {
+    frontCardContainerRowContainerInfo: {
+        height: '100%',
+        alignSelf: 'center',
+        color: 'rgba(0,0,0,0.8)',
+        marginLeft: widthPercentageToDP(1),
+        marginRight: widthPercentageToDP(1),
         fontSize: 16,
-        fontWeight: "bold",
-        alignContents: "center",
-        color: "gray",
+        textAlignVertical: 'center'
     },
-    avatar: {
-        height: "20%",
-        width: "35%",
-        alignSelf: "center",
-        borderRadius: 90,
-        marginBottom: "2%",
+    icon: {
+        marginTop: heightPercentageToDP(0.2),
     },
-    rowcard: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+    verticalLine:{
+        backgroundColor: "gray",
+        opacity: 0.2,
+        height: heightPercentageToDP(0.1),
+        marginVertical: heightPercentageToDP(1.1)
     },
 });
 

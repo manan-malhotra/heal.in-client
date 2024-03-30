@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
     View,
     StyleSheet,
-    FlatList,
     TouchableOpacity,
     Image,
     TextInput,
@@ -10,134 +9,97 @@ import {
     Linking,
     ScrollView,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons"; // Import AntDesign icon library
-import { LinearGradient } from "expo-linear-gradient";
+import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
-// Component for displaying searchable video list
 const SelfHelpVideo = () => {
     const [videos, setVideos] = useState([]);
-    const getVideos = async () => {
-        try {
-            const response = await axios.get(
-                process.env.API_HOST + "/admin/getAllSelfHelpVideos"
-            );
-            console.log(response.data);
-            const tempResponse = [];
-            response.data.forEach((video) => {
-                const videoId = video.url.split("=")[1];
-                video.thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                video.videoId = videoId;
-                video.title = video.title;
-                tempResponse.push(video);
-            });
-            setVideos(response.data);
-            setFilteredVideos(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const [searchText, setSearchText] = useState("");
+    const [filteredVideos, setFilteredVideos] = useState([]);
+
     useEffect(() => {
         getVideos();
     }, []);
 
-    const [searchText, setSearchText] = useState(""); // State for search term
-    const [filteredVideos, setFilteredVideos] = useState(videos); // State for filtered videos
+    const getVideos = async () => {
+        try {
+            const response = await axios.get(process.env.API_HOST + "/admin/getAllSelfHelpVideos");
+            const tempResponse = response.data.map(video => ({
+                ...video,
+                thumbnailUrl: `https://img.youtube.com/vi/${video.url.split("=")[1]}/hqdefault.jpg`,
+                videoId: video.url.split("=")[1]
+            }));
+            setVideos(tempResponse);
+            setFilteredVideos(tempResponse);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleSearch = (text) => {
         setSearchText(text);
-        let tempData = [...videos];
-        tempData = tempData.filter((video) =>
+        const filteredData = videos.filter((video) =>
             video.title.toLowerCase().includes(text.toLowerCase())
         );
-        setFilteredVideos(tempData);
+        setFilteredVideos(filteredData);
     };
 
     const handleVideoPress = (videoId) => {
-        // Open video on YouTube using Linking (adjust URL if needed)
         Linking.openURL(`https://www.youtube.com/watch?v=${videoId}`);
     };
 
-    const renderVideoItem = ({ item }) => (
-        <TouchableOpacity onPress={() => handleVideoPress(item.videoId)}>
-            <View style={styles.videoItem}>
-                {/* Container for thumbnail and text */}
-                <View style={styles.videoInfoContainer}>
-                    {item.thumbnailUrl && (
-                        <Image
-                            source={{ uri: item.thumbnailUrl }}
-                            style={styles.thumbnail}
-                        />
-                    )}
-                    <View style={styles.videoTextContainer}>
-                        <Text style={styles.videoTitle}>{item.title}</Text>
-                    </View>
-                </View>
-            </View>
-        </TouchableOpacity>
-    );
-
     return (
-        <LinearGradient
-            colors={[
-                "rgba(255,255,255,0.2)",
-                "rgba(110,113,254,0.6)",
-                "rgba(4,0,207,0.4)",
-            ]}
-            style={styles.container}
-        >
-            <View contentContainerStyle={styles.scrollViewContent}>
-                <View style={styles.container}>
-                    <View style={styles.searchBarContainer}>
-                        <AntDesign
-                            name="search1"
-                            size={24}
-                            color="black"
-                            style={styles.searchIcon}
-                        />
-                        <TextInput
-                            style={styles.searchBar} // Customize styles based on your desired search bar appearance
-                            placeholder="Search Videos"
-                            placeholderTextColor="black"
-                            onChangeText={handleSearch}
-                            value={searchText}
-                        />
-                        {/* <TouchableOpacity style={styles.searchButton} onPress={() => handleSearch(searchText)}>
-            <Text style={styles.searchButtonText}>Search</Text>
-          </TouchableOpacity> */}
-                    </View>
-                    <View style={styles.flatList}>
-                        <FlatList
-                            data={filteredVideos} // Use filteredVideos for rendering
-                            renderItem={renderVideoItem}
-                            keyExtractor={(item) => item.videoId} // Ensure unique keys
-                        />
-                    </View>
-                </View>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.container}>
+            <View style={styles.searchBarContainer}>
+                <AntDesign name="search1" size={24} color="black" style={styles.searchIcon} />
+                <TextInput
+                    style={styles.searchBar}
+                    placeholder="Search Videos"
+                    placeholderTextColor="black"
+                    onChangeText={handleSearch}
+                    value={searchText}
+                />
             </View>
-        </LinearGradient>
+            <View style = {styles.videoCard}> 
+                {filteredVideos.map((video, index) => (
+                    <TouchableOpacity key={index} onPress={() => handleVideoPress(video.videoId)} style = {{ borderRadius: 20}}>
+                        <View style={styles.videoItem}>
+                            <Image source={{ uri: video.thumbnailUrl }} style={styles.thumbnail} />
+                            <View style={styles.videoTextContainer}>
+                                <Text style={styles.videoTitle}>{video.title}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                ))}
+            </View>
+        </View>
+        </ScrollView>
     );
 };
 
-// Styles for the components
 const styles = StyleSheet.create({
     scrollViewContent: {
         flexGrow: 1,
     },
     container: {
-        padding: 20,
-        height: "100%",
+        backgroundColor: "#456990",
+        padding: widthPercentageToDP(5)
     },
     searchBarContainer: {
+        marginTop: heightPercentageToDP(10),
         flexDirection: "row",
         alignItems: "center",
         borderWidth: 0.4,
         borderColor: "gray",
         borderRadius: 10,
-        marginBottom: 30,
-        marginRight: 20,
-        marginLeft: 10,
+        marginBottom: 20,
+        elevation: 2,
+
         backgroundColor: "white",
+        borderRadius: 20
+
     },
     searchIcon: {
         paddingLeft: 10,
@@ -146,52 +108,33 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 10,
         paddingHorizontal: 10,
-        marginRight: 20,
     },
-    searchButton: {
-        backgroundColor: "#007bff",
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        borderTopRightRadius: 11,
-        borderBottomRightRadius: 11,
-    },
-    searchButtonText: {
-        color: "white",
-        fontWeight: "bold",
-    },
-    flatList: {
-        marginRight: "2%",
-        marginBottom: "30%",
+    video: {
+        borderColor: 'black'
     },
     videoItem: {
-        marginBottom: 10, // Increased margin to create larger video container
-        padding: 20, // Increased padding to create larger video container
-        backgroundColor: "rgba(255,255,255,0.6)", // Light gray background color
-        borderRadius: 10, // Rounded corners
-        flexDirection: "row", // Align thumbnail and text horizontally
-        paddingTop: 15,
-        paddingBottom: 15,
-        paddingLeft: 15,
-        paddingRight: 15,
-    },
-    videoInfoContainer: {
-        flex: 1, // Occupy remaining space
-        flexDirection: "row", // Align thumbnail and text horizontally
+        marginTop: heightPercentageToDP(2),
+        marginBottom: heightPercentageToDP(1),
+        backgroundColor: "white",
+        flexDirection: "row",
+        alignItems: "center",
+        padding :15,
+        elevation: 5,
+        borderRadius: 20
     },
     thumbnail: {
-        width: 100, // 30% of the container width
-        height: 70, // Take full height
-        marginRight: 15,
-        borderRadius: 5, // Rounded corners
+        width: widthPercentageToDP(30),
+        height: heightPercentageToDP(10),
+        borderRadius: 20,
+        marginRight: widthPercentageToDP(5),
     },
     videoTextContainer: {
-        flex: 1, // Occupy remaining space
-        justifyContent: "center", // Center text vertically
-        alignItems: "stretch",
+        flex: 1,
     },
     videoTitle: {
         fontSize: 16,
-        marginBottom: 5,
+        justifyContent: 'center',
+        borderRadius: 10
     },
 });
 
