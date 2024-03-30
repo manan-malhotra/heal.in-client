@@ -7,7 +7,24 @@ import {
     widthPercentageToDP,
 } from "react-native-responsive-screen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import ArticleCard from "../../../components/articleCard";
+const blogData = [
+    {
+        id: 1,
+        title: "COVID-19: The Intersection of Physical and Mental Health",
+        post_date: "2024-03-20T14:38:17.170+00:00",
+    },
+    {
+        id: 4,
+        title: "COVID-19: The Intersection of Physical and Mental Health",
+        post_date: "2024-03-20T14:38:17.170+00:00",
+    },
+    {
+        id: 7,
+        title: "COVID-19: The Intersection of Physical and Mental Health",
+        post_date: "2024-03-28T06:29:30.268+00:00",
+    },
+];
 const Home = () => {
     const [role, setRole] = useState("");
     useEffect(() => {
@@ -49,45 +66,19 @@ const Home = () => {
                     </View>
                 </View>
                 <View style={styles.articles}>
-                    <View style={styles.articleCard}>
-                        <View style={styles.articleTitleContainer}>
-                            <Text style={styles.articleTitle}>
-                                COVID-19: The Intersection of Physical and
-                                Mental Health
-                            </Text>
-                        </View>
-                        <View style={styles.articleDateContainer}>
-                            <Text style={styles.articleDate}>
-                                March 30,2024
-                            </Text>
-                        </View>
-                    </View>
-                    <View style={styles.articleCard}>
-                        <View style={styles.articleTitleContainer}>
-                            <Text style={styles.articleTitle}>
-                                COVID-19: The Intersection of Physical and
-                                Mental Health
-                            </Text>
-                        </View>
-                        <View style={styles.articleDateContainer}>
-                            <Text style={styles.articleDate}>
-                                March 11,2024
-                            </Text>
-                        </View>
-                    </View>
-                    <View style={styles.articleCard}>
-                        <View style={styles.articleTitleContainer}>
-                            <Text style={styles.articleTitle}>
-                                8 Big Ways we changed how we talk about mental
-                                health
-                            </Text>
-                        </View>
-                        <View style={styles.articleDateContainer}>
-                            <Text style={styles.articleDate}>
-                                March 08,2024
-                            </Text>
-                        </View>
-                    </View>
+                    {blogData.map((blog) => (
+                        <Pressable
+                            key={blog.id}
+                            onPress={() =>
+                                router.push(`user/home/blogs/${blog.id}`)
+                            }
+                        >
+                            <ArticleCard
+                                title={blog.title}
+                                post_date={blog.post_date}
+                            />
+                        </Pressable>
+                    ))}
                 </View>
                 <View style={styles.verticalLine}></View>
                 <View style={styles.row2}>
@@ -187,6 +178,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 14,
         color: theme.colors.button,
+        textDecorationLine: "underline",
+        textDecorationStyle: "solid",
     },
     articles: {
         height: "55%",
@@ -195,7 +188,7 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         marginRight: "auto",
         width: "91%",
-        height: "28%",
+        height: 120,
         backgroundColor: theme.colors.background,
         borderRadius: 10,
         borderBlockColor: theme.colors.primary,

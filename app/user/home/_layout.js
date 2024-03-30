@@ -9,11 +9,6 @@ const _layout = () => {
                 name="index"
                 options={{
                     headerTitle: "heal.in",
-                    headerStyle: {
-                        backgroundColor: "#3340B0",
-                    },
-                    headerTintColor: "white",
-                    navigationBarColor: "#3340B0",
                 }}
             />
             <Stack.Screen
@@ -27,20 +22,18 @@ const _layout = () => {
                         backgroundColor: "white",
                     },
                     headerTintColor: "black",
-                    navigationBarColor: "#3340B0",
                 }}
             />
             <Stack.Screen
                 name="blogs/index"
                 options={{
-                    headerTitle: "",
+                    headerTitle: "Blogs",
                     headerBackTitleVisible: false,
                     headerShadowVisible: false,
                     headerStyle: {
                         backgroundColor: "white",
                     },
                     headerTintColor: "black",
-                    navigationBarColor: "#3340B0",
                 }}
             />
         </Stack>
