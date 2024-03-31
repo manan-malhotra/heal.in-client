@@ -2,38 +2,44 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Stack, router } from "expo-router";
 import { theme } from "../../../constants/Colors";
-import {
-    heightPercentageToDP,
-    widthPercentageToDP,
-} from "react-native-responsive-screen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 import ArticleCard from "../../../components/articleCard";
-const blogData = [
-    {
-        id: 1,
-        title: "COVID-19: The Intersection of Physical and Mental Health",
-        post_date: "2024-03-20T14:38:17.170+00:00",
-    },
-    {
-        id: 4,
-        title: "COVID-19: The Intersection of Physical and Mental Health",
-        post_date: "2024-03-20T14:38:17.170+00:00",
-    },
-    {
-        id: 7,
-        title: "COVID-19: The Intersection of Physical and Mental Health",
-        post_date: "2024-03-28T06:29:30.268+00:00",
-    },
-];
+import { getAllBlogs } from "../../../common/userApi";
+import { getFromStorage } from "../../../common/helpers";
 const Home = () => {
+    const [blogData, setBlogData] = useState([]);
     const [role, setRole] = useState("");
+    const [name, setName] = useState("");
     useEffect(() => {
-        const getRole = async () => {
-            const role = await AsyncStorage.getItem("role");
-            setRole(role);
-        };
         getRole();
+        getBlogData();
+        getName();
     }, []);
+    const getRole = async () => {
+        try {
+            const role = await getFromStorage("role");
+            setRole(role);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const getName = async () => {
+        try {
+            const fname = await getFromStorage("firstName");
+            const lname = await getFromStorage("lastName");
+            const name = fname + " " + lname;
+            setName(name);
+            console.log(name);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const getBlogData = async () => {
+        const response = await getAllBlogs();
+        if (response.status === 200) {
+            setBlogData(response.data.slice(0, 3));
+        }
+    };
     return (
         <>
             <Stack.Screen options={{ headerShown: false }} />
@@ -49,7 +55,7 @@ const Home = () => {
                         </Text>
                         <Text style={styles.greetingName}>
                             {role == "DOCTOR" && "Dr. "}
-                            Manan Malhotra
+                            {name}
                         </Text>
                     </View>
                 </View>
