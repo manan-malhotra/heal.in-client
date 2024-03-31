@@ -20,8 +20,11 @@ const Forums = () => {
     const [searchText, setSearchText] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
     const [commentVisibleId, setCommentVisibleId] = useState([]);
+    const [comments, setComments] = useState({});
+    const [userId, setUserId] = useState("");
     useEffect(() => {
         getRole();
+        getUserId();
         getForumData();
     }, []);
     const getForumData = async () => {
@@ -35,11 +38,44 @@ const Forums = () => {
             console.log(error);
         }
     };
+    const getUserId = async () => {
+        try {
+            const id = await getFromStorage("userId");
+            setUserId(id);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const handleCommentId = (id) => {
         if (commentVisibleId.includes(id)) {
             setCommentVisibleId(commentVisibleId.filter((item) => item !== id));
         } else {
             setCommentVisibleId([...commentVisibleId, id]);
+        }
+    };
+    const setComment = (id, comment) => {
+        const newComments = { ...comments };
+        newComments[id] = comment;
+        setComments(newComments);
+    };
+    const handleCommentSend = async (id) => {
+        const json = {
+            comment: comments[id],
+            questionId: id,
+            userId,
+        };
+        newComments = { ...comments };
+        newComments[id] = "";
+        setComments(newComments);
+        try {
+            const response = await axios.post(
+                process.env.API_HOST + "/api/user/comment",
+                json
+            );
+            console.log(response.data);
+            getForumData();
+        } catch (error) {
+            console.log(error);
         }
     };
     const getRole = async () => {
@@ -227,15 +263,41 @@ const Forums = () => {
                                         <View style={styles.verticalLine} />
                                         <View style={styles.newComment}>
                                             <TextInput
-                                                placeholder="Add a comment"
+                                                placeholder="Type comment..."
                                                 placeholderTextColor={
                                                     theme.colors.primary
                                                 }
+                                                multiline
                                                 style={styles.commentInput}
+                                                onChangeText={(text) => {
+                                                    setComment(
+                                                        question.public_qna_id,
+                                                        text
+                                                    );
+                                                }}
+                                                value={
+                                                    comments[
+                                                        question.public_qna_id
+                                                    ]
+                                                }
                                             />
                                             <Pressable
                                                 style={styles.commentButton}
-                                            ></Pressable>
+                                                onPress={() => {
+                                                    handleCommentSend(
+                                                        question.public_qna_id
+                                                    );
+                                                }}
+                                            >
+                                                <Icon
+                                                    name="send"
+                                                    size={15}
+                                                    style={{
+                                                        color: theme.colors
+                                                            .button,
+                                                    }}
+                                                />
+                                            </Pressable>
                                         </View>
                                     </>
                                 )}
@@ -355,12 +417,13 @@ const styles = StyleSheet.create({
         opacity: 0.8,
     },
     newComment: {
-        borderColor: theme.colors.primary,
-        borderWidth: 0.2,
+        borderColor: theme.colors.button,
+        borderWidth: 0.4,
         borderRadius: 10,
         paddingHorizontal: "5%",
         paddingVertical: "2%",
         justifyContent: "center",
+        flexDirection: "row",
     },
     verticalLine: {
         height: 1,
@@ -370,5 +433,13 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
         marginTop: "5%",
         marginBottom: "2%",
+    },
+    commentButton: {
+        paddingBottom: "1%",
+        justifyContent: "flex-end",
+        marginLeft: "auto",
+    },
+    commentInput: {
+        width: "95%",
     },
 });

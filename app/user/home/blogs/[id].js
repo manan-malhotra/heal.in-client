@@ -8,7 +8,7 @@ import { getBlogById } from "../../../../common/userApi";
 import { ActivityIndicator } from "react-native-paper";
 import ReportModal from "../../../../components/reportModal";
 import { getFromStorage } from "../../../../common/helpers";
-const Blog = () => {
+const BlogIndividual = () => {
     const id = useLocalSearchParams()["id"];
     const [blogData, setBlogData] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -130,7 +130,7 @@ const Blog = () => {
     );
 };
 
-export default Blog;
+export default BlogIndividual;
 
 const styles = StyleSheet.create({
     body: {

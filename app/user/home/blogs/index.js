@@ -71,9 +71,7 @@ const Blog = () => {
                 {renderData.map((blog) => (
                     <Pressable
                         key={blog.id}
-                        onPress={() =>
-                            router.push(`/user/home/blogs/${blog.id}`)
-                        }
+                        onPress={() => router.push(`./blogs/${blog.id}`)}
                     >
                         <ArticleCard {...blog} />
                     </Pressable>

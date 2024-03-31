@@ -64,9 +64,7 @@ const Home = () => {
                         <Text style={styles.articleHeader}>Articles</Text>
                     </View>
                     <View style={styles.seeAllContainer}>
-                        <Pressable
-                            onPress={() => router.push("user/home/blogs")}
-                        >
+                        <Pressable onPress={() => router.push("./home/blogs")}>
                             <Text style={styles.seeAll}>See All</Text>
                         </Pressable>
                     </View>
@@ -76,7 +74,7 @@ const Home = () => {
                         <Pressable
                             key={blog.id}
                             onPress={() =>
-                                router.push(`user/home/blogs/${blog.id}`)
+                                router.push(`./home/blogs/${blog.id}`)
                             }
                         >
                             <ArticleCard {...blog} />
@@ -86,9 +84,7 @@ const Home = () => {
                 <View style={styles.verticalLine}></View>
                 <View style={styles.row2}>
                     <View style={styles.itemContainer}>
-                        <Pressable
-                            onPress={() => router.push("user/home/forums")}
-                        >
+                        <Pressable onPress={() => router.push("./home/forums")}>
                             <View style={styles.item}>
                                 <Image
                                     source={require("../../../assets/images/forums.png")}
@@ -97,9 +93,7 @@ const Home = () => {
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() =>
-                                router.push("user/home/selfHelpVideos")
-                            }
+                            onPress={() => router.push("./home/selfHelpVideos")}
                         >
                             <View style={styles.item}>
                                 <Image
@@ -116,17 +110,13 @@ const Home = () => {
                         </View>
                     </View>
                     <View style={styles.itemTextContainer}>
-                        <Pressable
-                            onPress={() => router.push("user/home/forums")}
-                        >
+                        <Pressable onPress={() => router.push("./home/forums")}>
                             <View style={styles.itemText}>
                                 <Text style={styles.itemHeading}>Forums</Text>
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() =>
-                                router.push("user/home/selfHelpVideos")
-                            }
+                            onPress={() => router.push("./home/selfHelpVideos")}
                         >
                             <View style={styles.itemText}>
                                 <Text style={styles.itemHeading}>Videos</Text>
