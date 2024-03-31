@@ -1,4 +1,5 @@
 import {
+    Modal,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -13,6 +14,7 @@ import SearchBar from "../../../components/searchBar";
 import { theme } from "../../../constants/Colors";
 import Icon from "react-native-vector-icons/Feather";
 import axios from "axios";
+import ReportModal from "../../../components/reportModal";
 const Forums = () => {
     const [forumData, setForumData] = useState({});
     const [mainData, setMainData] = useState({});
@@ -22,6 +24,8 @@ const Forums = () => {
     const [commentVisibleId, setCommentVisibleId] = useState([]);
     const [comments, setComments] = useState({});
     const [userId, setUserId] = useState("");
+    const [reportReason, setReportReason] = useState("");
+    const [reportIndex, setReportIndex] = useState("");
     useEffect(() => {
         getRole();
         getUserId();
@@ -139,7 +143,9 @@ const Forums = () => {
                                             <Pressable
                                                 onPress={() => {
                                                     setModalVisible(true);
-                                                    // setReportIndex(cardData[0].card_id);
+                                                    setReportIndex(
+                                                        question.public_qna_id
+                                                    );
                                                 }}
                                             >
                                                 <Icon
@@ -177,6 +183,10 @@ const Forums = () => {
                                                         <View
                                                             style={
                                                                 styles.comment
+                                                            }
+                                                            key={
+                                                                comment.comment_id +
+                                                                question.public_qna_id
                                                             }
                                                         >
                                                             <View
@@ -305,6 +315,26 @@ const Forums = () => {
                         ))}
                 </ScrollView>
             </View>
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                presentationStyle="pageSheet"
+                onRequestClose={() => {
+                    setModalVisible(false);
+                    setReportReason("");
+                    setReportIndex("");
+                }}
+            >
+                <ReportModal
+                    currentUserId={userId}
+                    setModalVisible={setModalVisible}
+                    reportIndex={reportIndex}
+                    reportReason={reportReason}
+                    setReportReason={setReportReason}
+                    setReportIndex={setReportIndex}
+                    api="qna"
+                />
+            </Modal>
         </>
     );
 };
