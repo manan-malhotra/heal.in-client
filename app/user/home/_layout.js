@@ -36,6 +36,18 @@ const _layout = () => {
                     headerTintColor: "black",
                 }}
             />
+            <Stack.Screen
+                name="forums"
+                options={{
+                    headerTitle: "Forums",
+                    headerBackTitleVisible: false,
+                    headerShadowVisible: false,
+                    headerStyle: {
+                        backgroundColor: "white",
+                    },
+                    headerTintColor: "black",
+                }}
+            />
         </Stack>
     );
 };

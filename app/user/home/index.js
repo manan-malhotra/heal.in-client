@@ -86,12 +86,16 @@ const Home = () => {
                 <View style={styles.verticalLine}></View>
                 <View style={styles.row2}>
                     <View style={styles.itemContainer}>
-                        <View style={styles.item}>
-                            <Image
-                                source={require("../../../assets/images/forums.png")}
-                                style={styles.itemImage}
-                            />
-                        </View>
+                        <Pressable
+                            onPress={() => router.push("user/home/forums")}
+                        >
+                            <View style={styles.item}>
+                                <Image
+                                    source={require("../../../assets/images/forums.png")}
+                                    style={styles.itemImage}
+                                />
+                            </View>
+                        </Pressable>
                         <Pressable
                             onPress={() =>
                                 router.push("user/home/selfHelpVideos")
@@ -112,9 +116,13 @@ const Home = () => {
                         </View>
                     </View>
                     <View style={styles.itemTextContainer}>
-                        <View style={styles.itemText}>
-                            <Text style={styles.itemHeading}>Forums</Text>
-                        </View>
+                        <Pressable
+                            onPress={() => router.push("user/home/forums")}
+                        >
+                            <View style={styles.itemText}>
+                                <Text style={styles.itemHeading}>Forums</Text>
+                            </View>
+                        </Pressable>
                         <Pressable
                             onPress={() =>
                                 router.push("user/home/selfHelpVideos")

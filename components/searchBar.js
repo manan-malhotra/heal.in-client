@@ -3,7 +3,7 @@ import React from "react";
 import { theme } from "../constants/Colors";
 import Icon from "react-native-vector-icons/AntDesign";
 
-const SearchBar = ({ handleSearch, searchText }) => {
+const SearchBar = ({ handleSearch, searchText, type }) => {
     return (
         <View style={styles.searchBar}>
             <View style={styles.searchBarIcon}>
@@ -16,7 +16,9 @@ const SearchBar = ({ handleSearch, searchText }) => {
             <View style={styles.searchBarInput}>
                 <TextInput
                     style={styles.searchBarInputText}
-                    placeholder="Search Videos"
+                    placeholder={
+                        typeof type == "undefined" ? "Search" : "Search " + type
+                    }
                     placeholderTextColor={theme.colors.primary}
                     value={searchText}
                     onChangeText={handleSearch}

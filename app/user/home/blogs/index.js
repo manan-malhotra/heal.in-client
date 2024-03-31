@@ -66,6 +66,7 @@ const Blog = () => {
                 <SearchBar
                     handleSearch={handleSearch}
                     searchText={searchText}
+                    type="Blogs"
                 />
                 {renderData.map((blog) => (
                     <Pressable

@@ -6,7 +6,6 @@ import {
     ScrollView,
     TouchableOpacity,
     Modal,
-    Alert,
 } from "react-native";
 import blogsData from "../../data/blog_content.json";
 import Icon from "react-native-vector-icons/Ionicons";
