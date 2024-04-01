@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 
 const ReportModal = ({
@@ -20,9 +20,9 @@ const ReportModal = ({
     };
     const handleReport = async () => {
         try {
-            console.log(reportIndex);
-            console.log(reportReason);
-            console.log(currentUserId);
+            if (!reportReason) {
+                return;
+            }
             let response;
             if (api == "blogs") {
                 response = await axios.post(

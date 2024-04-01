@@ -6,11 +6,12 @@ import {
     TextInput,
     View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { theme } from "../../../../constants/Colors";
 import ArticleCard from "../../../../components/articleCard";
 import { router } from "expo-router";
 import SearchBar from "../../../../components/searchBar";
+import { getAllBlogs } from "../../../../common/userApi";
 const blogData = [
     {
         id: 1,
@@ -39,8 +40,19 @@ const blogData = [
     },
 ];
 const Blog = () => {
+    const [blogData, setBlogData] = useState([]);
     const [searchText, setSearchText] = useState("");
     const [renderData, setRenderData] = useState(blogData);
+    useEffect(() => {
+        getBlogData();
+    }, []);
+    const getBlogData = async () => {
+        const response = await getAllBlogs();
+        if (response.status === 200) {
+            setBlogData(response.data);
+            setRenderData(response.data);
+        }
+    };
     const handleSearch = (text) => {
         setSearchText(text);
         const filteredData = blogData.filter((video) =>
@@ -51,34 +63,15 @@ const Blog = () => {
     return (
         <View style={styles.body}>
             <ScrollView>
-                {/* <View style={styles.searchBar}>
-                    <View style={styles.searchBarIcon}>
-                        <Icon
-                            name="search1"
-                            size={20}
-                            style={{ color: theme.colors.primary }}
-                        />
-                    </View>
-                    <View style={styles.searchBarInput}>
-                        <TextInput
-                            style={styles.searchBarInputText}
-                            placeholder="Search Videos"
-                            placeholderTextColor={theme.colors.primary}
-                            value={searchText}
-                            onChangeText={handleSearch}
-                        />
-                    </View>
-                </View> */}
                 <SearchBar
                     handleSearch={handleSearch}
                     searchText={searchText}
+                    type="Blogs"
                 />
                 {renderData.map((blog) => (
                     <Pressable
                         key={blog.id}
-                        onPress={() =>
-                            router.push(`/user/home/blogs/${blog.id}`)
-                        }
+                        onPress={() => router.push(`./blogs/${blog.id}`)}
                     >
                         <ArticleCard {...blog} />
                     </Pressable>

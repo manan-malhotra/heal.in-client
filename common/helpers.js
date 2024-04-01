@@ -1,3 +1,5 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const formatDate = (inputDate) => {
     const originalDate = new Date(inputDate);
     const monthNames = [
@@ -22,4 +24,8 @@ const formatDate = (inputDate) => {
     return formattedDate;
 };
 
-export { formatDate };
+const getFromStorage = async (key) => {
+    const value = await AsyncStorage.getItem(key);
+    return value;
+};
+export { formatDate, getFromStorage };

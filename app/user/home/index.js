@@ -2,38 +2,44 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Stack, router } from "expo-router";
 import { theme } from "../../../constants/Colors";
-import {
-    heightPercentageToDP,
-    widthPercentageToDP,
-} from "react-native-responsive-screen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 import ArticleCard from "../../../components/articleCard";
-const blogData = [
-    {
-        id: 1,
-        title: "COVID-19: The Intersection of Physical and Mental Health",
-        post_date: "2024-03-20T14:38:17.170+00:00",
-    },
-    {
-        id: 4,
-        title: "COVID-19: The Intersection of Physical and Mental Health",
-        post_date: "2024-03-20T14:38:17.170+00:00",
-    },
-    {
-        id: 7,
-        title: "COVID-19: The Intersection of Physical and Mental Health",
-        post_date: "2024-03-28T06:29:30.268+00:00",
-    },
-];
+import { getAllBlogs } from "../../../common/userApi";
+import { getFromStorage } from "../../../common/helpers";
 const Home = () => {
+    const [blogData, setBlogData] = useState([]);
     const [role, setRole] = useState("");
+    const [name, setName] = useState("");
     useEffect(() => {
-        const getRole = async () => {
-            const role = await AsyncStorage.getItem("role");
-            setRole(role);
-        };
         getRole();
+        getBlogData();
+        getName();
     }, []);
+    const getRole = async () => {
+        try {
+            const role = await getFromStorage("role");
+            setRole(role);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const getName = async () => {
+        try {
+            const fname = await getFromStorage("firstName");
+            const lname = await getFromStorage("lastName");
+            const name = fname + " " + lname;
+            setName(name);
+            console.log(name);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const getBlogData = async () => {
+        const response = await getAllBlogs();
+        if (response.status === 200) {
+            setBlogData(response.data.slice(0, 3));
+        }
+    };
     return (
         <>
             <Stack.Screen options={{ headerShown: false }} />
@@ -49,7 +55,7 @@ const Home = () => {
                         </Text>
                         <Text style={styles.greetingName}>
                             {role == "DOCTOR" && "Dr. "}
-                            Manan Malhotra
+                            {name}
                         </Text>
                     </View>
                 </View>
@@ -58,9 +64,7 @@ const Home = () => {
                         <Text style={styles.articleHeader}>Articles</Text>
                     </View>
                     <View style={styles.seeAllContainer}>
-                        <Pressable
-                            onPress={() => router.push("user/home/blogs")}
-                        >
+                        <Pressable onPress={() => router.push("./home/blogs")}>
                             <Text style={styles.seeAll}>See All</Text>
                         </Pressable>
                     </View>
@@ -70,7 +74,7 @@ const Home = () => {
                         <Pressable
                             key={blog.id}
                             onPress={() =>
-                                router.push(`user/home/blogs/${blog.id}`)
+                                router.push(`./home/blogs/${blog.id}`)
                             }
                         >
                             <ArticleCard {...blog} />
@@ -80,16 +84,16 @@ const Home = () => {
                 <View style={styles.verticalLine}></View>
                 <View style={styles.row2}>
                     <View style={styles.itemContainer}>
-                        <View style={styles.item}>
-                            <Image
-                                source={require("../../../assets/images/forums.png")}
-                                style={styles.itemImage}
-                            />
-                        </View>
+                        <Pressable onPress={() => router.push("./home/forums")}>
+                            <View style={styles.item}>
+                                <Image
+                                    source={require("../../../assets/images/forums.png")}
+                                    style={styles.itemImage}
+                                />
+                            </View>
+                        </Pressable>
                         <Pressable
-                            onPress={() =>
-                                router.push("user/home/selfHelpVideos")
-                            }
+                            onPress={() => router.push("./home/selfHelpVideos")}
                         >
                             <View style={styles.item}>
                                 <Image
@@ -106,13 +110,13 @@ const Home = () => {
                         </View>
                     </View>
                     <View style={styles.itemTextContainer}>
-                        <View style={styles.itemText}>
-                            <Text style={styles.itemHeading}>Forums</Text>
-                        </View>
+                        <Pressable onPress={() => router.push("./home/forums")}>
+                            <View style={styles.itemText}>
+                                <Text style={styles.itemHeading}>Forums</Text>
+                            </View>
+                        </Pressable>
                         <Pressable
-                            onPress={() =>
-                                router.push("user/home/selfHelpVideos")
-                            }
+                            onPress={() => router.push("./home/selfHelpVideos")}
                         >
                             <View style={styles.itemText}>
                                 <Text style={styles.itemHeading}>Videos</Text>

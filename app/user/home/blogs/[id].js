@@ -1,31 +1,44 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Pressable, StyleSheet, Text, View, Modal } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../../constants/Colors";
 import { formatDate } from "../../../../common/helpers";
 import Icon from "react-native-vector-icons/Feather";
-const blogData = [
-    {
-        blog_id: 10,
-        user_id: {
-            user_id: 23,
-            first_name: "Manan",
-            last_name: "Malhotra",
-            contact_number: 123456789,
-            age: 23,
-            gender: "Male",
-            depression_test_score: 14,
-            anxiety_test_score: 18,
-            adhd_test_score: 21,
-        },
-        title: "COVID-19: The Intersection of Physical and Mental Health",
-        description:
-            "Explore the benefits of mindfulness and meditation practices for reducing stress and finding inner peace. In today's fast-paced world, it's easy to feel overwhelmed and stressed out. However, by incorporating mindfulness and meditation into your daily routine, you can cultivate a sense of calm and tranquility amidst the chaos. This blog delves into the science behind mindfulness and meditation and highlights their numerous mental and physical health benefits. Whether you're new to mindfulness or a seasoned practitioner, this blog offers valuable insights and practical tips for integrating these practices into your life.",
-        post_date: "2024-03-20T14:38:17.170+00:00",
-    },
-];
-const Blog = () => {
+import { getBlogById } from "../../../../common/userApi";
+import { ActivityIndicator } from "react-native-paper";
+import ReportModal from "../../../../components/reportModal";
+import { getFromStorage } from "../../../../common/helpers";
+const BlogIndividual = () => {
     const id = useLocalSearchParams()["id"];
+    const [blogData, setBlogData] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [reportReason, setReportReason] = useState("");
+    const [reportIndex, setReportIndex] = useState("");
+    const [currentUserId, setCurrentUserId] = useState("");
+
+    useEffect(() => {
+        getBlogData(id);
+        getCurrentId();
+    }, []);
+    const getBlogData = async (id) => {
+        const response = await getBlogById(id);
+        if (response.status === 200) {
+            console.log(response.data);
+            console.log("yeet");
+            const array = [];
+            array.push(response.data);
+            setBlogData(array);
+        }
+    };
+    const getCurrentId = async () => {
+        try {
+            const id = await getFromStorage("userId");
+            setCurrentUserId(id);
+            console.log(currentUserId);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <View style={styles.body}>
             <Stack.Screen
@@ -39,42 +52,85 @@ const Blog = () => {
                     headerTintColor: "black",
                 }}
             />
-            <View style={styles.blogHeader}>
-                <Text style={styles.blogTitle}>{blogData[0].title}</Text>
-            </View>
-            <View style={styles.blogDetails}>
-                <View style={styles.blogDetailsLeft}>
-                    <View style={styles.blogSection}>
-                        <Text style={styles.blogAuthor}>
-                            {blogData[0].user_id.first_name}{" "}
-                            {blogData[0].user_id.last_name}
+            {blogData.length !== 0 && (
+                <>
+                    <View style={styles.blogHeader}>
+                        <Text style={styles.blogTitle}>
+                            {blogData[0].title}
                         </Text>
                     </View>
-                    <View style={styles.blogSection}>
-                        <Text style={styles.blogDate}>
-                            {formatDate(blogData[0].post_date)}
+                    <View style={styles.blogDetails}>
+                        <View style={styles.blogDetailsLeft}>
+                            <View style={styles.blogSection}>
+                                <Text style={styles.blogAuthor}>
+                                    {blogData[0].user_id.first_name}{" "}
+                                    {blogData[0].user_id.last_name}
+                                </Text>
+                            </View>
+                            <View style={styles.blogSection}>
+                                <Text style={styles.blogDate}>
+                                    {formatDate(blogData[0].post_date)}
+                                </Text>
+                            </View>
+                        </View>
+                        <View style={styles.blogDetailsRight}>
+                            <Pressable
+                                onPress={() => {
+                                    setModalVisible(true);
+                                    setReportIndex(blogData[0].blog_id);
+                                }}
+                            >
+                                <Icon
+                                    style={styles.alertIcon}
+                                    name="alert-triangle"
+                                    size={25}
+                                />
+                            </Pressable>
+                        </View>
+                    </View>
+                    <View style={styles.verticalLine} />
+                    <View style={styles.blogContent}>
+                        <Text style={styles.blogDescription}>
+                            {blogData[0].description}
                         </Text>
                     </View>
-                </View>
-                <View style={styles.blogDetailsRight}>
-                    <Icon
-                        style={styles.alertIcon}
-                        name="alert-triangle"
-                        size={25}
+                </>
+            )}
+            {blogData.length === 0 && (
+                <>
+                    <ActivityIndicator
+                        size="large"
+                        color={theme.colors.button}
+                        style={{ marginTop: "50%" }}
                     />
-                </View>
-            </View>
-            <View style={styles.verticalLine} />
-            <View style={styles.blogContent}>
-                <Text style={styles.blogDescription}>
-                    {blogData[0].description}
-                </Text>
-            </View>
+                </>
+            )}
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                presentationStyle="pageSheet"
+                onRequestClose={() => {
+                    setModalVisible(false);
+                    setReportReason("");
+                    setReportIndex("");
+                }}
+                style={styles.modal}
+            >
+                <ReportModal
+                    currentUserId={currentUserId}
+                    setModalVisible={setModalVisible}
+                    reportIndex={reportIndex}
+                    reportReason={reportReason}
+                    setReportReason={setReportReason}
+                    setReportIndex={setReportIndex}
+                    api="blogs"
+                />
+            </Modal>
         </View>
     );
 };
 
-export default Blog;
+export default BlogIndividual;
 
 const styles = StyleSheet.create({
     body: {
@@ -144,5 +200,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "400",
         lineHeight: 23,
+    },
+    modal: {
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
