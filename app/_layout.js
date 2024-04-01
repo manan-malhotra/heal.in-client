@@ -11,28 +11,27 @@ const MainLayout = () => {
   const segments = useSegments();
   const router = useRouter();
   const { user } = useAuth();
-
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      // TODO: Add Toast Messages
-      if (typeof isAuthenticated == "undefined") return;
-      const inApp = segments[0] == "(app)";
-      if (isAuthenticated && !inApp) {
-        if (user == null || user.role == "") {
-          router.replace("signIn");
-        } else {
-          // router.replace({
-          //     pathname: "home",
-          //     params: user,
-          // });
-          router.replace({ pathname: "/doctor", params: user });
-        }
-      } else if (isAuthenticated == false) {
-        router.replace("signIn");
-      }
-    };
-    checkAuthentication();
-  }, [isAuthenticated, user]);
+    useEffect(() => {
+        const checkAuthentication = async () => {
+            // TODO: Add Toast Messages
+            if (typeof isAuthenticated == "undefined") return;
+            const inApp = segments[0] == "(app)";
+            if (isAuthenticated && !inApp) {
+                if (user == null || user.role == "") {
+                    router.replace("signIn");
+                } else {
+                    // router.replace({
+                    //     pathname: "home",
+                    //     params: user,
+                    // });
+                    router.replace("/user/home/");
+                }
+            } else if (isAuthenticated == false) {
+                router.replace("signIn");
+            }
+        };
+        checkAuthentication();
+    }, [isAuthenticated, user]);
 
   return (
     <View className="h-full">
