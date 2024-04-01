@@ -6,11 +6,15 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { theme } from "../../../constants/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { router } from "expo-router";
+import axios from "axios";
 const Journal = () => {
+    useEffect(() => {
+        console.log("Backed");
+    }, []);
     return (
         <View style={styles.body}>
             <Text style={styles.heading}>My Journal</Text>

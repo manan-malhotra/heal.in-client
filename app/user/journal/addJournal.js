@@ -6,24 +6,57 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { theme } from "../../../constants/Colors";
-import Icon from "react-native-vector-icons/Feather";
+import { router, useLocalSearchParams } from "expo-router";
 const newJournal = () => {
+    const {
+        id,
+        title: oldTitle,
+        description: oldDescription,
+    } = useLocalSearchParams();
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const handleSubmit = async () => {
+        console.log(title);
+        console.log(description);
+        console.log(id);
+        router.push("./");
+    };
     return (
         <View style={styles.body}>
             <View style={styles.heading}>
-                {/* <TextInput placeholder="Title" /> */}
-                <Text style={styles.title}>
-                    Feeling Good on a Sunday Afternoon
-                </Text>
+                <TextInput
+                    placeholder="Title"
+                    placeholderTextColor={theme.colors.primary}
+                    style={styles.title}
+                    multiline
+                    value={oldTitle}
+                    onChangeText={(text) => setTitle(text)}
+                />
                 <View style={styles.line} />
             </View>
             <ScrollView>
                 <View style={styles.description}>
-                    <Text style={styles.descriptionText}></Text>
+                    <TextInput
+                        placeholder="Description"
+                        placeholderTextColor={theme.colors.primary}
+                        style={styles.descriptionText}
+                        multiline
+                        value={oldDescription}
+                        onChangeText={(text) => setDescription(text)}
+                        numberOfLines={10}
+                    />
                 </View>
             </ScrollView>
+            <TouchableOpacity
+                style={styles.submit}
+                onPress={() => {
+                    handleSubmit();
+                }}
+            >
+                <Text style={styles.submitText}>Submit</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -38,8 +71,7 @@ const styles = StyleSheet.create({
         paddingTop: "1%",
     },
     heading: {
-        marginTop: "5%",
-        height: 30,
+        marginTop: "10%",
     },
     title: {
         fontSize: 30,
@@ -70,5 +102,27 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "500",
         letterSpacing: 0.5,
+        height: 500,
+    },
+    submit: {
+        width: "45%",
+        marginLeft: "auto",
+        marginRight: "auto",
+        borderRadius: 10,
+        backgroundColor: theme.colors.primary,
+        paddingBottom: "2%",
+        paddingTop: "2%",
+        borderColor: theme.colors.primary,
+        borderWidth: 1,
+        marginTop: "10%",
+        borderRadius: 10,
+        marginBottom: "5%",
+    },
+    submitText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "white",
+        textAlign: "center",
+        zIndex: 1,
     },
 });

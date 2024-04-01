@@ -6,11 +6,22 @@ import {
     View,
 } from "react-native";
 import React from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import Icon from "react-native-vector-icons/Feather";
 const Journal = () => {
     const { id } = useLocalSearchParams();
+    const handleEdit = () => {
+        router.push({
+            pathname: "./addJournal/",
+            params: {
+                id,
+                title: "Feeling Good on a Sunday Afternoon",
+                description:
+                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur aliquid tempore tempora neque repudiandae a quasi rerum obcaecati nobis illo, magnam, placeat dolores accusamus quod ullam temporibus. Quo, excepturi magni asperiores, praesentium accusantium adipisci",
+            },
+        });
+    };
     return (
         <View style={styles.body}>
             <View style={styles.heading}>
@@ -18,7 +29,11 @@ const Journal = () => {
                     Feeling Good on a Sunday Afternoon
                 </Text>
                 <View style={styles.options}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            handleEdit();
+                        }}
+                    >
                         <Icon name="edit-3" size={25} />
                     </TouchableOpacity>
                     <TouchableOpacity>
