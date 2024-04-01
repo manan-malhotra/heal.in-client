@@ -9,55 +9,84 @@ import {
 import React, { useState } from "react";
 import { theme } from "../../../constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
+import axios from "axios";
 const newJournal = () => {
     const {
         id,
         title: oldTitle,
         description: oldDescription,
     } = useLocalSearchParams();
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const [title, setTitle] = useState(oldTitle || "");
+    const [description, setDescription] = useState(oldDescription || "");
     const handleSubmit = async () => {
-        console.log(title);
-        console.log(description);
-        console.log(id);
+        if (title.trim() === "" || description.trim() === "") {
+            return;
+        }
+        const json = {
+            title,
+            description,
+        };
+        if (id) {
+            json["entryId"] = id;
+            try {
+                const response = await axios.put(
+                    process.env.API_HOST + "/api/journal/edit",
+                    json
+                );
+                console.log(response.status);
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            try {
+                const response = await axios.post(
+                    process.env.API_HOST + "/api/journal",
+                    json
+                );
+                console.log(response.status);
+            } catch (error) {
+                console.log(error);
+            }
+        }
         router.push("./");
     };
     return (
-        <View style={styles.body}>
-            <View style={styles.heading}>
-                <TextInput
-                    placeholder="Title"
-                    placeholderTextColor={theme.colors.primary}
-                    style={styles.title}
-                    multiline
-                    value={oldTitle}
-                    onChangeText={(text) => setTitle(text)}
-                />
-                <View style={styles.line} />
-            </View>
-            <ScrollView>
-                <View style={styles.description}>
+        <>
+            <View style={styles.body}>
+                <View style={styles.heading}>
                     <TextInput
-                        placeholder="Description"
+                        placeholder="Title"
                         placeholderTextColor={theme.colors.primary}
-                        style={styles.descriptionText}
+                        style={styles.title}
                         multiline
-                        value={oldDescription}
-                        onChangeText={(text) => setDescription(text)}
-                        numberOfLines={10}
+                        value={title}
+                        onChangeText={(text) => setTitle(text)}
                     />
+                    <View style={styles.line} />
                 </View>
-            </ScrollView>
-            <TouchableOpacity
-                style={styles.submit}
-                onPress={() => {
-                    handleSubmit();
-                }}
-            >
-                <Text style={styles.submitText}>Submit</Text>
-            </TouchableOpacity>
-        </View>
+                <ScrollView>
+                    <View style={styles.description}>
+                        <TextInput
+                            placeholder="Description"
+                            placeholderTextColor={theme.colors.primary}
+                            style={styles.descriptionText}
+                            multiline
+                            value={description}
+                            onChangeText={(text) => setDescription(text)}
+                            numberOfLines={10}
+                        />
+                    </View>
+                </ScrollView>
+                <TouchableOpacity
+                    style={styles.submit}
+                    onPress={() => {
+                        handleSubmit();
+                    }}
+                >
+                    <Text style={styles.submitText}>Submit</Text>
+                </TouchableOpacity>
+            </View>
+        </>
     );
 };
 

@@ -6,15 +6,72 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { theme } from "../../../constants/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { router } from "expo-router";
 import axios from "axios";
+import { getFromStorage } from "../../../common/helpers";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Journal = () => {
+    const [journalData, setJournalData] = useState([]);
+    const [id, setId] = useState();
     useEffect(() => {
         console.log("Backed");
-    }, []);
+        getId();
+        getJournalEntries();
+    }, [id]);
+    const getId = async () => {
+        try {
+            const value = await AsyncStorage.getItem("userId");
+            setId(value);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const getJournalEntries = async () => {
+        try {
+            if (id) {
+                const response = await axios.get(
+                    process.env.API_HOST +
+                        "/api/journal/findAll/" +
+                        parseInt(id)
+                );
+                if (response.status === 200) {
+                    setJournalData(response.data);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const formatDate = (inputDate) => {
+        const originalDate = new Date(inputDate);
+        const date = originalDate.getDate();
+        if (date < 10) {
+            return "0" + date;
+        }
+        return date;
+    };
+    const formatMonth = (inputDate) => {
+        const originalDate = new Date(inputDate);
+        const monthNames = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sept",
+            "Oct",
+            "Nov",
+            "Dec",
+        ];
+
+        return monthNames[originalDate.getMonth()];
+    };
     return (
         <View style={styles.body}>
             <Text style={styles.heading}>My Journal</Text>
@@ -25,27 +82,33 @@ const Journal = () => {
                     </Text>
                 </View>
                 <View style={styles.journals}>
-                    <View style={styles.journalCard}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                router.push("./journal/" + 2);
-                            }}
-                            style={styles.journalDate}
-                        >
-                            <Text style={styles.journalDateText}>12</Text>
-                            <Text style={styles.journalMonthText}>Mar</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => {
-                                router.push("./journal/" + 2);
-                            }}
-                            style={styles.journalTitle}
-                        >
-                            <Text style={styles.journalTitleText}>
-                                Feeling Good on a Sunday Evening
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                    {journalData.map((entry) => (
+                        <View style={styles.journalCard} key={entry.entry_id}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    router.push("./journal/" + entry.entry_id);
+                                }}
+                                style={styles.journalDate}
+                            >
+                                <Text style={styles.journalDateText}>
+                                    {formatDate(entry.entry_date)}
+                                </Text>
+                                <Text style={styles.journalMonthText}>
+                                    {formatMonth(entry.entry_date)}
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    router.push("./journal/" + entry.entry_id);
+                                }}
+                                style={styles.journalTitle}
+                            >
+                                <Text style={styles.journalTitleText}>
+                                    {entry.title}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    ))}
                 </View>
             </ScrollView>
             <TouchableOpacity

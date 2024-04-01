@@ -1,33 +1,78 @@
 import {
+    Alert,
     ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import Icon from "react-native-vector-icons/Feather";
+import axios from "axios";
 const Journal = () => {
     const { id } = useLocalSearchParams();
+    const [entry, setEntry] = useState({});
+    useEffect(() => {
+        getEntry();
+    }, []);
+    const getEntry = async () => {
+        try {
+            const response = await axios.get(
+                process.env.API_HOST + "/api/journal/findById/" + id
+            );
+            if (response.status === 200) {
+                setEntry(response.data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const handleEdit = () => {
         router.push({
             pathname: "./addJournal/",
             params: {
                 id,
-                title: "Feeling Good on a Sunday Afternoon",
-                description:
-                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur aliquid tempore tempora neque repudiandae a quasi rerum obcaecati nobis illo, magnam, placeat dolores accusamus quod ullam temporibus. Quo, excepturi magni asperiores, praesentium accusantium adipisci",
+                title: entry.title,
+                description: entry.description,
             },
         });
+    };
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete(
+                process.env.API_HOST + "/api/journal/delete/" + id
+            );
+        } catch (error) {
+            console.log(error);
+        }
+        router.push("./");
+    };
+
+    const confirmDelete = () => {
+        Alert.alert(
+            "Delete Entry",
+            "Are you sure you want to delete this entry?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                },
+                {
+                    text: "Delete",
+                    onPress: () => {
+                        handleDelete();
+                    },
+                    style: "destructive",
+                },
+            ]
+        );
     };
     return (
         <View style={styles.body}>
             <View style={styles.heading}>
-                <Text style={styles.title}>
-                    Feeling Good on a Sunday Afternoon
-                </Text>
+                <Text style={styles.title}>{entry.title}</Text>
                 <View style={styles.options}>
                     <TouchableOpacity
                         onPress={() => {
@@ -36,7 +81,11 @@ const Journal = () => {
                     >
                         <Icon name="edit-3" size={25} />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            confirmDelete();
+                        }}
+                    >
                         <Icon
                             name="trash"
                             size={25}
@@ -49,49 +98,7 @@ const Journal = () => {
             <ScrollView>
                 <View style={styles.description}>
                     <Text style={styles.descriptionText}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Consequuntur aliquid tempore tempora neque repudiandae a
-                        quasi rerum obcaecati nobis illo, magnam, placeat
-                        dolores accusamus quod ullam temporibus. Quo, excepturi
-                        magni asperiores, praesentium accusantium adipisci
-                        exercitationem minus accusamus non blanditiis impedit
-                        velit nemo molestias fugiat rerum vitae ea quae
-                        aspernatur itaque dicta corrupti voluptates! Aut
-                        laboriosam repellat voluptates repudiandae inventore ut,
-                        rem sunt enim quisquam iure nobis. Natus itaque incidunt
-                        inventore amet eaque recusandae veniam cupiditate
-                        distinctio nostrum, ipsam consectetur esse ad voluptas
-                        eos exercitationem molestiae excepturi repudiandae
-                        aliquam non beatae! Atque ad vitae ipsa soluta expedita
-                        fuga impedit mollitia dolore corporis! Voluptate
-                        dignissimos tempore suscipit hic ducimus commodi labore.
-                        Aut laboriosam earum similique fugiat eligendi vero ab
-                        porro, unde nemo mollitia officia commodi atque,
-                        officiis saepe optio in qui quae quisquam voluptate
-                        nobis vitae rem quibusdam reiciendis. Quis, perspiciatis
-                        laboriosam! Voluptate aliquid numquam pariatur beatae
-                        sit excepturi commodi ut provident ullam et neque totam
-                        officiis quibusdam aperiam impedit ipsa voluptates
-                        tempora id temporibus cum inventore, rerum distinctio
-                        vel. Ad distinctio sit, laborum, perferendis,
-                        consequatur molestiae commodi mollitia alias deleniti
-                        suscipit in dicta ratione blanditiis nobis numquam
-                        aliquam voluptate facere ipsum quidem! Nihil, sed
-                        aliquid ab aspernatur magnam pariatur? Delectus at
-                        perferendis modi et cupiditate. Numquam pariatur natus a
-                        sed, deserunt odio omnis sequi. Eum, aliquid dolores.
-                        Atque quisquam nemo quis illo porro minima, deserunt
-                        molestiae iure, blanditiis suscipit, placeat quasi
-                        commodi. Rem nemo tenetur ea qui dolorem natus impedit
-                        cupiditate at sit praesentium quidem ipsam harum eum ad
-                        consequuntur, in, ratione cum sequi atque adipisci
-                        tempora molestiae nam dignissimos. Qui quaerat
-                        reiciendis, quod libero esse eos quae tempora mollitia
-                        ipsum, nostrum hic itaque culpa id dicta voluptatum
-                        quasi. Reprehenderit aut in sapiente perspiciatis
-                        pariatur est dolor, praesentium at eum repellat vero,
-                        culpa fugit excepturi quidem explicabo ex labore!
-                        Consequuntur, quod.
+                        {entry.description}
                     </Text>
                 </View>
             </ScrollView>
