@@ -29,7 +29,6 @@ import {
   Timestamp,
   where,
 } from "firebase/firestore";
-import CustomKeyboardView from "../components/CustomKeyboardView";
 const getRoomId = (userId1, userId2) => {
   const sortedIds = [userId1, userId2].sort();
   const roomId = sortedIds.join("-");
