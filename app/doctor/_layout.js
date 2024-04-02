@@ -1,10 +1,7 @@
-import { Text, View } from "react-native";
 import React from "react";
-import { Stack, Tabs, useLocalSearchParams } from "expo-router";
-
+import { Tabs, useLocalSearchParams } from "expo-router";
 import Icon from "react-native-vector-icons/AntDesign";
 import Icon3 from "react-native-vector-icons/Ionicons";
-import Icon2 from "react-native-vector-icons/Feather";
 
 export default function _layout() {
   const user = useLocalSearchParams();
