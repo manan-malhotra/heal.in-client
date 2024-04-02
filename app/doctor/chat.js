@@ -118,8 +118,6 @@ const Chat = () => {
                     patient.user_id.first_name + " " + patient.user_id.last_name
                   }
                   gender={patient.user_id.gender}
-                  icon="person"
-                  iconBackground="blue"
                 />
               </Pressable>
             </View>
