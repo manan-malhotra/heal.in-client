@@ -25,7 +25,7 @@ const MainLayout = () => {
           //     pathname: "home",
           //     params: user,
           // });
-          router.replace({ pathname: "/doctor", params: user });
+          router.replace({ pathname: "/admin", params: user });
         }
       } else if (isAuthenticated == false) {
         router.replace("signIn");
