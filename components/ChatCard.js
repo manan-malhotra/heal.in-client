@@ -6,20 +6,20 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-const ChatCard = ({ id, name, gender, icon, iconBackground }) => {
+const ChatCard = ({ id, name, gender, icon, iconBackground, folder }) => {
   if (icon && iconBackground) {
     return (
       <View style={styles.card}>
         <View style={styles.iconContainer}>
           <View style={styles.alternateIcon}>
-            {/* <Image
+            <Image
               source={{
-                uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/main/assets/avatars/${
+                uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/main/assets/${
                   gender === "Male" ? "female" : "male"
                 }/${id % 7}.png`,
               }}
               style={styles.avatar}
-            /> */}
+            />
           </View>
         </View>
         <View style={styles.nameContainer}>
