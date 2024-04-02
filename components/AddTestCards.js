@@ -6,29 +6,29 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-const ChatCard = ({ id, name, gender }) => {
+const AddTestCards = ({ testName, iconName }) => {
   return (
     <View style={styles.card}>
       <View style={styles.iconContainer}>
         <View style={styles.icon}>
-          <Image
-            source={{
-              uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/main/assets/avatars/${
-                gender === "Male" ? "female" : "male"
-              }/${id % 7}.png`,
-            }}
-            style={styles.avatar}
-          />
+          <View style={styles.innerIcon}>
+            <Image
+              source={{
+                uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/test/assets/tests/${iconName}`,
+              }}
+              style={styles.avatar}
+            />
+          </View>
         </View>
       </View>
       <View style={styles.nameContainer}>
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{testName}</Text>
       </View>
     </View>
   );
 };
 
-export default ChatCard;
+export default AddTestCards;
 
 const styles = StyleSheet.create({
   avatar: {
@@ -61,11 +61,21 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   icon: {
-    width: "60%",
+    width: "55%",
     aspectRatio: 1,
     borderRadius: 999,
-    backgroundColor: theme.colors.primary,
-    position: "absolute",
+    borderWidth: 1,
+    borderColor: theme.colors.text,
+    backgroundColor: theme.colors.background,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  innerIcon: {
+    width: "65%",
+    aspectRatio: 1,
+    alignItems: "center",
+    justifyContent: "center",
     overflow: "hidden",
   },
   nameContainer: {
