@@ -8,23 +8,15 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import CustomKeyboardView from "../components/CustomKeyboardView";
 import { db } from "../firebaseConfig";
-import {
-  router,
-  Stack,
-  Tabs,
-  useLocalSearchParams,
-  useRouter,
-} from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { theme } from "../constants/Colors";
-import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
+import { Entypo, Feather } from "@expo/vector-icons";
 import MessageList from "../components/MessageList";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   addDoc,
   collection,
@@ -46,7 +38,6 @@ const ChatRoom = () => {
   const data = useLocalSearchParams();
   console.log("DATA: ", data);
   const item = useLocalSearchParams();
-  const router = useRouter();
   const [messages, setMessages] = useState([]);
   const textRef = useRef("");
   const inputRef = useRef(null);
@@ -95,7 +86,7 @@ const ChatRoom = () => {
       age: data.age,
       gender: data.gender,
     };
-    router.push({ pathname: "/doctor/chat", params: user });
+    router.dismiss();
   };
 
   const handleSendMessage = async () => {
@@ -219,6 +210,7 @@ const ChatRoom = () => {
             ref={inputRef}
             onChangeText={(value) => (textRef.current = value)}
             placeholder="Type message..."
+            placeholderTextColor={theme.colors.text}
             style={{ flex: 1, marginRight: 2, fontSize: hp(1.5) }}
           />
           <TouchableOpacity
@@ -270,12 +262,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 
-  patientIcon: {
-    width: "20%",
-    aspectRatio: 1,
-    borderRadius: 999,
-    backgroundColor: theme.colors.primary,
-  },
+  // patientIcon: {
+  //   width: "20%",
+  //   aspectRatio: 1,
+  //   borderRadius: 999,
+  //   backgroundColor: theme.colors.button,
+  // },
   verticalLine: {
     height: hp(0.1),
     width: wp(89),

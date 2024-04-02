@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { TextInput as Input } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
-import { theme } from '../constants/Colors';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, TextInput as Input, View } from "react-native";
+import { theme } from "../constants/Colors";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
+import { Feather } from "@expo/vector-icons";
 
 export default function MyTextInput({
+  icon,
   errorInput,
   placeholderText,
   isPassword,
@@ -21,7 +26,7 @@ export default function MyTextInput({
 
   const handleChangeText = (value) => {
     if (isNum) {
-      const numericValue = value.replace(/[^0-9]/g, '');
+      const numericValue = value.replace(/[^0-9]/g, "");
       setText(numericValue);
     } else {
       setText(value);
@@ -32,38 +37,61 @@ export default function MyTextInput({
   };
 
   return (
-    <View style={styles.inputContainer}>
-      <Input
-        style={styles.formInput}
-        selectionColor={theme.colors.primary}
-        underlineColor="transparent"
-        placeholder={placeholderText}
-        secureTextEntry={isPassword}
-        keyboardType={isEmail ? 'email-address' : isNum ? 'numeric' : 'default'}
-        autoCapitalize={isEmail ? 'none' : 'sentences'}
-        value={text}
-        onChangeText={handleChangeText}
-        {...props}
-      />
+    <View
+      style={{
+        paddingTop: hp(0.7),
+        width: wp(80),
+        marginRight: "auto",
+        marginLeft: "auto",
+      }}
+    >
+      <View style={styles.card}>
+        <Feather name={icon} size={22} color="black" style={styles.icon} />
+        <Input
+          style={styles.formInput}
+          placeholder={placeholderText}
+          secureTextEntry={isPassword}
+          keyboardType={
+            isEmail ? "email-address" : isNum ? "numeric" : "default"
+          }
+          autoCapitalize={isEmail ? "none" : "sentences"}
+          value={text}
+          onChangeText={handleChangeText}
+          {...props}
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   inputContainer: {
-    width: '100%',
+    width: "100%",
     marginVertical: 10,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
+  icon: {
+    marginRight: wp(4),
+    marginLeft: wp(3),
+  },
+
   formInput: {
-    backgroundColor: '#F4F4F4',
-    fontSize: 17,
+    flex: 1,
     height: 40,
-    width: '100%',
-    paddingHorizontal: 12,
-    color: 'grey',
-    borderWidth: 1,
-    borderColor: 'grey',
+    borderWidth: 0,
     borderRadius: 5,
+    paddingLeft: 10,
+    fontSize: 20,
+    fontWeight: "600",
+  },
+  card: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: theme.colors.text,
+    backgroundColor: theme.colors.background,
+    marginBottom: hp(2),
   },
 });

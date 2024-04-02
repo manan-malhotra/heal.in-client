@@ -11,6 +11,7 @@ const MainLayout = () => {
     const segments = useSegments();
     const router = useRouter();
     const { user } = useAuth();
+
     useEffect(() => {
         const checkAuthentication = async () => {
             // TODO: Add Toast Messages
@@ -24,7 +25,7 @@ const MainLayout = () => {
                     //     pathname: "home",
                     //     params: user,
                     // });
-                    router.replace("/user/");
+                    router.replace("/user/home/");
                 }
             } else if (isAuthenticated == false) {
                 router.replace("signIn");
