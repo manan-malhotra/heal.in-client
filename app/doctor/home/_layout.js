@@ -1,12 +1,14 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 const _layout = () => {
+    const user = useLocalSearchParams();
     return (
         <Stack>
             <Stack.Screen
                 name="index"
+                initialParams={user}
                 options={{
                     headerTitle: "heal.in",
                 }}
@@ -38,6 +40,7 @@ const _layout = () => {
             />
             <Stack.Screen
                 name="forums"
+                initialParams={user}
                 options={{
                     headerTitle: "Forums",
                     headerBackTitleVisible: false,

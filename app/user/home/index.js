@@ -1,39 +1,16 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Stack, router } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import ArticleCard from "../../../components/articleCard";
 import { getAllBlogs } from "../../../common/userApi";
-import { getFromStorage } from "../../../common/helpers";
 const Home = () => {
+    const user = useLocalSearchParams();
     const [blogData, setBlogData] = useState([]);
-    const [role, setRole] = useState("");
-    const [name, setName] = useState("");
     useEffect(() => {
-        getRole();
         getBlogData();
-        getName();
     }, []);
-    const getRole = async () => {
-        try {
-            const role = await getFromStorage("role");
-            setRole(role);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const getName = async () => {
-        try {
-            const fname = await getFromStorage("firstName");
-            const lname = await getFromStorage("lastName");
-            const name = fname + " " + lname;
-            setName(name);
-            console.log(name);
-        } catch (error) {
-            console.log(error);
-        }
-    };
     const getBlogData = async () => {
         const response = await getAllBlogs();
         if (response.status === 200) {
@@ -54,8 +31,8 @@ const Home = () => {
                             Good Afternoon,
                         </Text>
                         <Text style={styles.greetingName}>
-                            {role == "DOCTOR" && "Dr. "}
-                            {name}
+                            {user.role == "DOCTOR" && "Dr. "}
+                            {user.firstName} {user.lastName}
                         </Text>
                     </View>
                 </View>
