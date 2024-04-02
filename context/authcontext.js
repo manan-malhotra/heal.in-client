@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(undefined);
-    const [role, setRole] = useState('');
+    const [role, setRole] = useState("");
     const [userId, setUserId] = useState();
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export const AuthContextProvider = ({ children }) => {
                         await AsyncStorage.setItem("role", data.role);
                         await AsyncStorage.setItem("contact", strcontact);
                         await AsyncStorage.setItem("userId", strUserId);
-                        if(data) setUser(data);
+                        if (data) setUser(data);
                     }
                 } catch {
                     await AsyncStorage.removeItem("token");
@@ -81,45 +81,45 @@ export const AuthContextProvider = ({ children }) => {
                 setIsAuthenticated(true);
             }
         } catch (error) {
+            console.log(error);
             //Wrong Username
-            if(error.response.status == 404) {
+            if (error.response.status == 404) {
                 Toast.show({
-                    type: 'error',
-                    text1: 'Error',
-                    text2: 'Entered Username is Wrong',
-                    position: 'top',
+                    type: "error",
+                    text1: "Error",
+                    text2: "Entered Username is Wrong",
+                    position: "top",
                     visibilityTime: 3000,
-                  });
-                  
-                  return;
+                });
+
+                return;
             }
 
             // Wrong Password
-            if(error.response.status == 401) {
+            if (error.response.status == 401) {
                 Toast.show({
-                    type: 'error',
-                    text1: 'Error',
-                    text2: 'Entered Password is Wrong',
-                    position: 'top',
+                    type: "error",
+                    text1: "Error",
+                    text2: "Entered Password is Wrong",
+                    position: "top",
                     visibilityTime: 3000,
-                  });
-                  return;
+                });
+                return;
             }
-            
 
             //Server Down
-            if(error.response.status == 502) {
+            if (error.response.status == 502) {
                 Toast.show({
-                    type: 'error',
-                    text1: 'Error',
-                    text2: 'Currently Server is Down Try Again After Few Minutes',
-                    position: 'top',
+                    type: "error",
+                    text1: "Error",
+                    text2: "Currently Server is Down Try Again After Few Minutes",
+                    position: "top",
                     visibilityTime: 3000,
-                  });
-                  return;
+                });
+                return;
             }
 
-            console.log(error.response.status)
+            console.log(error.response.status);
             console.log("Error logging in: ", error);
             setIsAuthenticated(false);
         }
@@ -144,16 +144,16 @@ export const AuthContextProvider = ({ children }) => {
             }
         } catch (error) {
             console.log("Error registering: ", error);
-            if(error.response.status==403){
+            if (error.response.status == 403) {
                 Toast.show({
-                    type: 'error',
-                    text1: 'Error',
-                    text2: 'Email already exists',
-                    position: 'top',
+                    type: "error",
+                    text1: "Error",
+                    text2: "Email already exists",
+                    position: "top",
                     visibilityTime: 3000,
-                  });
-                  
-                  return;
+                });
+
+                return;
             }
             setIsAuthenticated(false);
         }
@@ -170,7 +170,15 @@ export const AuthContextProvider = ({ children }) => {
     };
     return (
         <AuthContext.Provider
-            value={{ user, isAuthenticated, login, register, logout, role, userId }}
+            value={{
+                user,
+                isAuthenticated,
+                login,
+                register,
+                logout,
+                role,
+                userId,
+            }}
         >
             {children}
         </AuthContext.Provider>

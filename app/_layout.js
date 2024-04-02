@@ -22,6 +22,9 @@ const MainLayout = () => {
                     router.replace("signIn");
                 } else {
                     const route = user.role.toLowerCase();
+                    if (route === "responder") {
+                        route = "user";
+                    }
                     // router.replace({
                     //     pathname: "home",
                     //     params: user,
