@@ -11,7 +11,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { theme } from "../../constants/Colors.js";
 import SearchBar from "../../components/searchBar";
 import { Asset } from "expo-asset";
-import PatientChatCard from "../../components/patientChatCard";
+import ChatCard from "../../components/ChatCard";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -112,7 +112,7 @@ const Chat = () => {
           renderData.map((patient) => (
             <View key={patient.user_id.user_id} style={{ paddingTop: 7 }}>
               <Pressable onPress={() => openChatRoom(patient)}>
-                <PatientChatCard
+                <ChatCard
                   id={patient.user_id.user_id}
                   name={
                     patient.user_id.first_name + " " + patient.user_id.last_name
