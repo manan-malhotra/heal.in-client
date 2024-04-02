@@ -53,7 +53,8 @@ const ScoreCard = () => {
             <TouchableOpacity
                 style={styles.anotherTestCard}
                 onPress={() => {
-                    router.back();
+                    console.log("Trigger");
+                    router.navigate("/user/assessment");
                 }}
             >
                 <Text style={styles.anotherTest}>Take another Test</Text>

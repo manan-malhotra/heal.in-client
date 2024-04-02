@@ -12,6 +12,7 @@ import { Stack, router, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import axios from "axios";
 import { ActivityIndicator } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Test = () => {
     const { test } = useLocalSearchParams();
     const [selectedOptions, setSelectedOptions] = useState([]);
@@ -35,6 +36,13 @@ const Test = () => {
             [question]: option,
         }));
     };
+    const sendScoreToAsync = async (sum) => {
+        try {
+            AsyncStorage.setItem(test, String(sum));
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const handleSubmit = async () => {
         console.log(selectedOptions);
         const sum = Object.values(selectedOptions).reduce(
@@ -42,9 +50,10 @@ const Test = () => {
             0
         );
         const length = Object.keys(selectedOptions).length;
-        if (length != data.length) {
+        if (length == data.length) {
             //push to scoreCard
             await sendScore(sum);
+            await sendScoreToAsync(sum);
             router.dismissAll();
             router.push({
                 pathname: "./scoreCard",

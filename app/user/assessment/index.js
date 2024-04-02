@@ -1,20 +1,39 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "../../../context/authcontext";
 import AddTestCards from "../../../components/AddTestCards";
 import Title from "../../../components/Title";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Assessment = () => {
-    const { logout } = useAuth();
+    useEffect(() => {
+        console.log("TESTINZg..");
+        getTestScores();
+    });
+    const [ADHD, setADHD] = useState();
+    const [Depression, setDepression] = useState();
+    const [Anxiety, setAnxiety] = useState();
+    const getTestScores = async () => {
+        try {
+            const ADHD = await AsyncStorage.getItem("ADHD");
+            setADHD(ADHD);
+            const Anxiety = await AsyncStorage.getItem("Anxiety");
+            setAnxiety(Anxiety);
+            const Depression = await AsyncStorage.getItem("Depression");
+            setDepression(Depression);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const user = useLocalSearchParams();
     const handleTest = (testName) => {
         score = undefined;
         if (testName == "ADHD") {
-            score = user.adhdTestScore;
+            score = ADHD;
         } else if (testName == "Depression") {
-            score = user.depressionTestScore;
+            score = Depression;
         } else if (testName == "Anxiety") {
-            score = user.anxietyTestScore;
+            score = Anxiety;
         }
         if (score == undefined) {
             router.push("./assessment/" + testName);
