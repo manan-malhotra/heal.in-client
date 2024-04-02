@@ -13,12 +13,10 @@ import {
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { theme } from "../../../constants/Colors";
-import { Entypo, Feather, FontAwesome } from "@expo/vector-icons";
-import RNPickerSelect from "react-native-picker-select";
-import AddCardUsers from "../../../components/AddCardUsers";
 import Header from "../../../components/Header";
 import MyTextInput from "../../../components/TextInput";
 import axios from "axios";
+import GenderDropDown from "../../../components/GenderDropDown";
 
 const AddResponderFields = () => {
   let selectedValue;
@@ -26,26 +24,10 @@ const AddResponderFields = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState(-1);
   const [password, setPassword] = useState("");
-
-  const [formData, setFormData] = useState({
-    age: "",
-    gender: null,
-  });
-  const handleInputChange = (name, text) => {
-    console.log(text);
-    setFormData({ ...formData, [name]: text });
-  };
+  const [gender, setGender] = useState("");
+  const [age, setAge] = useState(0);
 
   const handleSubmit = () => {
-    console.log(
-      "Full Name: ",
-      fullName,
-      email,
-      phoneNumber,
-      password,
-      formData.gender,
-      formData.age
-    );
     handleSave();
   };
   const handleSave = async () => {
@@ -57,8 +39,8 @@ const AddResponderFields = () => {
           firstName: firstName,
           lastName: lastName,
           email: email,
-          age: parseInt(formData.age),
-          gender: formData.gender,
+          age: parseInt(age),
+          gender: gender,
           password: password,
           role: "RESPONDER",
           contact: phoneNumber,
@@ -66,6 +48,7 @@ const AddResponderFields = () => {
       );
       if (response.status === 200) {
         console.log("SUCCESS");
+        router.back();
       }
     } catch (error) {
       console.log("Error saving post: " + error);
@@ -106,31 +89,7 @@ const AddResponderFields = () => {
             }}
           >
             <View style={styles.card}>
-              <RNPickerSelect
-                // onValueChange={handleGenderChange}
-                onValueChange={(text) => handleInputChange("gender", text)}
-                items={[
-                  { label: "Male", value: "male" },
-                  { label: "Female", value: "female" },
-                  { label: "Other", value: "other" },
-                ]}
-                placeholder={{
-                  label: "Gender",
-                  value: null,
-                }}
-                value={selectedValue}
-                style={{
-                  inputIOS: {
-                    fontSize: 16,
-                    paddingVertical: 8.5,
-                    paddingLeft: 10,
-                    color: "black",
-                    paddingRight: 30,
-                    fontWeight: "600",
-                    fontSize: 20,
-                  },
-                }}
-              />
+              <GenderDropDown onChangeText={setGender} />
             </View>
           </View>
 
@@ -148,8 +107,8 @@ const AddResponderFields = () => {
                 style={styles.textInput}
                 keyboardType="numeric"
                 secureTextEntry={false}
-                value={formData.age}
-                onChangeText={(text) => handleInputChange("age", text)}
+                value={age}
+                onChangeText={(text) => setAge(text)}
               />
             </View>
           </View>

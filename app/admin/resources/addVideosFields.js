@@ -8,6 +8,7 @@ import { theme } from "../../../constants/Colors";
 import Header from "../../../components/Header";
 import MyTextInput from "../../../components/TextInput";
 import axios from "axios";
+import { router } from "expo-router";
 
 const AddVideosFields = () => {
   const [title, setTitle] = useState("");
@@ -29,8 +30,10 @@ const AddVideosFields = () => {
       );
       if (response.status === 200) {
         console.log("SUCCESS");
+
         setTitle("");
         setURL("");
+        router.back();
       }
     } catch (error) {
       console.log("Error saving post: " + error);

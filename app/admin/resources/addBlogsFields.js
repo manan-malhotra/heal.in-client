@@ -17,13 +17,13 @@ import { Feather } from "@expo/vector-icons";
 import Header from "../../../components/Header";
 import MyTextInput from "../../../components/TextInput";
 import axios from "axios";
+import { router } from "expo-router";
 
 const AddBlogsFields = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   const handleSubmit = () => {
-    console.log("Resources: ", title, description);
     handleAddBlog();
   };
   const handleAddBlog = async () => {
@@ -40,6 +40,7 @@ const AddBlogsFields = () => {
         console.log("SUCCESS");
         setTitle("");
         setDescription("");
+        router.back();
       }
     } catch (error) {
       console.log("Error saving post: " + error);
