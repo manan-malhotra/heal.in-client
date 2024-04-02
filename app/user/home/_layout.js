@@ -28,6 +28,7 @@ const _layout = () => {
             />
             <Stack.Screen
                 name="blogs/index"
+                initialParams={user}
                 options={{
                     headerTitle: "Blogs",
                     headerBackTitleVisible: false,
@@ -53,6 +54,7 @@ const _layout = () => {
             />
             <Stack.Screen
                 name="newForum"
+                initialParams={user}
                 options={{
                     headerTitle: "Forums",
                     headerBackTitleVisible: false,

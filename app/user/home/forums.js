@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Stack, router, useLocalSearchParams } from "expo-router";
-import { getFromStorage, formatDate } from "../../../common/helpers";
+import { formatDate } from "../../../common/helpers";
 import SearchBar from "../../../components/searchBar";
 import { theme } from "../../../constants/Colors";
 import Icon from "react-native-vector-icons/Feather";

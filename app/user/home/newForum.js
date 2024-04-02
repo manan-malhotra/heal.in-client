@@ -9,19 +9,11 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { theme } from "../../../constants/Colors";
-import { getFromStorage } from "../../../common/helpers";
 import axios from "axios";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 const NewForum = () => {
+    const user = useLocalSearchParams();
     const [query, setQuery] = useState("");
-    const [userId, setUserId] = useState("");
-    useEffect(() => {
-        getUserId();
-    });
-    const getUserId = async () => {
-        const value = await getFromStorage("userId");
-        setUserId(value);
-    };
     const handleSubmit = async () => {
         if (query.trim() === "") {
             return;
@@ -31,13 +23,13 @@ const NewForum = () => {
                 process.env.API_HOST + "/api/user/addQuestion",
                 {
                     question: query,
-                    userId,
+                    userId: user.userId,
                     description: "",
                 }
             );
             if (response.status === 200) {
                 console.log("success");
-                router.push("./forums");
+                router.dismissAll();
             }
         } catch (error) {
             console.log(error);
