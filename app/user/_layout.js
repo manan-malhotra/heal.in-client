@@ -1,11 +1,16 @@
 import { View, Text } from "react-native";
-import React from "react";
-import { Stack, Tabs } from "expo-router";
+import React, { useEffect } from "react";
+import { Stack, Tabs, useLocalSearchParams } from "expo-router";
 import Icon from "react-native-vector-icons/AntDesign";
 import Icon3 from "react-native-vector-icons/FontAwesome";
 import Icon2 from "react-native-vector-icons/Feather";
 
 export default function _layout() {
+    const user = useLocalSearchParams();
+    useEffect(() => {
+        console.log(user);
+        console.log("userTest");
+    }, []);
     return (
         <>
             <Tabs
@@ -17,6 +22,7 @@ export default function _layout() {
             >
                 <Tabs.Screen
                     name="home"
+                    initialParams={user}
                     options={{
                         title: "Home",
                         tabBarIcon: ({ focused, color, size }) => (
@@ -30,6 +36,7 @@ export default function _layout() {
                 />
                 <Tabs.Screen
                     name="assessment"
+                    initialParams={user}
                     options={{
                         title: "Assessment",
                         tabBarIcon: ({ focused, color, size }) => (
