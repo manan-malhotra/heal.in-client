@@ -20,6 +20,7 @@ import AddCardUsers from "../../../components/AddCardUsers";
 import Header from "../../../components/Header";
 import MyTextInput from "../../../components/TextInput";
 import axios from "axios";
+import GenderDropDown from "../../../components/GenderDropDown";
 
 const AddDoctorFields = () => {
   const [selectedGender, setSelectedGender] = useState(null);
@@ -31,30 +32,9 @@ const AddDoctorFields = () => {
   const [licenseNumber, setLicenseNumber] = useState(-1);
   const [password, setPassword] = useState("");
   const [specialization, setSpecialization] = useState("");
-
-  const [formData, setFormData] = useState({
-    age: "",
-    gender: null,
-  });
-  const handleInputChange = (name, text) => {
-    console.log(text);
-    setFormData({ ...formData, [name]: text });
-  };
-  let selectedValue;
+  const [gender, setGender] = useState("");
+  const [age, setAge] = useState(0);
   const handleSubmit = () => {
-    console.log(
-      "Full Name: ",
-      fullName,
-      email,
-      phoneNumber,
-      password,
-      formData.gender,
-      formData.age,
-      degree,
-      experience,
-      specialization,
-      licenseNumber
-    );
     handleSave();
   };
   const handleSave = async () => {
@@ -66,8 +46,8 @@ const AddDoctorFields = () => {
           firstName: firstName,
           lastName: lastName,
           email: email,
-          age: parseInt(formData.age),
-          gender: formData.gender,
+          age: parseInt(age),
+          gender: gender,
           password: password,
           role: "DOCTOR",
           contact: phoneNumber,
@@ -79,6 +59,7 @@ const AddDoctorFields = () => {
       );
       if (response.status === 200) {
         console.log("SUCCESS");
+        router.back();
       }
     } catch (error) {
       console.log("Error saving post: " + error);
@@ -120,30 +101,7 @@ const AddDoctorFields = () => {
               }}
             >
               <View style={styles.card}>
-                <RNPickerSelect
-                  onValueChange={(text) => handleInputChange("gender", text)}
-                  items={[
-                    { label: "Male", value: "male" },
-                    { label: "Female", value: "female" },
-                    { label: "Other", value: "other" },
-                  ]}
-                  placeholder={{
-                    label: "Gender",
-                    value: null,
-                  }}
-                  value={selectedValue}
-                  style={{
-                    inputIOS: {
-                      fontSize: 16,
-                      paddingVertical: 8.5,
-                      paddingLeft: 10,
-                      color: "black",
-                      paddingRight: 30,
-                      fontWeight: "600",
-                      fontSize: 20,
-                    },
-                  }}
-                />
+                <GenderDropDown onChangeText={setGender} />
               </View>
             </View>
 
@@ -159,8 +117,8 @@ const AddDoctorFields = () => {
                 <TextInput
                   placeholder="Age"
                   style={styles.textInput}
-                  value={formData.age}
-                  onChangeText={(text) => handleInputChange("age", text)}
+                  value={age}
+                  onChangeText={(text) => setAge(text)}
                 />
               </View>
             </View>

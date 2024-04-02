@@ -1,10 +1,16 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import React, { useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import Header from "../../../components/Header";
 import MyTextInput from "../../../components/TextInput";
@@ -13,10 +19,10 @@ import axios from "axios";
 const AddTestFields = () => {
   const params = useLocalSearchParams();
   const [question, setQuestion] = useState("");
-  const [option1, setOption1] = useState("");
-  const [option2, setOption2] = useState("");
-  const [option3, setOption3] = useState("");
-  const [option4, setOption4] = useState("");
+  const [option1, setOption1] = useState("Never");
+  const [option2, setOption2] = useState("Rarely");
+  const [option3, setOption3] = useState("Often");
+  const [option4, setOption4] = useState("Very Often");
 
   const handleSubmit = () => {
     console.log("Resources: ", question, option1, option2, option3, option4);
@@ -42,6 +48,7 @@ const AddTestFields = () => {
         setOption2("");
         setOption3("");
         setOption4("");
+        router.back();
       }
     } catch (error) {
       console.log("Error saving post: " + error);
@@ -55,30 +62,55 @@ const AddTestFields = () => {
       <View
         style={{ backgroundColor: "white", height: hp(70), paddingTop: "8%" }}
       >
-        <MyTextInput
+        {/* <MyTextInput
           placeholderText="Question"
           icon=""
           onChangeText={setQuestion}
-        />
+          value={question}
+        /> */}
+        <View
+          style={{
+            paddingTop: hp(0.7),
+            width: wp(80),
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+        >
+          <View style={styles.card}>
+            <TextInput
+              placeholder="Question"
+              style={[styles.textInput, styles.bioInput]}
+              keyboardType="default"
+              multiline={true}
+              numberOfLines={400}
+              onChangeText={setQuestion}
+              value={question}
+            />
+          </View>
+        </View>
         <MyTextInput
           placeholderText="Option 1"
           icon=""
           onChangeText={setOption1}
+          value={option1}
         />
         <MyTextInput
           placeholderText="Option 2"
           icon=""
           onChangeText={setOption2}
+          value={option2}
         />
         <MyTextInput
           placeholderText="Option 3"
           icon=""
           onChangeText={setOption3}
+          value={option3}
         />
         <MyTextInput
           placeholderText="Option 4"
           icon=""
           onChangeText={setOption4}
+          value={option4}
         />
       </View>
       <View style={{ flex: 1 }}>
@@ -137,5 +169,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 20,
     fontWeight: "600",
+  },
+  bioInput: {
+    height: 100,
   },
 });
