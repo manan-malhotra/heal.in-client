@@ -13,7 +13,7 @@ const ChatCard = ({ id, name, gender }) => {
                 <View style={styles.icon}>
                     <Image
                         source={{
-                            uri: `file:///Users/yashtalele/Developer/GitHub/heal.in/heal.in-client/assets/avatars/${
+                            uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/main/assets/avatars${
                                 gender === "Male" ? "female" : "male"
                             }/${id % 7}.png`,
                         }}
