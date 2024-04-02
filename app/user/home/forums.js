@@ -9,7 +9,7 @@ import {
     View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Stack, router } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { getFromStorage, formatDate } from "../../../common/helpers";
 import SearchBar from "../../../components/searchBar";
 import { theme } from "../../../constants/Colors";
@@ -20,7 +20,6 @@ import FloatingButton from "../../../components/floatingButton";
 const Forums = () => {
     const [forumData, setForumData] = useState({});
     const [mainData, setMainData] = useState({});
-    const [role, setRole] = useState("");
     const [searchText, setSearchText] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
     const [commentVisibleId, setCommentVisibleId] = useState([]);
@@ -28,8 +27,8 @@ const Forums = () => {
     const [userId, setUserId] = useState("");
     const [reportReason, setReportReason] = useState("");
     const [reportIndex, setReportIndex] = useState("");
+    const user = useLocalSearchParams();
     useEffect(() => {
-        getRole();
         getUserId();
         getForumData();
     }, []);
@@ -68,7 +67,7 @@ const Forums = () => {
         const json = {
             comment: comments[id],
             questionId: id,
-            userId,
+            userId: user.userId,
         };
         newComments = { ...comments };
         newComments[id] = "";
@@ -80,14 +79,6 @@ const Forums = () => {
             );
             console.log(response.data);
             getForumData();
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const getRole = async () => {
-        try {
-            const role = await getFromStorage("role");
-            setRole(role);
         } catch (error) {
             console.log(error);
         }
@@ -105,7 +96,7 @@ const Forums = () => {
             <Stack.Screen
                 options={{
                     headerTitle:
-                        role == "RESPONDER" ? "Respond to QnA" : "Forums",
+                        user.role == "RESPONDER" ? "Respond to QnA" : "Forums",
                 }}
             />
             <View style={styles.body}>
@@ -141,7 +132,7 @@ const Forums = () => {
                                         </View>
                                     </View>
                                     <View style={styles.cardDetailsRight}>
-                                        {role == "USER" && (
+                                        {user.role == "USER" && (
                                             <Pressable
                                                 onPress={() => {
                                                     setModalVisible(true);
@@ -270,7 +261,7 @@ const Forums = () => {
                                         </Text>
                                     </>
                                 )}
-                                {role == "RESPONDER" && (
+                                {user.role == "RESPONDER" && (
                                     <>
                                         <View style={styles.verticalLine} />
                                         <View style={styles.newComment}>
@@ -316,7 +307,7 @@ const Forums = () => {
                             </View>
                         ))}
                 </ScrollView>
-                {role == "USER" && (
+                {user.role == "USER" && (
                     <TouchableOpacity
                         onPress={() => {
                             router.push("./newForum");
@@ -337,7 +328,7 @@ const Forums = () => {
                 }}
             >
                 <ReportModal
-                    currentUserId={userId}
+                    currentUserId={user.userId}
                     setModalVisible={setModalVisible}
                     reportIndex={reportIndex}
                     reportReason={reportReason}

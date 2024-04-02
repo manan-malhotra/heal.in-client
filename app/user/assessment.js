@@ -1,9 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { router } from "expo-router";
+import React, { useEffect } from "react";
+import { router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "../../context/authcontext";
 const Assessment = () => {
     const { logout } = useAuth();
+    const user = useLocalSearchParams();
     return (
         <View
             style={{
@@ -14,7 +15,7 @@ const Assessment = () => {
             }}
         >
             <Pressable onPress={() => logout()}>
-                <Text>Assessment</Text>
+                <Text>{user.firstName}</Text>
             </Pressable>
         </View>
     );
