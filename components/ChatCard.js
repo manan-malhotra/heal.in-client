@@ -14,7 +14,7 @@ const ChatCard = ({ id, name, gender }) => {
           <Image
             source={{
               uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/main/assets/avatars/${
-                gender === "Male" ? "female" : "male"
+                gender === "male" ? "male" : "female"
               }/${id % 7}.png`,
             }}
             style={styles.avatar}
