@@ -6,15 +6,14 @@ import {
     widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-const PatientChatCard = ({ id, name, gender }) => {
-    const url = process.env.FILEPATH;
+const ChatCard = ({ id, name, gender }) => {
     return (
-        <View style={styles.patientCard}>
-            <View style={styles.patientIconContainer}>
-                <View style={styles.patientIcon}>
+        <View style={styles.card}>
+            <View style={styles.iconContainer}>
+                <View style={styles.icon}>
                     <Image
                         source={{
-                            uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/main/assets/avatars/${
+                            uri: `file:///Users/yashtalele/Developer/GitHub/heal.in/heal.in-client/assets/avatars/${
                                 gender === "Male" ? "female" : "male"
                             }/${id % 7}.png`,
                         }}
@@ -22,21 +21,21 @@ const PatientChatCard = ({ id, name, gender }) => {
                     />
                 </View>
             </View>
-            <View style={styles.patientNameContainer}>
-                <Text style={styles.patientName}>{name}</Text>
+            <View style={styles.nameContainer}>
+                <Text style={styles.name}>{name}</Text>
             </View>
         </View>
     );
 };
 
-export default PatientChatCard;
+export default ChatCard;
 
 const styles = StyleSheet.create({
     avatar: {
         width: "100%",
         height: "100%",
     },
-    patientCard: {
+    card: {
         marginLeft: "auto",
         marginRight: "auto",
         width: wp(77),
@@ -54,14 +53,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         flexDirection: "row",
     },
-    patientIconContainer: {
+    iconContainer: {
         justifyContent: "center",
         alignItems: "center",
         height: "100%",
         width: "35%",
         overflow: "hidden",
     },
-    patientIcon: {
+    icon: {
         width: "60%",
         aspectRatio: 1,
         borderRadius: 999,
@@ -69,13 +68,13 @@ const styles = StyleSheet.create({
         position: "absolute",
         overflow: "hidden",
     },
-    patientNameContainer: {
+    nameContainer: {
         justifyContent: "center",
         alignItems: "start",
         height: "100%",
         width: "65%",
     },
-    patientName: {
+    name: {
         padding: wp(0.2),
         fontSize: 16,
         fontWeight: "bold",
