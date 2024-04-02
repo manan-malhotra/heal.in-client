@@ -62,7 +62,7 @@ const styles_other = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 16,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.button,
   },
 });
 
@@ -80,7 +80,7 @@ const styles_me = StyleSheet.create({
     alignSelf: "flex-end",
     padding: 12,
     borderRadius: 16,
-    backgroundColor: "white",
+    backgroundColor: theme.colors.background,
     borderWidth: 1,
     borderColor: "rgb(229, 229, 229)",
   },
