@@ -5,6 +5,7 @@ import { theme } from "../../../constants/Colors";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import ArticleCard from "../../../components/articleCard";
 import { getAllBlogs } from "../../../common/userApi";
+import Avatar from "../../../components/Avatar";
 const Home = () => {
     const user = useLocalSearchParams();
     const [blogData, setBlogData] = useState([]);
@@ -22,10 +23,13 @@ const Home = () => {
             <Stack.Screen options={{ headerShown: false }} />
             <View style={styles.body}>
                 <View style={styles.row}>
-                    <Image
-                        source={require("../../../assets/avatars/male/0.png")}
-                        style={styles.avatar}
-                    />
+                    <View style={styles.avatar}>
+                        <Avatar
+                            userId={user.userId}
+                            gender={user.gender}
+                            role={user.role}
+                        />
+                    </View>
                     <View>
                         <Text style={styles.greetingHeader}>
                             Good Afternoon,
@@ -121,7 +125,8 @@ const styles = StyleSheet.create({
     avatar: {
         width: 50,
         height: 50,
-        marginHorizontal: 15,
+        marginLeft: 15,
+        marginRight: 10,
         marginVertical: 10,
     },
     greetingHeader: {
