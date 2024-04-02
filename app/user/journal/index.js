@@ -8,11 +8,10 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { theme } from "../../../constants/Colors";
-import Icon from "react-native-vector-icons/Ionicons";
 import { router } from "expo-router";
 import axios from "axios";
-import { getFromStorage } from "../../../common/helpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import FloatingButton from "../../../components/floatingButton";
 const Journal = () => {
     const [journalData, setJournalData] = useState([]);
     const [id, setId] = useState();
@@ -114,9 +113,7 @@ const Journal = () => {
             <TouchableOpacity
                 onPress={() => router.push("./journal/addJournal")}
             >
-                <View style={styles.floatingButton}>
-                    <Icon name="add-sharp" style={styles.floatingButtonIcon} />
-                </View>
+                <FloatingButton />
             </TouchableOpacity>
         </View>
     );
@@ -202,22 +199,5 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textTransform: "capitalize",
         justifyContent: "center",
-    },
-    floatingButton: {
-        position: "absolute",
-        bottom: 20,
-        right: 20,
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: theme.colors.button,
-    },
-    floatingButtonIcon: {
-        color: "white",
-        fontSize: 30,
-        marginLeft: "auto",
-        marginRight: "auto",
-        marginTop: "auto",
-        marginBottom: "auto",
     },
 });

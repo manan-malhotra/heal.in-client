@@ -5,16 +5,18 @@ import {
     StyleSheet,
     Text,
     TextInput,
+    TouchableOpacity,
     View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { getFromStorage, formatDate } from "../../../common/helpers";
 import SearchBar from "../../../components/searchBar";
 import { theme } from "../../../constants/Colors";
 import Icon from "react-native-vector-icons/Feather";
 import axios from "axios";
 import ReportModal from "../../../components/reportModal";
+import FloatingButton from "../../../components/floatingButton";
 const Forums = () => {
     const [forumData, setForumData] = useState({});
     const [mainData, setMainData] = useState({});
@@ -314,6 +316,15 @@ const Forums = () => {
                             </View>
                         ))}
                 </ScrollView>
+                {role == "USER" && (
+                    <TouchableOpacity
+                        onPress={() => {
+                            router.push("./newForum");
+                        }}
+                    >
+                        <FloatingButton />
+                    </TouchableOpacity>
+                )}
             </View>
             <Modal
                 visible={modalVisible}

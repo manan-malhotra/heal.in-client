@@ -7,10 +7,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const MainLayout = () => {
-  const { isAuthenticated } = useAuth();
-  const segments = useSegments();
-  const router = useRouter();
-  const { user } = useAuth();
+    const { isAuthenticated } = useAuth();
+    const segments = useSegments();
+    const router = useRouter();
+    const { user } = useAuth();
     useEffect(() => {
         const checkAuthentication = async () => {
             // TODO: Add Toast Messages
@@ -24,7 +24,7 @@ const MainLayout = () => {
                     //     pathname: "home",
                     //     params: user,
                     // });
-                    router.replace("/user/home/");
+                    router.replace("/user/");
                 }
             } else if (isAuthenticated == false) {
                 router.replace("signIn");
@@ -33,19 +33,19 @@ const MainLayout = () => {
         checkAuthentication();
     }, [isAuthenticated, user]);
 
-  return (
-    <View className="h-full">
-      <Slot />
-    </View>
-  );
+    return (
+        <View className="h-full">
+            <Slot />
+        </View>
+    );
 };
 
 export default function RootLayout() {
-  return (
-    <SafeAreaProvider>
-      <AuthContextProvider>
-        <MainLayout />
-      </AuthContextProvider>
-    </SafeAreaProvider>
-  );
+    return (
+        <SafeAreaProvider>
+            <AuthContextProvider>
+                <MainLayout />
+            </AuthContextProvider>
+        </SafeAreaProvider>
+    );
 }
