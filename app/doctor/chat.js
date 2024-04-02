@@ -106,7 +106,7 @@ const Chat = () => {
               alignItems: "center",
             }}
           >
-            <ActivityIndicator size="large" color={theme.colors.primary} />
+            <ActivityIndicator size="large" color={theme.colors.button} />
           </View>
         ) : (
           renderData.map((patient) => (
@@ -133,7 +133,7 @@ export default Chat;
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: "#ffffff",
     paddingTop: hp(10),
   },
 });
