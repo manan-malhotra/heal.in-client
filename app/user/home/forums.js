@@ -24,12 +24,10 @@ const Forums = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [commentVisibleId, setCommentVisibleId] = useState([]);
     const [comments, setComments] = useState({});
-    const [userId, setUserId] = useState("");
     const [reportReason, setReportReason] = useState("");
     const [reportIndex, setReportIndex] = useState("");
     const user = useLocalSearchParams();
     useEffect(() => {
-        getUserId();
         getForumData();
     }, []);
     const getForumData = async () => {
@@ -39,14 +37,6 @@ const Forums = () => {
             );
             setForumData(response.data);
             setMainData(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const getUserId = async () => {
-        try {
-            const id = await getFromStorage("userId");
-            setUserId(id);
         } catch (error) {
             console.log(error);
         }
