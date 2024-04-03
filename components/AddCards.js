@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   leftIconView: {
-    width: "60%",
+    width: "50%",
     aspectRatio: 1,
     borderRadius: 999,
     backgroundColor: theme.colors.button,
