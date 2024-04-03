@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     borderColor: theme.colors.text,
-    backgroundColor: "#fff",
+    backgroundColor: theme.colors.background,
     marginBottom: hp(2),
   },
   icon: {
