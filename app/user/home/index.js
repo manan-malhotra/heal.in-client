@@ -83,12 +83,14 @@ const Home = () => {
                                 />
                             </View>
                         </Pressable>
-                        <View style={styles.item}>
-                            <Image
-                                source={require("../../../assets/images/relax.png")}
-                                style={styles.itemImage}
-                            />
-                        </View>
+                        <Pressable onPress={() => router.push("./home/relax")}>
+                            <View style={styles.item}>
+                                <Image
+                                    source={require("../../../assets/images/relax.png")}
+                                    style={styles.itemImage}
+                                />
+                            </View>
+                        </Pressable>
                     </View>
                     <View style={styles.itemTextContainer}>
                         <Pressable onPress={() => router.push("./home/forums")}>
@@ -103,9 +105,11 @@ const Home = () => {
                                 <Text style={styles.itemHeading}>Videos</Text>
                             </View>
                         </Pressable>
-                        <View style={styles.itemText}>
-                            <Text style={styles.itemHeading}>Relax</Text>
-                        </View>
+                        <Pressable onPress={() => router.push("./home/relax")}>
+                            <View style={styles.itemText}>
+                                <Text style={styles.itemHeading}>Relax</Text>
+                            </View>
+                        </Pressable>
                     </View>
                 </View>
             </View>
