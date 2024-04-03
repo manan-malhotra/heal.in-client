@@ -1,4 +1,6 @@
 import {
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -36,8 +38,6 @@ const getRoomId = (userId1, userId2) => {
 };
 const ChatRoom = () => {
   const data = useLocalSearchParams();
-  console.log("DATA: ", data);
-  const item = useLocalSearchParams();
   const [messages, setMessages] = useState([]);
   const textRef = useRef("");
   const inputRef = useRef(null);
@@ -62,14 +62,13 @@ const ChatRoom = () => {
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
     } else {
-      const other_username = data.other_first_name + "_" + data.other_last_name;
-      const username = data.firstName + "_" + data.lastName;
+      const username = data.other_first_name + "_" + data.other_last_name;
       await setDoc(doc(db, "rooms", roomId), {
         roomId,
         userId1: data.other_userId,
-        userId2: data.UserId,
-        username1: other_username,
-        username2: username,
+        userId2: data.userId,
+        username1: username,
+        username2: data.firstName + "_" + data.lastName,
         createdAt: Timestamp.fromDate(new Date()),
         messagesExist: false,
       });
@@ -90,9 +89,7 @@ const ChatRoom = () => {
   };
 
   const handleSendMessage = async () => {
-    console.log("Inside this");
     let message = textRef.current.trim();
-    console.log(message);
     if (!message) return;
     try {
       let roomId = getRoomId(data.userId, data.other_userId);
@@ -114,31 +111,15 @@ const ChatRoom = () => {
         senderName: username,
         createdAt: Timestamp.fromDate(new Date()),
       });
-      console.log("new message id: ", newDoc.id);
     } catch (e) {
       Alert.alert("Message", e.message);
     }
   };
 
   return (
-    <View>
-      <View
-        style={{
-          flexDirection: "column",
-          backgroundColor: "white",
-          height: hp(90),
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: "white",
-            paddingTop: "20%",
-            paddingBottom: "2%",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+    <View style={styles.container}>
+      <View style={styles.mainContainer}>
+        <View style={styles.header}>
           <View style={styles.leftContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -168,72 +149,36 @@ const ChatRoom = () => {
           </View>
         </View>
         <View style={styles.verticalLine}></View>
-        <ScrollView
-          style={{
-            paddingLeft: wp(2),
-            paddingRight: wp(2),
-          }}
-        >
-          <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0)" }}>
-            <MessageList
-              messages={messages}
-              currentUserId={data.userId}
-              currentUsername={data.firstName + "_" + data.lastName}
-            />
-          </View>
+        <ScrollView style={styles.messageContainer}>
+          <MessageList
+            messages={messages}
+            currentUserId={data.userId}
+            currentUsername={data.firstName + "_" + data.lastName}
+          />
         </ScrollView>
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          paddingTop: hp(0),
-          justifyContent: "justify-between",
-          alignItems: "center",
-          marginHorizontal: wp(4),
-          height: hp(5),
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "justify-between",
-            backgroundColor: "#f1f1f1",
-            opacity: 0.8,
-            borderWidth: 1,
-            padding: 8,
-            borderColor: "black",
-            borderRadius: 15,
-            paddingLeft: wp(3),
-          }}
-        >
-          <TextInput
-            ref={inputRef}
-            onChangeText={(value) => (textRef.current = value)}
-            placeholder="Type message..."
-            placeholderTextColor={theme.colors.text}
-            style={{ flex: 1, marginRight: 2, fontSize: hp(1.5) }}
-          />
-          <TouchableOpacity
-            onPress={handleSendMessage}
-            style={{
-              backgroundColor: "#f1f1f1",
-              opacity: 0.8,
-              padding: 0,
-              marginRight: 1,
-              borderRadius: 999,
-            }}
-          >
-            <Feather
-              name="send"
-              size={hp(2.7)}
-              paddingTop="0.7%"
-              paddingBottom="7.2%"
-              paddingRight="3%"
-              color={theme.colors.text}
-            />
-          </TouchableOpacity>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null}>
+        <View style={{}}>
+          <View style={styles.inputContainer}>
+            <View style={styles.textInputContainer}>
+              <TextInput
+                ref={inputRef}
+                onChangeText={(value) => (textRef.current = value)}
+                placeholder="Type message..."
+                style={styles.textInput}
+                returnKeyType="send"
+                onSubmitEditing={handleSendMessage}
+              />
+              <TouchableOpacity
+                onPress={handleSendMessage}
+                style={styles.sendButton}
+              >
+                <Feather name="send" size={hp(2.7)} color="black" />
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -241,6 +186,65 @@ const ChatRoom = () => {
 export default ChatRoom;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  mainContainer: {
+    paddingTop: hp(6),
+    flex: 1,
+    backgroundColor: "white",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: hp("2%"),
+  },
+  headerText: {
+    fontSize: hp(2.2),
+    fontWeight: "600",
+  },
+  actions: {
+    flexDirection: "row",
+  },
+  verticalLine: {
+    height: 1,
+    width: wp(90),
+    marginLeft: "auto",
+    marginRight: "auto",
+    backgroundColor: "gray",
+  },
+  messageContainer: {
+    flex: 1,
+    paddingHorizontal: wp(2),
+    paddingVertical: wp(3),
+    marginBottom: wp(2),
+  },
+  inputContainer: {
+    height: hp(5),
+    width: wp(85),
+    marginBottom: hp(2),
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  textInputContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#f1f1f1",
+    borderRadius: 15,
+    borderWidth: 1,
+    paddingHorizontal: wp(3),
+  },
+  textInput: {
+    flex: 1,
+    fontSize: hp(1.5),
+    paddingVertical: Platform.OS === "ios" ? hp(1) : 0, // Add padding for iOS to prevent the cursor from being obscured by the keyboard
+  },
+  sendButton: {
+    padding: wp(2.5),
+    borderRadius: 999,
+  },
   leftContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -261,23 +265,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  bottomBar: {
+    height: hp(10),
+    backgroundColor: "red",
+  },
+});
 
+const styles1 = StyleSheet.create({
   // patientIcon: {
   //   width: "20%",
   //   aspectRatio: 1,
   //   borderRadius: 999,
   //   backgroundColor: theme.colors.button,
   // },
-  verticalLine: {
-    height: hp(0.1),
-    width: wp(89),
-    alignSelf: "center",
-    opacity: 1,
-    backgroundColor: "black",
-    marginVertical: 5,
-  },
-  bottomBar: {
-    height: hp(10),
-    backgroundColor: "red",
-  },
 });
