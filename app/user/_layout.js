@@ -73,6 +73,7 @@ export default function _layout() {
         />
         <Tabs.Screen
           name="profile"
+          initialParams={user}
           options={{
             title: "Profile",
             tabBarIcon: ({ focused, color, size }) => (
