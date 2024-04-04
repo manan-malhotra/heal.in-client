@@ -1,58 +1,60 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import { useAuth } from "../../../context/authcontext";
 import AddTestCards from "../../../components/AddTestCards";
 import Title from "../../../components/Title";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-const data = [
-    {
-        test_id: 1,
-        test_name: "ADHD",
-    },
-    {
-        test_id: 2,
-        test_name: "Anxiety",
-    },
-    {
-        test_id: 3,
-        test_name: "Depression",
-    },
-];
+import axios from "axios";
 const Assessment = () => {
-    useEffect(() => {
-        getTestScores();
-    });
-    const getTestScores = async () => {
-        // try {
-        //     const ADHD = await AsyncStorage.getItem("ADHD");
-        //     setADHD(ADHD);
-        //     const Anxiety = await AsyncStorage.getItem("Anxiety");
-        //     setAnxiety(Anxiety);
-        //     const Depression = await AsyncStorage.getItem("Depression");
-        //     setDepression(Depression);
-        // } catch (error) {
-        //     console.log(error);
-        // }
-    };
+    const [tests, setTests] = useState([]);
+    const [score, setScore] = useState([]);
     const user = useLocalSearchParams();
-    const handleTest = (testName) => {
-        // score = undefined;
-        // if (testName == "ADHD") {
-        //     score = ADHD;
-        // } else if (testName == "Depression") {
-        //     score = Depression;
-        // } else if (testName == "Anxiety") {
-        //     score = Anxiety;
-        // }
-        // if (score == undefined) {
-        //     router.push("./assessment/" + testName);
-        // } else {
-        //     router.push({
-        //         pathname: "./assessment/scoreCard",
-        //         params: { sum: score, total: 7 * 3, test: testName },
-        //     });
-        // }
+    useEffect(() => {
+        getTests();
+    }, []);
+    const getTests = async () => {
+        try {
+            const response = await axios.get(
+                process.env.API_HOST + "/test/getAll"
+            );
+            setTests(response.data);
+            getTestScores();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const getTestScores = async () => {
+        try {
+            const response = await axios.get(
+                process.env.API_HOST + "/test/getRecentScores/" + user.userId
+            );
+            console.log(response.data);
+            setScore(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleTest = (testId) => {
+        let sum = 0;
+        let total = 0;
+        score.forEach((item) => {
+            if (item.test_id.test_id === testId) {
+                //goto Scorecard
+                total = item.total;
+                console.log("Scorecard routing");
+                router.push({
+                    pathname: "./assessment/scoreCard",
+                    params: {
+                        sum: item.score,
+                        total: item.total,
+                        test: item.test_id.test_name,
+                    },
+                });
+            }
+        });
+        if (total == 0) {
+            router.push("./assessment/" + testId);
+        }
     };
     return (
         <View
@@ -63,15 +65,12 @@ const Assessment = () => {
             }}
         >
             <Title title="Self Assessment Tests" />
-            {data.map((item) => (
+            {tests.map((item, index) => (
                 <Pressable
-                    onPress={() => handleTest("ADHD")}
+                    onPress={() => handleTest(item.test_id)}
                     key={item.test_id}
                 >
-                    <AddTestCards
-                        testName={item.test_name}
-                        iconName={item.test_id - 1}
-                    />
+                    <AddTestCards testName={item.test_name} iconName={index} />
                 </Pressable>
             ))}
             {/* <Pressable onPress={() => router.push("./assessment/Postpartum")}>

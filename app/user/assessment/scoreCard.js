@@ -54,7 +54,7 @@ const ScoreCard = () => {
                 style={styles.anotherTestCard}
                 onPress={() => {
                     console.log("Trigger");
-                    router.navigate("/user/assessment");
+                    router.replace("/user/assessment");
                 }}
             >
                 <Text style={styles.anotherTest}>Take another Test</Text>
