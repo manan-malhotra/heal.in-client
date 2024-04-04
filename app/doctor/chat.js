@@ -81,6 +81,7 @@ const Chat = () => {
             last_name: name[1],
             user_id: doc.get("userId2"),
             contact: "1234567890",
+            gender: doc.get("userGender"),
           },
         };
         return temp;

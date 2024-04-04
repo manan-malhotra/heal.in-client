@@ -71,6 +71,7 @@ const ChatRoom = () => {
         username2: data.firstName + "_" + data.lastName,
         createdAt: Timestamp.fromDate(new Date()),
         messagesExist: false,
+        userGender: data.gender,
       });
     }
   };
@@ -269,13 +270,4 @@ const styles = StyleSheet.create({
     height: hp(10),
     backgroundColor: "red",
   },
-});
-
-const styles1 = StyleSheet.create({
-  // patientIcon: {
-  //   width: "20%",
-  //   aspectRatio: 1,
-  //   borderRadius: 999,
-  //   backgroundColor: theme.colors.button,
-  // },
 });
