@@ -1,9 +1,9 @@
 import React from "react";
-import { Tabs } from "expo-router";
+import { Tabs, useLocalSearchParams } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 
 export default function _layout() {
-
+  const user = useLocalSearchParams();
   return (
     <>
       <Tabs
@@ -54,6 +54,7 @@ export default function _layout() {
         />
         <Tabs.Screen
           name="adminProfile"
+          initialParams={user}
           options={{
             title: "Admin Profile",
             tabBarIcon: ({ focused, color, size }) => (
