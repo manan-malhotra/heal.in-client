@@ -10,6 +10,7 @@ const Assessment = () => {
     const user = useLocalSearchParams();
     useEffect(() => {
         getTests();
+        getTestScores();
     }, []);
     const getTests = async () => {
         try {
@@ -17,7 +18,6 @@ const Assessment = () => {
                 process.env.API_HOST + "/test/getAll"
             );
             setTests(response.data);
-            getTestScores();
         } catch (error) {
             console.log(error);
         }
@@ -37,8 +37,7 @@ const Assessment = () => {
     const handleTest = (testId, testName) => {
         let total = 0;
         score.forEach((item) => {
-            if (item.test_id.test_id === testId) {
-                //goto Scorecard
+            if (item.test_id.test_id === testId && total == 0) {
                 total = item.total;
                 router.push({
                     pathname: "./assessment/scoreCard",

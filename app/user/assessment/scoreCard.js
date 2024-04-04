@@ -53,6 +53,7 @@ const ScoreCard = () => {
                 onPress={() => {
                     console.log(testId + " TEST");
                     router.back();
+                    router.replace("/user/assessment");
                     router.push({
                         pathname: "user/assessment/" + test,
                         params: { testId },
