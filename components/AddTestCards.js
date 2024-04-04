@@ -15,7 +15,7 @@ const AddTestCards = ({ testName, iconName }) => {
                     <View style={styles.innerIcon}>
                         <Image
                             source={{
-                                uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/test/assets/tests/${iconName}`,
+                                uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/test/assets/tests/${iconName}.png`,
                             }}
                             style={styles.avatar}
                         />
