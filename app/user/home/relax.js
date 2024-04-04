@@ -123,7 +123,7 @@ const Relax = () => {
 
     return (
         <>
-            <Header title={"Practice  Meditation"} />
+            {/* <Header title={""} /> */}
             <View
                 style={{
                     backgroundColor: "white",
@@ -131,7 +131,6 @@ const Relax = () => {
                     justifyContent: "center",
                 }}
             >
-                <View></View>
                 <View
                     style={{ alignItems: "center", justifyContent: "center" }}
                 >
