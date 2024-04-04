@@ -43,18 +43,6 @@ export const AuthContextProvider = ({ children }) => {
                         await AsyncStorage.setItem("role", data.role);
                         await AsyncStorage.setItem("contact", strcontact);
                         await AsyncStorage.setItem("userId", strUserId);
-                        await AsyncStorage.setItem(
-                            "ADHD",
-                            String(data.adhdTestScore)
-                        );
-                        await AsyncStorage.setItem(
-                            "Anxiety",
-                            String(data.anxietyTestScore)
-                        );
-                        await AsyncStorage.setItem(
-                            "Depression",
-                            String(data.depressionTestScore)
-                        );
                         if (data) setUser(data);
                     }
                 } catch {
@@ -67,9 +55,6 @@ export const AuthContextProvider = ({ children }) => {
                     await AsyncStorage.removeItem("role");
                     await AsyncStorage.removeItem("contact");
                     await AsyncStorage.removeItem("userId");
-                    await AsyncStorage.removeItem("ADHD");
-                    await AsyncStorage.removeItem("Anxiety");
-                    await AsyncStorage.removeItem("Depression");
                     axios.defaults.headers.common["Authorization"] = "";
                     setIsAuthenticated(false);
                 }
