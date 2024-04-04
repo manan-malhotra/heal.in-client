@@ -19,10 +19,10 @@ import axios from "axios";
 const AddTestFields = () => {
     const params = useLocalSearchParams();
     const [question, setQuestion] = useState("");
-    const [option1, setOption1] = useState("Never");
-    const [option2, setOption2] = useState("Rarely");
-    const [option3, setOption3] = useState("Often");
-    const [option4, setOption4] = useState("Very Often");
+    const [option1, setOption1] = useState("Not at all");
+    const [option2, setOption2] = useState("Several Days");
+    const [option3, setOption3] = useState("More than half the days");
+    const [option4, setOption4] = useState("Nearly every day");
 
     const handleSubmit = () => {
         console.log(
