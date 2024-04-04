@@ -34,26 +34,28 @@ const Assessment = () => {
         }
     };
 
-    const handleTest = (testId) => {
-        let sum = 0;
+    const handleTest = (testId, testName) => {
         let total = 0;
         score.forEach((item) => {
             if (item.test_id.test_id === testId) {
                 //goto Scorecard
                 total = item.total;
-                console.log("Scorecard routing");
                 router.push({
                     pathname: "./assessment/scoreCard",
                     params: {
                         sum: item.score,
                         total: item.total,
                         test: item.test_id.test_name,
+                        testId,
                     },
                 });
             }
         });
         if (total == 0) {
-            router.push("./assessment/" + testId);
+            router.push({
+                pathname: "./assessment/" + testName,
+                params: { testId },
+            });
         }
     };
     return (
@@ -67,7 +69,7 @@ const Assessment = () => {
             <Title title="Self Assessment Tests" />
             {tests.map((item, index) => (
                 <Pressable
-                    onPress={() => handleTest(item.test_id)}
+                    onPress={() => handleTest(item.test_id, item.test_name)}
                     key={item.test_id}
                 >
                     <AddTestCards testName={item.test_name} iconName={index} />
