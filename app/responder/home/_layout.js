@@ -51,6 +51,12 @@ const _layout = () => {
                     headerTintColor: "black",
                 }}
             />
+            <Stack.Screen
+                name="relax"
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Stack>
     );
 };
