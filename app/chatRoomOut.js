@@ -1,7 +1,6 @@
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -31,6 +30,7 @@ import {
   Timestamp,
   where,
 } from "firebase/firestore";
+import { Encrypt, Decrypt } from "../common/aes";
 const getRoomId = (userId1, userId2) => {
   const sortedIds = [userId1, userId2].sort();
   const roomId = sortedIds.join("-");
@@ -108,7 +108,7 @@ const ChatRoom = () => {
       const username = data.firstName + "_" + data.lastName;
       const newDoc = await addDoc(messagesRef, {
         userId: data.userId,
-        text: message,
+        text: Encrypt(message),
         senderName: username,
         createdAt: Timestamp.fromDate(new Date()),
       });
