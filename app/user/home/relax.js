@@ -123,7 +123,6 @@ const Relax = () => {
 
     return (
         <>
-            {/* <Header title={""} /> */}
             <View
                 style={{
                     backgroundColor: "white",
