@@ -1,4 +1,5 @@
 import {
+    Alert,
     KeyboardAvoidingView,
     ScrollView,
     StyleSheet,
@@ -11,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { theme } from "../../../constants/Colors";
 import axios from "axios";
 import { router, useLocalSearchParams } from "expo-router";
+import { sentimentScore } from "../../../common/sentiment";
 const NewForum = () => {
     const user = useLocalSearchParams();
     const [query, setQuery] = useState("");
@@ -19,6 +21,15 @@ const NewForum = () => {
             return;
         }
         try {
+            const score = await sentimentScore(query);
+            if (score < -0.2) {
+                Alert.alert(
+                    "Warning",
+                    "Please refrain from using negative words in your query.",
+                    [{ text: "Ok" }]
+                );
+                return;
+            }
             const response = await axios.post(
                 process.env.API_HOST + "/api/user/addQuestion",
                 {
