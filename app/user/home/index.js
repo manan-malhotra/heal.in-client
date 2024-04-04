@@ -9,13 +9,25 @@ import Avatar from "../../../components/Avatar";
 const Home = () => {
     const user = useLocalSearchParams();
     const [blogData, setBlogData] = useState([]);
+    const [greeting, setGreeting] = useState("Good Morning");
     useEffect(() => {
+        getGreeting();
         getBlogData();
     }, []);
     const getBlogData = async () => {
         const response = await getAllBlogs();
         if (response.status === 200) {
             setBlogData(response.data.slice(0, 3));
+        }
+    };
+    const getGreeting = () => {
+        const currentHour = new Date().getHours();
+        if (currentHour < 12) {
+            setGreeting("Good Morning");
+        } else if (currentHour < 18) {
+            setGreeting("Good Afternoon");
+        } else {
+            setGreeting("Good Evening");
         }
     };
     return (
@@ -31,9 +43,7 @@ const Home = () => {
                         />
                     </View>
                     <View>
-                        <Text style={styles.greetingHeader}>
-                            Good Afternoon,
-                        </Text>
+                        <Text style={styles.greetingHeader}>{greeting}</Text>
                         <Text style={styles.greetingName}>
                             {user.role == "DOCTOR" && "Dr. "}
                             {user.firstName} {user.lastName}

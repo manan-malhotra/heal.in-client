@@ -123,20 +123,29 @@ const Forums = () => {
                                     </View>
                                     <View style={styles.cardDetailsRight}>
                                         {user.role == "USER" && (
-                                            <Pressable
-                                                onPress={() => {
-                                                    setModalVisible(true);
-                                                    setReportIndex(
-                                                        question.public_qna_id
-                                                    );
-                                                }}
-                                            >
-                                                <Icon
-                                                    style={styles.alertIcon}
-                                                    name="alert-triangle"
-                                                    size={25}
-                                                />
-                                            </Pressable>
+                                            <>
+                                                {question.user_id.user_id !=
+                                                    user.userId && (
+                                                    <Pressable
+                                                        onPress={() => {
+                                                            setModalVisible(
+                                                                true
+                                                            );
+                                                            setReportIndex(
+                                                                question.public_qna_id
+                                                            );
+                                                        }}
+                                                    >
+                                                        <Icon
+                                                            style={
+                                                                styles.alertIcon
+                                                            }
+                                                            name="alert-triangle"
+                                                            size={25}
+                                                        />
+                                                    </Pressable>
+                                                )}
+                                            </>
                                         )}
                                     </View>
                                 </View>
