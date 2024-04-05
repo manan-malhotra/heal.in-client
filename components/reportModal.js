@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import React from "react";
 import axios from "axios";
+import { theme } from "../constants/Colors";
 
 const ReportModal = ({
     currentUserId,
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     submitButton: {
-        backgroundColor: "red",
+        backgroundColor: theme.colors.error,
         paddingVertical: 10,
         borderRadius: 10,
         alignItems: "center",
