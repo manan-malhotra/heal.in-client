@@ -51,28 +51,32 @@ const AddVideosFields = () => {
         <MyTextInput placeholderText="URL" icon="" onChangeText={setURL} />
       </View>
       <View style={{ flex: 1 }}>
-        <View
-          style={{
-            width: wp(45),
-            backgroundColor: theme.colors.primary,
-            height: hp(5.5),
-            borderRadius: 20,
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
+        <TouchableOpacity onPress={() => handleSubmit()}>
           <View
-            style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
+            style={{
+              width: wp(45),
+              backgroundColor: theme.colors.button,
+              height: hp(5.5),
+              borderRadius: 20,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
           >
-            <TouchableOpacity onPress={() => handleSubmit()}>
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                flex: 1,
+              }}
+            >
               <Text
                 style={{ fontSize: hp(2.2), fontWeight: "600", color: "white" }}
               >
                 Add Video
               </Text>
-            </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
