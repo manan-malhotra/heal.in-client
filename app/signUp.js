@@ -330,7 +330,7 @@ const ErrorView = ({ error }) => {
         marginLeft: "auto",
         marginRight: "auto",
         marginTop: hp(-1),
-        marginBottom: hp(0.5),
+        marginBottom: hp(0.45),
       }}
     >
       <Text style={styles.error}>{error}</Text>

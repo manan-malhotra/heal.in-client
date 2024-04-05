@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, Text, View, Modal } from "react-native";
+import {
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+    Modal,
+    ScrollView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../../constants/Colors";
@@ -23,8 +30,6 @@ const BlogIndividual = () => {
     const getBlogData = async (id) => {
         const response = await getBlogById(id);
         if (response.status === 200) {
-            console.log(response.data);
-            console.log("yeet");
             const array = [];
             array.push(response.data);
             setBlogData(array);
@@ -34,7 +39,6 @@ const BlogIndividual = () => {
         try {
             const id = await getFromStorage("userId");
             setCurrentUserId(id);
-            console.log(currentUserId);
         } catch (error) {
             console.log(error);
         }
@@ -89,11 +93,11 @@ const BlogIndividual = () => {
                         </View>
                     </View>
                     <View style={styles.verticalLine} />
-                    <View style={styles.blogContent}>
+                    <ScrollView style={styles.blogContent}>
                         <Text style={styles.blogDescription}>
                             {blogData[0].description}
                         </Text>
-                    </View>
+                    </ScrollView>
                 </>
             )}
             {blogData.length === 0 && (

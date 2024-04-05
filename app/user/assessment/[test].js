@@ -15,15 +15,18 @@ import { ActivityIndicator } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const Test = () => {
     const { test } = useLocalSearchParams();
+    const { testId } = useLocalSearchParams();
+    const { userId } = useLocalSearchParams();
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [data, setData] = useState([]);
+    console.log(testId);
     useEffect(() => {
         fetchData();
     }, []);
     const fetchData = async () => {
         try {
             const response = await axios.get(
-                process.env.API_HOST + "/admin/getAll" + test + "Test"
+                process.env.API_HOST + "/test/getQuestions/" + testId
             );
             setData(response.data);
         } catch (error) {
@@ -36,13 +39,6 @@ const Test = () => {
             [question]: option,
         }));
     };
-    const sendScoreToAsync = async (sum) => {
-        try {
-            AsyncStorage.setItem(test, String(sum));
-        } catch (error) {
-            console.log(error);
-        }
-    };
     const handleSubmit = async () => {
         console.log(selectedOptions);
         const sum = Object.values(selectedOptions).reduce(
@@ -53,11 +49,10 @@ const Test = () => {
         if (length == data.length) {
             //push to scoreCard
             await sendScore(sum);
-            await sendScoreToAsync(sum);
             router.dismissAll();
             router.push({
                 pathname: "./scoreCard",
-                params: { sum, total: data.length * 3, test },
+                params: { sum, total: data.length * 3, test, testId },
             });
         } else {
             Alert.alert(
@@ -74,10 +69,12 @@ const Test = () => {
         try {
             const json = {
                 score: sum,
-                test: test.toLowerCase(),
+                total: data.length * 3,
+                testId,
+                userId,
             };
             const response = await axios.post(
-                process.env.API_HOST + "/api/user/addScore",
+                process.env.API_HOST + "/test/addScores",
                 json
             );
         } catch (error) {
@@ -99,24 +96,34 @@ const Test = () => {
                 {data.length > 0 ? (
                     <ScrollView>
                         {data.map((item, index) => (
-                            <View style={styles.questionCard} key={item.id}>
+                            <View
+                                style={styles.questionCard}
+                                key={item.question_id}
+                            >
                                 <Text style={styles.question}>
                                     Q{index + 1}. {item.question}
                                 </Text>
                                 <View style={{ flexDirection: "row" }}>
                                     <TouchableOpacity
                                         style={
-                                            selectedOptions[item.id] === 0
+                                            selectedOptions[
+                                                item.question_id
+                                            ] === 0
                                                 ? styles.selectedOptionCard
                                                 : styles.optionCard
                                         }
                                         onPress={() => {
-                                            handleOptionSelected(item.id, 0);
+                                            handleOptionSelected(
+                                                item.question_id,
+                                                0
+                                            );
                                         }}
                                     >
                                         <Text
                                             style={
-                                                selectedOptions[item.id] === 0
+                                                selectedOptions[
+                                                    item.question_id
+                                                ] === 0
                                                     ? styles.selectedOption
                                                     : styles.option
                                             }
@@ -126,17 +133,24 @@ const Test = () => {
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         style={
-                                            selectedOptions[item.id] === 1
+                                            selectedOptions[
+                                                item.question_id
+                                            ] === 1
                                                 ? styles.selectedOptionCard
                                                 : styles.optionCard
                                         }
                                         onPress={() => {
-                                            handleOptionSelected(item.id, 1);
+                                            handleOptionSelected(
+                                                item.question_id,
+                                                1
+                                            );
                                         }}
                                     >
                                         <Text
                                             style={
-                                                selectedOptions[item.id] === 1
+                                                selectedOptions[
+                                                    item.question_id
+                                                ] === 1
                                                     ? styles.selectedOption
                                                     : styles.option
                                             }
@@ -148,17 +162,24 @@ const Test = () => {
                                 <View style={{ flexDirection: "row" }}>
                                     <TouchableOpacity
                                         style={
-                                            selectedOptions[item.id] === 2
+                                            selectedOptions[
+                                                item.question_id
+                                            ] === 2
                                                 ? styles.selectedOptionCard
                                                 : styles.optionCard
                                         }
                                         onPress={() => {
-                                            handleOptionSelected(item.id, 2);
+                                            handleOptionSelected(
+                                                item.question_id,
+                                                2
+                                            );
                                         }}
                                     >
                                         <Text
                                             style={
-                                                selectedOptions[item.id] === 2
+                                                selectedOptions[
+                                                    item.question_id
+                                                ] === 2
                                                     ? styles.selectedOption
                                                     : styles.option
                                             }
@@ -168,17 +189,24 @@ const Test = () => {
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         style={
-                                            selectedOptions[item.id] === 3
+                                            selectedOptions[
+                                                item.question_id
+                                            ] === 3
                                                 ? styles.selectedOptionCard
                                                 : styles.optionCard
                                         }
                                         onPress={() => {
-                                            handleOptionSelected(item.id, 3);
+                                            handleOptionSelected(
+                                                item.question_id,
+                                                3
+                                            );
                                         }}
                                     >
                                         <Text
                                             style={
-                                                selectedOptions[item.id] === 3
+                                                selectedOptions[
+                                                    item.question_id
+                                                ] === 3
                                                     ? styles.selectedOption
                                                     : styles.option
                                             }

@@ -5,10 +5,9 @@ import { theme } from "../../../constants/Colors";
 import { usePreventRemoveContext } from "@react-navigation/native";
 
 const ScoreCard = () => {
-    const { test, sum, total } = useLocalSearchParams();
+    const { test, sum, total, testId } = useLocalSearchParams();
     const [type, setType] = useState("Severe");
     const nav = useNavigation();
-    usePreventRemoveContext();
     useEffect(() => {
         const percent = (sum / total) * 100;
         if (percent < 20) {
@@ -22,7 +21,6 @@ const ScoreCard = () => {
         } else if (percent < 100) {
             setType("Severe");
         }
-        nav.canGoBack = () => false;
     }, []);
 
     return (
@@ -44,20 +42,25 @@ const ScoreCard = () => {
             <TouchableOpacity
                 style={styles.anotherTestCard}
                 onPress={() => {
-                    router.back();
-                    router.push("./" + test);
+                    console.log("Trigger");
+                    router.replace("/user/assessment");
                 }}
             >
-                <Text style={styles.anotherTest}>Test Again</Text>
+                <Text style={styles.anotherTest}>Take another Test</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.anotherTestCard}
                 onPress={() => {
-                    console.log("Trigger");
-                    router.navigate("/user/assessment");
+                    console.log(testId + " TEST");
+                    router.back();
+                    router.replace("/user/assessment");
+                    router.push({
+                        pathname: "user/assessment/" + test,
+                        params: { testId },
+                    });
                 }}
             >
-                <Text style={styles.anotherTest}>Take another Test</Text>
+                <Text style={styles.anotherTest}>Test Again</Text>
             </TouchableOpacity>
             <View style={styles.summaryCard}>
                 <Text style={styles.summary}>
