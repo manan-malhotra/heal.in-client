@@ -93,10 +93,13 @@ const BlogIndividual = () => {
                         </View>
                     </View>
                     <View style={styles.verticalLine} />
+
                     <ScrollView style={styles.blogContent}>
-                        <Text style={styles.blogDescription}>
-                            {blogData[0].description}
-                        </Text>
+                        <View style={{ height: "100%", paddingBottom: 100 }}>
+                            <Text style={styles.blogDescription}>
+                                {blogData[0].description}
+                            </Text>
+                        </View>
                     </ScrollView>
                 </>
             )}
