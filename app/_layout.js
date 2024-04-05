@@ -8,31 +8,23 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const MainLayout = () => {
     const { isAuthenticated } = useAuth();
-    const segments = useSegments();
     const router = useRouter();
     const { user } = useAuth();
 
     useEffect(() => {
         const checkAuthentication = async () => {
-            // TODO: Add Toast Messages
-            if (typeof isAuthenticated == "undefined") return;
-            const inApp = segments[0] == "(app)";
-            if (isAuthenticated && !inApp) {
+            if (typeof isAuthenticated == "undefined") router.replace("signIn");
+            if (isAuthenticated) {
                 if (user == null || user.role == "") {
                     router.replace("signIn");
                 } else {
                     let route = user.role.toLowerCase();
-                    // router.replace({
-                    //     pathname: "home",
-                    //     params: user,
-                    // });
-
                     router.replace({
                         pathname: "/" + route + "/",
                         params: user,
                     });
                 }
-            } else if (isAuthenticated == false) {
+            } else {
                 router.replace("signIn");
             }
         };

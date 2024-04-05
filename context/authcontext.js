@@ -12,10 +12,9 @@ export const AuthContextProvider = ({ children }) => {
     const [userId, setUserId] = useState();
 
     useEffect(() => {
-        console.log(process.env.API_HOST + "TESTS");
+        console.log(process.env.API_HOST);
         const loadToken = async () => {
             const token = await AsyncStorage.getItem("token");
-            console.log(typeof token);
             setIsAuthenticated(!!token); // Set isAuthenticated to true if token exists, false otherwise
             if (token) {
                 axios.defaults.headers.common[
@@ -27,8 +26,6 @@ export const AuthContextProvider = ({ children }) => {
                         process.env.API_HOST + "/api/user/getProfile"
                     );
                     if (profileResponse.status === 200) {
-                        console.log(profileResponse.data);
-                        console.log(profileResponse.data + "Space");
                         const data = profileResponse.data;
                         const strAge = String(data.age);
                         const strUserId = String(data.userId);
@@ -120,14 +117,12 @@ export const AuthContextProvider = ({ children }) => {
                 return;
             }
 
-            console.log(error.response.status);
             console.log("Error logging in: ", error);
             setIsAuthenticated(false);
         }
     };
 
     const register = async (userData) => {
-        console.log(userData);
         try {
             const response = await axios.post(
                 process.env.API_HOST + "/api/user/register",
@@ -135,7 +130,6 @@ export const AuthContextProvider = ({ children }) => {
             );
 
             if (response.status === 200) {
-                console.log("Registered: " + response.data);
                 const token = response.data;
                 await AsyncStorage.setItem("token", token);
                 axios.defaults.headers.common[
@@ -190,7 +184,6 @@ export const useAuth = () => {
     const value = useContext(AuthContext);
     const { isAuthenticated } = value;
     const { user } = useContext(AuthContext);
-    console.log(isAuthenticated + " test");
     if (!value) {
         throw new Error("useAuth must be used within an AuthProvider");
     }

@@ -12,7 +12,7 @@ const Avatar = ({ userId, gender, role }) => {
             source={{
                 uri: `https://raw.githubusercontent.com/manan-malhotra/heal.in-client/test/assets/avatars/${
                     role?.toLowerCase() === "doctor" ? "doctor" : ""
-                }${gender.toLowerCase() === "male" ? "male" : "female"}/${
+                }${gender?.toLowerCase() === "male" ? "male" : "female"}/${
                     userId % 7
                 }.png`,
             }}

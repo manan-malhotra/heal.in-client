@@ -55,7 +55,13 @@ const Home = () => {
                         <Text style={styles.articleHeader}>Articles</Text>
                     </View>
                     <View style={styles.seeAllContainer}>
-                        <Pressable onPress={() => router.push("./home/blogs")}>
+                        <Pressable
+                            onPress={() =>
+                                router.push(
+                                    user.role.toLowerCase() + "/home/blogs"
+                                )
+                            }
+                        >
                             <Text style={styles.seeAll}>See All</Text>
                         </Pressable>
                     </View>
@@ -65,7 +71,10 @@ const Home = () => {
                         <Pressable
                             key={blog.id}
                             onPress={() =>
-                                router.push(`./home/blogs/${blog.id}`)
+                                router.push(
+                                    user.role.toLowerCase() +
+                                        `/home/blogs/${blog.id}`
+                                )
                             }
                         >
                             <ArticleCard {...blog} />
@@ -75,7 +84,13 @@ const Home = () => {
                 <View style={styles.verticalLine}></View>
                 <View style={styles.row2}>
                     <View style={styles.itemContainer}>
-                        <Pressable onPress={() => router.push("./home/forums")}>
+                        <Pressable
+                            onPress={() =>
+                                router.push(
+                                    user.role.toLowerCase() + "/home/forums"
+                                )
+                            }
+                        >
                             <View style={styles.item}>
                                 <Image
                                     source={require("../../../assets/images/forums.png")}
@@ -84,7 +99,12 @@ const Home = () => {
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() => router.push("./home/selfHelpVideos")}
+                            onPress={() =>
+                                router.push(
+                                    user.role.toLowerCase() +
+                                        "/home/selfHelpVideos"
+                                )
+                            }
                         >
                             <View style={styles.item}>
                                 <Image
@@ -93,7 +113,13 @@ const Home = () => {
                                 />
                             </View>
                         </Pressable>
-                        <Pressable onPress={() => router.push("./home/relax")}>
+                        <Pressable
+                            onPress={() =>
+                                router.push(
+                                    user.role.toLowerCase() + "/home/relax"
+                                )
+                            }
+                        >
                             <View style={styles.item}>
                                 <Image
                                     source={require("../../../assets/images/relax.png")}
@@ -103,19 +129,36 @@ const Home = () => {
                         </Pressable>
                     </View>
                     <View style={styles.itemTextContainer}>
-                        <Pressable onPress={() => router.push("./home/forums")}>
+                        <Pressable
+                            onPress={() =>
+                                router.push(
+                                    user.role.toLowerCase() + "/home/forums"
+                                )
+                            }
+                        >
                             <View style={styles.itemText}>
                                 <Text style={styles.itemHeading}>Forums</Text>
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() => router.push("./home/selfHelpVideos")}
+                            onPress={() =>
+                                router.push(
+                                    user.role.toLowerCase() +
+                                        "/home/selfHelpVideos"
+                                )
+                            }
                         >
                             <View style={styles.itemText}>
                                 <Text style={styles.itemHeading}>Videos</Text>
                             </View>
                         </Pressable>
-                        <Pressable onPress={() => router.push("./home/relax")}>
+                        <Pressable
+                            onPress={() =>
+                                router.push(
+                                    user.role.toLowerCase() + "/home/relax"
+                                )
+                            }
+                        >
                             <View style={styles.itemText}>
                                 <Text style={styles.itemHeading}>Relax</Text>
                             </View>
