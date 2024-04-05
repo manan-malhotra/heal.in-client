@@ -28,6 +28,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(0);
+  const [errors, setErrors] = useState("");
 
   const handleSignUp = () => {
     const [firstName, lastName] = fullName.split(" ");
@@ -41,10 +42,91 @@ export default function SignUp() {
       password: password,
       role: "USER",
     };
-    try {
-      register(userData);
-    } catch (error) {
-      console.log(error);
+
+    const CustomTextInput = ({
+      placeholderText,
+      icon,
+      isEmail,
+      isNum,
+      onChangeText,
+      value,
+      error,
+    }) => {
+      return (
+        <View style={styles.container}>
+          <View style={styles.iconContainer}>
+            {/* Your icon rendering code */}
+          </View>
+          <MyTextInput
+            style={styles.input}
+            placeholder={placeholderText}
+            placeholderTextColor={theme.colors.placeholder}
+            onChangeText={onChangeText}
+            keyboardType={
+              isNum ? "numeric" : isEmail ? "email-address" : "default"
+            }
+            value={value}
+          />
+          {error && (
+            <View style={{ flexDirection: "row" }}>
+              <MaterialIcons name="error" size={10} color="red" />
+              <Text style={styles.error}>{error}</Text>
+            </View>
+          )}
+        </View>
+      );
+    };
+
+    function validateRegistrationData(data) {
+      const passwordRegex =
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$/;
+      let errors = {};
+
+      if (!data.firstName || data.firstName.trim() === "") {
+        errors.fullName = "Name cannot be empty";
+      }
+      if (!data.lastName || data.firstName.trim() === "") {
+        errors.fullName = "Last name needed";
+      }
+      if (!data.age || isNaN(data.age)) {
+        errors.age = "Enter Valid age";
+      }
+
+      if (!data.gender) {
+        errors.gender = "Select gender";
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!data.email || !emailRegex.test(data.email)) {
+        errors.email = "Email must be a valid email address";
+      }
+
+      const contactRegex = /^\d{10}$/;
+      if (!data.contact || !contactRegex.test(data.contact)) {
+        errors.phoneNumber = "Must be a valid 10-digit phone number";
+      }
+
+      if (!data.password) {
+        errors.password = "Password is required";
+      }
+      if (!passwordRegex.test(data.password)) {
+        errors.password =
+          "Password must be at least 8 characters long and must contain atleast - \n \u2022 one uppercase letter \n \u2022 one lowercase letter \n \u2022 one number \n \u2022 one special character";
+      }
+
+      return errors;
+    }
+
+    const validationErrors = validateRegistrationData(userData);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      try {
+        console.log(userData);
+        // register(userData);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -109,18 +191,25 @@ export default function SignUp() {
             placeholderText={"Full Name"}
             icon={"user"}
             onChangeText={setFullName}
+            error={errors.fullName}
           />
+          {errors && <ErrorView error={errors.fullName} />}
           <MyTextInput
             placeholderText={"Email"}
             icon={"mail"}
             isEmail={true}
             onChangeText={setEmail}
+            error={errors.email}
           />
+          {errors && <ErrorView error={errors.email} />}
           <MyTextInput
             placeholderText={"Phone Number"}
             icon={"smartphone"}
-            onChangeText={setPassword}
+            onChangeText={setPhoneNumber}
+            isNum={true}
+            error={errors.phoneNumber}
           />
+          {errors && <ErrorView error={errors.phoneNumber} />}
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <View
               style={{
@@ -131,8 +220,12 @@ export default function SignUp() {
               }}
             >
               <View style={styles.card}>
-                <GenderDropDown onChangeText={setGender} />
+                <GenderDropDown
+                  onChangeText={setGender}
+                  error={errors.gender}
+                />
               </View>
+              {errors && <ErrorView error={errors.gender} />}
             </View>
 
             <View
@@ -152,8 +245,10 @@ export default function SignUp() {
                   secureTextEntry={false}
                   value={age}
                   onChangeText={(text) => setAge(text)}
+                  error={errors.age}
                 />
               </View>
+              {errors && <ErrorView error={errors.age} />}
             </View>
           </View>
           <MyTextInput
@@ -162,6 +257,7 @@ export default function SignUp() {
             isPassword={true}
             onChangeText={setPassword}
           />
+          {errors && <ErrorView error={errors.password} />}
         </View>
         <View style={{ backgroundColor: "white" }}>
           <View
@@ -223,6 +319,25 @@ export default function SignUp() {
   );
 }
 
+const ErrorView = ({ error }) => {
+  console.log(error);
+  return (
+    <View
+      style={{
+        justifyContent: "flex-start",
+        paddingBottom: 10,
+        width: wp(80),
+        marginLeft: "auto",
+        marginRight: "auto",
+        marginTop: hp(-1),
+        marginBottom: hp(0.5),
+      }}
+    >
+      <Text style={styles.error}>{error}</Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   body: {
     flex: 1,
@@ -266,5 +381,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 20,
     fontWeight: "600",
+  },
+  error: {
+    color: theme.colors.error,
   },
 });
