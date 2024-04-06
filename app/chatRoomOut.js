@@ -93,7 +93,6 @@ const ChatRoom = () => {
       });
     }
   };
-
   const handleBackPress = () => {
     const user = {
       userId: data.userId,
@@ -187,7 +186,7 @@ const ChatRoom = () => {
                     ],
                     { cancelable: false }
                   );
-                } else {
+                } else if (data.role == "DOCTOR") {
                   Alert.alert(
                     "Room Id",
                     codeSnippet,
