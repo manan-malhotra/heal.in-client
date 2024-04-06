@@ -1,4 +1,5 @@
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -6,7 +7,9 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Linking,
   View,
+  Clipboard,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../firebaseConfig";
@@ -36,11 +39,26 @@ const getRoomId = (userId1, userId2) => {
   const roomId = sortedIds.join("-");
   return roomId;
 };
+
+function generateRoomId(length) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
 const ChatRoom = () => {
+  const [codeSnippet, setCodeSnippet] = useState("");
   const data = useLocalSearchParams();
   const [messages, setMessages] = useState([]);
   const textRef = useRef("");
   const inputRef = useRef(null);
+  const copyCodeToClipboard = async (videoId) => {
+    Clipboard.setString(videoId);
+  };
 
   useEffect(() => {
     createRoomIfNotExists();
@@ -117,6 +135,10 @@ const ChatRoom = () => {
     }
   };
 
+  const handleVideoCall = (videoCallId) => {
+    Linking.openURL(`https://shepherd-casual-subtly.ngrok-free.app/`);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.mainContainer}>
@@ -140,22 +162,70 @@ const ChatRoom = () => {
               </Text>
             </View>
           </View>
-          {/* <View style={styles.rightContainer}>
-                        <TouchableOpacity onPress={() => {}}>
-                            <Feather
-                                name="phone"
-                                size={hp(2.5)}
-                                color={"#000000"}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {}}>
-                            <Feather
-                                name="video"
-                                size={hp(2.6)}
-                                color={"#000000"}
-                            />
-                        </TouchableOpacity>
-                    </View> */}
+          <View style={styles.rightContainer}>
+            <TouchableOpacity onPress={() => {}}>
+              <Feather name="phone" size={hp(2.5)} color={"#000000"} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                if (data.role == "USER") {
+                  Alert.alert(
+                    "Video Call",
+                    "You will need room id to access the video call.",
+                    [
+                      {
+                        text: "Cancel",
+                        onPress: () => {},
+                        style: "cancel",
+                      },
+                      {
+                        text: "OK",
+                        onPress: () => {},
+                      },
+                    ],
+                    { cancelable: false }
+                  );
+                } else {
+                  Alert.alert(
+                    "Room Id",
+                    codeSnippet,
+                    [
+                      {
+                        text: "Copy",
+                        onPress: () => {
+                          const videoId = generateRoomId(5);
+                          copyCodeToClipboard(videoId);
+                          const sendMessage = "Room id: " + videoId;
+                          textRef.current = sendMessage;
+                          handleSendMessage();
+                          Alert.alert(
+                            "Copied",
+                            "The room id has been copied to the clipboard.",
+                            [
+                              {
+                                text: "OK",
+                                onPress: () => {
+                                  handleVideoCall(videoId);
+                                },
+                              },
+                            ]
+                          );
+                        },
+                      },
+                      {
+                        text: "Cancel",
+                        onPress: () => {},
+                        style: "cancel",
+                      },
+                    ],
+                    { cancelable: false }
+                  );
+                }
+              }}
+            >
+              <Feather name="video" size={hp(2.6)} color={"#000000"} />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.verticalLine}></View>
         <ScrollView style={styles.messageContainer}>
