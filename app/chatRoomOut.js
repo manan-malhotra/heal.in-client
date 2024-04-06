@@ -135,7 +135,7 @@ const ChatRoom = () => {
     }
   };
 
-  const handleVideoCall = (videoCallId) => {
+  const handleVideoCall = () => {
     Linking.openURL(`https://shepherd-casual-subtly.ngrok-free.app/`);
   };
 
@@ -180,7 +180,9 @@ const ChatRoom = () => {
                       },
                       {
                         text: "OK",
-                        onPress: () => {},
+                        onPress: () => {
+                          handleVideoCall();
+                        },
                       },
                     ],
                     { cancelable: false }
@@ -205,7 +207,7 @@ const ChatRoom = () => {
                               {
                                 text: "OK",
                                 onPress: () => {
-                                  handleVideoCall(videoId);
+                                  handleVideoCall();
                                 },
                               },
                             ]
