@@ -18,7 +18,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { theme } from "../../constants/Colors";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import Avatar from "../../components/Avatar";
 
 const Profile = () => {
@@ -115,12 +115,18 @@ const Profile = () => {
             valueColor={"#000000"}
           />
         </TouchableOpacity>
-        <ProfileCard
-          iconType="Feather"
-          icon="bookmark"
-          legend="Privacy Policy"
-          legendColor={"#6D6D6D"}
-        />
+        <TouchableOpacity
+          onPress={() => {
+            router.push("../privacyPolicy");
+          }}
+        >
+          <ProfileCard
+            iconType="Feather"
+            icon="bookmark"
+            legend="Privacy Policy"
+            legendColor={"#6D6D6D"}
+          />
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => logout()}>
           <ProfileCard
             iconType="Feather"
