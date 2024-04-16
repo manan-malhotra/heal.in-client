@@ -36,6 +36,7 @@ const Assessment = () => {
 
     const handleTest = (testId, testName) => {
         let total = 0;
+        console.log("Score: ",tests);
         score.forEach((item) => {
             if (item.test_id.test_id === testId && total == 0) {
                 total = item.total;
@@ -46,6 +47,7 @@ const Assessment = () => {
                         total: item.total,
                         test: item.test_id.test_name,
                         testId,
+                        firstName: user.firstName,
                     },
                 });
             }
