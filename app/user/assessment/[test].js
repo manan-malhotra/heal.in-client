@@ -1,6 +1,5 @@
 import {
     Alert,
-    Pressable,
     ScrollView,
     StyleSheet,
     Text,
@@ -12,11 +11,12 @@ import { Stack, router, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import axios from "axios";
 import { ActivityIndicator } from "react-native-paper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const Test = () => {
     const { test } = useLocalSearchParams();
     const { testId } = useLocalSearchParams();
     const { userId } = useLocalSearchParams();
+    const { firstName } = useLocalSearchParams();
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [data, setData] = useState([]);
     console.log(testId);
@@ -47,13 +47,33 @@ const Test = () => {
         );
         const length = Object.keys(selectedOptions).length;
         if (length == data.length) {
-            //push to scoreCard
             await sendScore(sum);
             router.dismissAll();
             router.push({
                 pathname: "./scoreCard",
                 params: { sum, total: data.length * 3, test, testId },
             });
+            console.log("Username : ", firstName);
+            console.log("Test Name : ", test);
+             try {
+                 const json = {
+                    auxTestScoreDTO:{
+                        score: sum,
+                        total: data.length * 3,
+                        testId,
+                        userId,
+                    },
+                    username: firstName,
+                    testname: test
+                 };
+                 const response = await axios.post(
+                     process.env.API_HOST + "/test/getEmail",
+                     json,
+                 );
+             } catch (error) {
+                 console.log(error);
+             }
+            
         } else {
             Alert.alert(
                 "Incomplete Questions",
