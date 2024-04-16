@@ -12,11 +12,14 @@ import { Stack, router, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import axios from "axios";
 import { ActivityIndicator } from "react-native-paper";
+import * as MailComposer from 'expo-mail-composer';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const Test = () => {
     const { test } = useLocalSearchParams();
     const { testId } = useLocalSearchParams();
     const { userId } = useLocalSearchParams();
+    const { firstName } = useLocalSearchParams();
+    const { lastName } = useLocalSearchParams();
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [data, setData] = useState([]);
     console.log(testId);
@@ -54,6 +57,23 @@ const Test = () => {
                 pathname: "./scoreCard",
                 params: { sum, total: data.length * 3, test, testId },
             });
+            
+             try {
+                 const json = {
+                     score: sum,
+                     total: data.length * 3,
+                     testId,
+                     userId,
+                 };
+
+                 const response = await axios.post(
+                     process.env.API_HOST + "/test/getEmail",
+                     json,
+                 );
+             } catch (error) {
+                 console.log(error);
+             }
+            
         } else {
             Alert.alert(
                 "Incomplete Questions",
