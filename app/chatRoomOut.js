@@ -1,17 +1,23 @@
 import {
-  Alert,
-  KeyboardAvoidingView,
+  ImageBackground,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
-  Linking,
+  Image,
   View,
-  Clipboard,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Icon } from "react-native-elements";
+import React, { useEffect, useRef, useCallback, useState } from "react";
+import * as ImagePicker from "expo-image-picker";
+import {
+  GiftedChat,
+  Bubble,
+  InputToolbar,
+  SystemMessage,
+  Send,
+} from "react-native-gifted-chat";
 import { db } from "../firebaseConfig";
 import { router, useLocalSearchParams } from "expo-router";
 import {
@@ -19,8 +25,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { theme } from "../constants/Colors";
-import { Entypo, Feather } from "@expo/vector-icons";
-import MessageList from "../components/MessageList";
+import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
 import {
   addDoc,
   collection,
@@ -34,46 +39,55 @@ import {
   where,
 } from "firebase/firestore";
 import { Decrypt, Encrypt } from "../common/aes";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const getRoomId = (userId1, userId2) => {
   const sortedIds = [userId1, userId2].sort();
   const roomId = sortedIds.join("-");
   return roomId;
 };
-
-function generateRoomId(length) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
-
 const ChatRoom = () => {
-  const [codeSnippet, setCodeSnippet] = useState("");
   const data = useLocalSearchParams();
   const [messages, setMessages] = useState([]);
   const textRef = useRef("");
   const inputRef = useRef(null);
-  const copyCodeToClipboard = async (videoId) => {
-    Clipboard.setString(videoId);
-  };
+  const insets = useSafeAreaInsets();
+  const [text, setText] = useState("");
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     createRoomIfNotExists();
     let roomId = getRoomId(data.userId, data.other_userId);
     const docRef = doc(db, "rooms", roomId);
     const messagesRef = collection(docRef, "messages");
-    const q = query(messagesRef, orderBy("createdAt", "asc"));
+    const q = query(messagesRef, orderBy("createdAt", "desc"));
     let unsub = onSnapshot(q, (snapshot) => {
       let allMessages = snapshot.docs.map((doc) => {
         return doc.data();
       });
-      setMessages([...allMessages]);
+      setMessages([
+        ...allMessages.map((message) => {
+          return {
+            _id: message.id,
+            text: Decrypt(message.text),
+            createdAt: message.createdAt.toDate(),
+            user: {
+              _id: message.userId === data.userId ? 1 : 0,
+              name: message.senderName,
+            },
+            image: message.image ? message.image : null,
+          };
+        }),
+      ]);
     });
     return unsub;
   }, []);
+  const onSend = useCallback((messages = []) => {
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, messages)
+    );
+    handleSendMessage(messages[0]);
+  }, []);
+
   const createRoomIfNotExists = async () => {
     let roomId = getRoomId(data.userId, data.other_userId);
     const q = query(collection(db, "rooms"), where("roomId", "==", roomId));
@@ -93,6 +107,7 @@ const ChatRoom = () => {
       });
     }
   };
+
   const handleBackPress = () => {
     const user = {
       userId: data.userId,
@@ -106,9 +121,8 @@ const ChatRoom = () => {
     router.dismiss();
   };
 
-  const handleSendMessage = async () => {
-    let message = textRef.current.trim();
-    if (!message) return;
+  const handleSendMessage = async (message) => {
+    console.log(message);
     try {
       let roomId = getRoomId(data.userId, data.other_userId);
       const docRef = doc(db, "rooms", roomId);
@@ -124,19 +138,79 @@ const ChatRoom = () => {
       if (inputRef) inputRef?.current?.clear();
       const username = data.firstName + "_" + data.lastName;
       const newDoc = await addDoc(messagesRef, {
+        id: message._id,
         userId: data.userId,
-        text: Encrypt(message),
+        text: Encrypt(message.text),
         senderName: username,
-        createdAt: Timestamp.fromDate(new Date()),
+        createdAt: message.createdAt,
       });
+      console.log(newDoc);
     } catch (e) {
       console.log("Message", e.message);
     }
   };
-
-  const handleVideoCall = () => {
-    Linking.openURL(`https://shepherd-casual-subtly.ngrok-free.app/`);
+  const renderInputToolbar = (props) => {
+    return (
+      <InputToolbar
+        {...props}
+        containerStyle={{
+          marginLeft: hp(1),
+          marginRight: hp(1),
+          backgroundColor: "white",
+          borderTopWidth: 1,
+          borderTopColor: "black",
+          borderWidth: 1,
+          borderRadius: 999,
+        }}
+      />
+    );
   };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log("File uri: ", result);
+
+    if (!result.canceled) {
+      setImageFlag(true);
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const renderChatFooter = useCallback(() => {
+    if (image) {
+      return (
+        <View style={styles.chatFooter}>
+          <Image source={{ uri: image }} style={{ height: 75, width: 75 }} />
+          <TouchableOpacity
+            onPress={() => setImage("")}
+            style={styles.buttonFooterChatImg}
+          >
+            <Text style={styles.textFooterChat}>X</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    // if (filePath) {
+    //   return (
+    //     <View style={styles.chatFooter}>
+    //       <InChatFileTransfer filePath={filePath} />
+    //       <TouchableOpacity
+    //         onPress={() => setFilePath("")}
+    //         style={styles.buttonFooterChat}
+    //       >
+    //         <Text style={styles.textFooterChat}>X</Text>
+    //       </TouchableOpacity>
+    //     </View>
+    //   );
+    // }
+    return null;
+  }, [image]);
 
   return (
     <View style={styles.container}>
@@ -165,100 +239,103 @@ const ChatRoom = () => {
             <TouchableOpacity onPress={() => {}}>
               <Feather name="phone" size={hp(2.5)} color={"#000000"} />
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                if (data.role == "USER") {
-                  Alert.alert(
-                    "Video Call",
-                    "You will need room id to access the video call.",
-                    [
-                      {
-                        text: "Cancel",
-                        onPress: () => {},
-                        style: "cancel",
-                      },
-                      {
-                        text: "OK",
-                        onPress: () => {
-                          handleVideoCall();
-                        },
-                      },
-                    ],
-                    { cancelable: false }
-                  );
-                } else if (data.role == "DOCTOR") {
-                  Alert.alert(
-                    "Room Id",
-                    codeSnippet,
-                    [
-                      {
-                        text: "Copy",
-                        onPress: () => {
-                          const videoId = generateRoomId(5);
-                          copyCodeToClipboard(videoId);
-                          const sendMessage = "Room id: " + videoId;
-                          textRef.current = sendMessage;
-                          handleSendMessage();
-                          Alert.alert(
-                            "Copied",
-                            "The room id has been copied to the clipboard.",
-                            [
-                              {
-                                text: "OK",
-                                onPress: () => {
-                                  handleVideoCall();
-                                },
-                              },
-                            ]
-                          );
-                        },
-                      },
-                      {
-                        text: "Cancel",
-                        onPress: () => {},
-                        style: "cancel",
-                      },
-                    ],
-                    { cancelable: false }
-                  );
-                }
-              }}
-            >
+            <TouchableOpacity onPress={() => {}}>
               <Feather name="video" size={hp(2.6)} color={"#000000"} />
             </TouchableOpacity>
           </View>
         </View>
         <View style={styles.verticalLine}></View>
-        <ScrollView style={styles.messageContainer}>
-          <MessageList
+        <ImageBackground
+          source={require("../assets/wallpaper.png")}
+          style={{
+            flex: 1,
+            marginBottom: insets.bottom + 10,
+            backgroundColor: "white",
+          }}
+        >
+          <GiftedChat
             messages={messages}
-            currentUserId={data.userId}
-            currentUsername={data.firstName + "_" + data.lastName}
+            onSend={(messages) => onSend(messages)}
+            user={{
+              _id: 1,
+            }}
+            renderSystemMessage={(props) => {
+              <SystemMessage {...props} />;
+            }}
+            bottomOffset={insets.bottom}
+            onInputTextChanged={setText}
+            renderAvatar={null}
+            maxComposerHeight={100}
+            renderChatFooter={renderChatFooter}
+            renderBubble={(props) => {
+              return (
+                <View style={{ marginBottom: hp(1) }}>
+                  <Bubble
+                    {...props}
+                    textStyle={{
+                      left: {
+                        color: "black",
+                        fontSize: hp(1.7),
+                      },
+                      right: {
+                        color: "white",
+                        fontSize: hp(1.7),
+                      },
+                    }}
+                    wrapperStyle={{
+                      left: {
+                        backgroundColor: theme.colors.background,
+                        borderWidth: 1,
+                        borderColor: "rgb(229, 229, 229)",
+                      },
+                      right: {
+                        backgroundColor: theme.colors.button,
+                        borderWidth: 1,
+                        borderColor: "rgb(0, 0, 0)",
+                      },
+                    }}
+                  />
+                </View>
+              );
+            }}
+            renderSend={(props) => {
+              return (
+                <View
+                  style={{
+                    height: 50,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 14,
+                    paddingHorizontal: 14,
+                  }}
+                >
+                  <TouchableOpacity onPress={pickImage}>
+                    <Ionicons
+                      name="camera-outline"
+                      color={theme.colors.button}
+                      size={28}
+                    />
+                  </TouchableOpacity>
+                  <Send
+                    {...props}
+                    containerStyle={{
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Feather
+                      name="send"
+                      color={theme.colors.button}
+                      size={25}
+                    />
+                  </Send>
+                </View>
+              );
+            }}
+            renderInputToolbar={renderInputToolbar}
           />
-        </ScrollView>
+        </ImageBackground>
       </View>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null}>
-        <View style={{}}>
-          <View style={styles.inputContainer}>
-            <View style={styles.textInputContainer}>
-              <TextInput
-                ref={inputRef}
-                onChangeText={(value) => (textRef.current = value)}
-                placeholder="Type message..."
-                style={styles.textInput}
-                returnKeyType="send"
-                onSubmitEditing={handleSendMessage}
-              />
-              <TouchableOpacity
-                onPress={handleSendMessage}
-                style={styles.sendButton}
-              >
-                <Feather name="send" size={hp(2.7)} color="black" />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -266,6 +343,16 @@ const ChatRoom = () => {
 export default ChatRoom;
 
 const styles = StyleSheet.create({
+  composer: {
+    backgroundColor: "#fff",
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "lightgray",
+    paddingHorizontal: 10,
+    paddingTop: 8,
+    fontSize: 16,
+    marginVertical: 4,
+  },
   container: {
     flex: 1,
   },
@@ -307,6 +394,51 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
   },
+  chatFooter: {
+    shadowColor: "#1F2687",
+    shadowOpacity: 0.37,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 0,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.18)",
+    flexDirection: "row",
+    padding: hp(1.5),
+    marginLeft: wp(3.5),
+    marginRight: wp(4),
+    backgroundColor: "white",
+  },
+  buttonFooterChat: {
+    width: 35,
+    height: 35,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    borderColor: "black",
+    right: 3,
+    top: -2,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+  },
+  buttonFooterChatImg: {
+    width: 35,
+    height: 35,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    borderColor: "black",
+    left: 66,
+    top: -4,
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
+  },
+  textFooterChat: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "gray",
+  },
   textInputContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -319,7 +451,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     fontSize: hp(1.5),
-    paddingVertical: Platform.OS === "ios" ? hp(1) : 0, // Add padding for iOS to prevent the cursor from being obscured by the keyboard
+    paddingVertical: Platform.OS === "ios" ? hp(1) : 0,
   },
   sendButton: {
     padding: wp(2.5),
