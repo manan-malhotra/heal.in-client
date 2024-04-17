@@ -126,10 +126,10 @@ export default function SignUp() {
 
         if (Object.keys(validationErrors).length === 0) {
             try {
-                console.log(userData);
-                // register(userData);
+                // console.log(userData);
+                register(userData);
             } catch (error) {
-                console.log(error);
+                // console.log(error);
             }
         }
     };
@@ -326,7 +326,6 @@ export default function SignUp() {
 }
 
 const ErrorView = ({ error }) => {
-    console.log(error);
     return (
         <View
             style={{

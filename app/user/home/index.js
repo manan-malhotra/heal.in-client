@@ -6,11 +6,27 @@ import { heightPercentageToDP } from "react-native-responsive-screen";
 import ArticleCard from "../../../components/articleCard";
 import { getAllBlogs } from "../../../common/userApi";
 import Avatar from "../../../components/Avatar";
+import * as LocalAuthentication from "expo-local-authentication";
 const Home = () => {
     const user = useLocalSearchParams();
     const [blogData, setBlogData] = useState([]);
     const [greeting, setGreeting] = useState("Good Morning");
+    const passcode = async () => {
+        // const result = await LocalAuthentication.authenticateAsync({
+        //     promptMessage: "Please authenticate",
+        //     fallbackLabel: "Enter Passcode",
+        //     cancelLabel: "Can",
+        // });
+        console.log(result);
+        if (!result.success) {
+            console.log("Cancel mat kar dost");
+        }
+        if (result.success) {
+            console.log("kar le dost");
+        }
+    };
     useEffect(() => {
+        // passcode();
         getGreeting();
         getBlogData();
     }, []);

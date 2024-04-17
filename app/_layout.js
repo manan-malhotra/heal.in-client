@@ -20,9 +20,13 @@ const MainLayout = () => {
                 } else {
                     let route = user.role.toLowerCase();
                     router.replace({
-                        pathname: "/" + route + "/",
+                        pathname: "/locked/",
                         params: user,
                     });
+                    // router.replace({
+                    //     pathname: "/" + route + "/",
+                    //     params: user,
+                    // });
                 }
             } else {
                 router.replace("signIn");
