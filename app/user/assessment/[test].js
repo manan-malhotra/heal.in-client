@@ -51,7 +51,7 @@ const Test = () => {
             router.dismissAll();
             router.push({
                 pathname: "./scoreCard",
-                params: { sum, total: data.length * 3, test, testId },
+                params: { sum, total: data.length * 3, test, testId, firstName },
             });
             console.log("Username : ", firstName);
             console.log("Test Name : ", test);

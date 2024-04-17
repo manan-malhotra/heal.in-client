@@ -1,12 +1,14 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { theme } from "../../../constants/Colors";
+import axios from "axios";
 import { usePreventRemoveContext } from "@react-navigation/native";
 
 const ScoreCard = () => {
-    const { test, sum, total, testId } = useLocalSearchParams();
+    const { test, sum, total, testId, userId, firstName } = useLocalSearchParams();
     const [type, setType] = useState("Severe");
+    const [showMessage, setShowMessage] = useState(false);
     const nav = useNavigation();
     useEffect(() => {
         const percent = (sum / total) * 100;
@@ -22,6 +24,28 @@ const ScoreCard = () => {
             setType("Severe");
         }
     }, []);
+
+    const sendEmail = async () => {
+        try {
+            const json = {
+                auxTestScoreDTO:{
+                    score: sum,
+                    total: total,
+                    testId,
+                    userId,
+                },
+                username: firstName,
+                testname: test
+            };
+            const response = await axios.post(
+                process.env.API_HOST + "/test/getEmail",
+                json,
+            );
+            setShowMessage(true);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <View style={styles.body}>
@@ -62,6 +86,26 @@ const ScoreCard = () => {
             >
                 <Text style={styles.anotherTest}>Test Again</Text>
             </TouchableOpacity>
+
+            <View>
+            <TouchableOpacity
+                style={styles.anotherTestCard}
+                onPress={() => {
+                    sendEmail();
+                }}
+            >
+                <Text style={styles.anotherTest}>Email Reports</Text>
+            </TouchableOpacity>
+
+            {showMessage && (
+                <View style={styles.summaryCard}>
+                    <Text style={styles.summary}>
+                        Your test results have been sent 
+                    </Text>
+                </View>
+            )}
+            </View>
+
             <View style={styles.summaryCard}>
                 <Text style={styles.summary}>
                     Based on your responses, you may have symptoms of{" "}
@@ -146,9 +190,8 @@ const styles = StyleSheet.create({
         width: "100%",
         marginLeft: "auto",
         marginRight: "auto",
-        padding: "5%",
+        padding: "3%",
         borderRadius: 10,
-        marginTop: "5%",
         alignItems: "center",
     },
     summary: {
