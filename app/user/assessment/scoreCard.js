@@ -6,7 +6,7 @@ import axios from "axios";
 import { usePreventRemoveContext } from "@react-navigation/native";
 
 const ScoreCard = () => {
-    const { test, sum, total, testId, userId, firstName } = useLocalSearchParams();
+    const { test, sum, total, testId, userId, firstName, email } = useLocalSearchParams();
     const [type, setType] = useState("Severe");
     const [showMessage, setShowMessage] = useState(false);
     const nav = useNavigation();
@@ -26,6 +26,7 @@ const ScoreCard = () => {
     }, []);
 
     const sendEmail = async () => {
+        console.log("Mail: ",email)
         try {
             const json = {
                 auxTestScoreDTO:{
@@ -35,7 +36,9 @@ const ScoreCard = () => {
                     userId,
                 },
                 username: firstName,
-                testname: test
+                testname: test,
+                email: email,
+                type: type
             };
             const response = await axios.post(
                 process.env.API_HOST + "/test/getEmail",
