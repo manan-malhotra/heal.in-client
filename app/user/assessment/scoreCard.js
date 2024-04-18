@@ -3,13 +3,15 @@ import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import axios from "axios";
-import { usePreventRemoveContext } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-paper";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const ScoreCard = () => {
-    const { test, sum, total, testId, userId, firstName, email } = useLocalSearchParams();
+    const { test, sum, total, testId, userId, firstName, email } =
+        useLocalSearchParams();
     const [type, setType] = useState("Severe");
     const [showMessage, setShowMessage] = useState(false);
-    const nav = useNavigation();
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const percent = (sum / total) * 100;
         if (percent < 20) {
@@ -26,10 +28,12 @@ const ScoreCard = () => {
     }, []);
 
     const sendEmail = async () => {
-        console.log("Mail: ",email)
+        setLoading(true);
+        setShowMessage(true);
+        console.log("Mail: ", email);
         try {
             const json = {
-                auxTestScoreDTO:{
+                auxTestScoreDTO: {
                     score: sum,
                     total: total,
                     testId,
@@ -38,12 +42,13 @@ const ScoreCard = () => {
                 username: firstName,
                 testname: test,
                 email: email,
-                type: type
+                type: type,
             };
             const response = await axios.post(
                 process.env.API_HOST + "/test/getEmail",
-                json,
+                json
             );
+            setLoading(false);
             setShowMessage(true);
         } catch (error) {
             console.log(error);
@@ -91,22 +96,42 @@ const ScoreCard = () => {
             </TouchableOpacity>
 
             <View>
-            <TouchableOpacity
-                style={styles.anotherTestCard}
-                onPress={() => {
-                    sendEmail();
-                }}
-            >
-                <Text style={styles.anotherTest}>Email Reports</Text>
-            </TouchableOpacity>
-
-            {showMessage && (
-                <View style={styles.summaryCard}>
-                    <Text style={styles.summary}>
-                        Your test results have been sent 
-                    </Text>
+                {!showMessage && (
+                    <TouchableOpacity
+                        style={styles.anotherTestCard}
+                        onPress={() => {
+                            sendEmail();
+                        }}
+                    >
+                        <Text style={styles.anotherTest}>Email Reports</Text>
+                    </TouchableOpacity>
+                )}
+                <View>
+                    {loading && (
+                        <ActivityIndicator
+                            style={{
+                                paddingTop: 20,
+                                paddingBottom: 20,
+                                color: "green",
+                            }}
+                        />
+                    )}
+                    {showMessage && !loading && (
+                        <View style={styles.emailCard}>
+                            <Icon
+                                name="email-check-outline"
+                                size={25}
+                                style={{
+                                    color: "green",
+                                    paddingRight: 16,
+                                }}
+                            />
+                            <Text style={styles.summary}>
+                                Your test results have been sent
+                            </Text>
+                        </View>
+                    )}
                 </View>
-            )}
             </View>
 
             <View style={styles.summaryCard}>
@@ -188,6 +213,17 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         color: theme.colors.button,
+    },
+    emailCard: {
+        width: "100%",
+        marginLeft: "auto",
+        marginRight: "auto",
+        padding: "3%",
+        borderRadius: 10,
+        alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "center",
+        marginTop: "5%",
     },
     summaryCard: {
         width: "100%",
