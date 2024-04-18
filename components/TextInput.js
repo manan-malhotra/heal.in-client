@@ -16,6 +16,8 @@ export default function MyTextInput({
   isNum,
   value,
   onChangeText,
+  letterSpacing, 
+  fontSize=20, 
   ...props
 }) {
   const [text, setText] = useState(value);
@@ -49,7 +51,10 @@ export default function MyTextInput({
         <Feather name={icon} size={22} color="black" style={styles.icon} />
         <Input
           placeholderTextColor="#ADADAD"
-          style={styles.formInput}
+          style={[
+            styles.formInput,
+            { letterSpacing: letterSpacing, fontSize: fontSize },
+          ]}
           placeholder={placeholderText}
           secureTextEntry={isPassword}
           keyboardType={
