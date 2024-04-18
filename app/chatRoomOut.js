@@ -5,12 +5,13 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Clipboard,
+  Linking,
   View,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Icon } from "react-native-elements";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { uploadImage } from "../firebaseConfig";
 import {
   GiftedChat,
   Bubble,
@@ -40,12 +41,33 @@ import {
 } from "firebase/firestore";
 import { Decrypt, Encrypt } from "../common/aes";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import axios from "axios";
+import { Alert } from "react-native";
 const getRoomId = (userId1, userId2) => {
   const sortedIds = [userId1, userId2].sort();
   const roomId = sortedIds.join("-");
   return roomId;
 };
+function createRandomString(length) {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+function generateRoomId(length) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
 const ChatRoom = () => {
+  const [codeSnippet, setCodeSnippet] = useState("");
   const data = useLocalSearchParams();
   const [messages, setMessages] = useState([]);
   const textRef = useRef("");
@@ -53,6 +75,11 @@ const ChatRoom = () => {
   const insets = useSafeAreaInsets();
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
+  let firebaseImageURL = null;
+  const [imageURL, setImageURL] = useState(null);
+  const copyCodeToClipboard = async (videoId) => {
+    Clipboard.setString(videoId);
+  };
 
   useEffect(() => {
     createRoomIfNotExists();
@@ -81,11 +108,26 @@ const ChatRoom = () => {
     });
     return unsub;
   }, []);
-  const onSend = useCallback((messages = []) => {
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      firebaseImageURL = await uploadImage(result.assets[0]);
+      setImageURL(firebaseImageURL);
+    }
+  };
+
+  const onSend = useCallback((messages = [], url) => {
     setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
+      GiftedChat.append(previousMessages, messages),
     );
-    handleSendMessage(messages[0]);
+    handleSendMessage(messages[0], url);
   }, []);
 
   const createRoomIfNotExists = async () => {
@@ -102,6 +144,7 @@ const ChatRoom = () => {
         username1: username,
         username2: data.firstName + "_" + data.lastName,
         createdAt: Timestamp.fromDate(new Date()),
+        image: image,
         messagesExist: false,
         userGender: data.gender,
       });
@@ -121,8 +164,7 @@ const ChatRoom = () => {
     router.dismiss();
   };
 
-  const handleSendMessage = async (message) => {
-    console.log(message);
+  const handleSendMessage = async (message, url) => {
     try {
       let roomId = getRoomId(data.userId, data.other_userId);
       const docRef = doc(db, "rooms", roomId);
@@ -132,7 +174,7 @@ const ChatRoom = () => {
         { messagesExist: true },
         {
           merge: true,
-        }
+        },
       );
       textRef.current = "";
       if (inputRef) inputRef?.current?.clear();
@@ -143,8 +185,10 @@ const ChatRoom = () => {
         text: Encrypt(message.text),
         senderName: username,
         createdAt: message.createdAt,
+        image: url ? url : null,
       });
       console.log(newDoc);
+      setImage(null);
     } catch (e) {
       console.log("Message", e.message);
     }
@@ -162,24 +206,8 @@ const ChatRoom = () => {
           borderWidth: 1,
           borderRadius: 999,
         }}
-      />
+      ></InputToolbar>
     );
-  };
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log("File uri: ", result);
-
-    if (!result.canceled) {
-      setImageFlag(true);
-      setImage(result.assets[0].uri);
-    }
   };
 
   const renderChatFooter = useCallback(() => {
@@ -212,6 +240,10 @@ const ChatRoom = () => {
     return null;
   }, [image]);
 
+  const handleVideoCall = () => {
+    // Linking.openURL(`https://shepherd-casual-subtly.ngrok-free.app/`);
+    Linking.openURL(`http://172.16.129.74:3000/`);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.mainContainer}>
@@ -236,10 +268,84 @@ const ChatRoom = () => {
             </View>
           </View>
           <View style={styles.rightContainer}>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => {
+                try {
+                  Alert;
+                  axios.post(process.env.TWILIO_API_HOST + "initiate-call", {
+                    to: "+917756994033",
+                  });
+                } catch (error) {
+                  console.log(error);
+                }
+              }}
+            >
               <Feather name="phone" size={hp(2.5)} color={"#000000"} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => {
+                if (data.role == "USER") {
+                  Alert.alert(
+                    "Video Call",
+                    "You will need room id to access the video call.",
+                    [
+                      {
+                        text: "Cancel",
+                        onPress: () => {},
+                        style: "cancel",
+                      },
+                      {
+                        text: "OK",
+                        onPress: () => {
+                          handleVideoCall();
+                        },
+                      },
+                    ],
+                    { cancelable: false },
+                  );
+                } else if (data.role == "DOCTOR") {
+                  Alert.alert(
+                    "Room Id",
+                    codeSnippet,
+                    [
+                      {
+                        text: "Copy",
+                        onPress: () => {
+                          const videoId = generateRoomId(5);
+                          copyCodeToClipboard(videoId);
+                          const sendMessage = "Room id: " + videoId;
+                          textRef.current = sendMessage;
+                          const message = {
+                            _id: Math.random(),
+                            text: sendMessage,
+                            createdAt: new Date(),
+                          };
+                          handleSendMessage(message, null);
+                          Alert.alert(
+                            "Copied",
+                            "The room id has been copied to the clipboard.",
+                            [
+                              {
+                                text: "OK",
+                                onPress: () => {
+                                  handleVideoCall();
+                                },
+                              },
+                            ],
+                          );
+                        },
+                      },
+                      {
+                        text: "Cancel",
+                        onPress: () => {},
+                        style: "cancel",
+                      },
+                    ],
+                    { cancelable: false },
+                  );
+                }
+              }}
+            >
               <Feather name="video" size={hp(2.6)} color={"#000000"} />
             </TouchableOpacity>
           </View>
@@ -255,7 +361,10 @@ const ChatRoom = () => {
         >
           <GiftedChat
             messages={messages}
-            onSend={(messages) => onSend(messages)}
+            alwaysShowSend
+            onSend={async (messages) => {
+              onSend(messages, imageURL);
+            }}
             user={{
               _id: 1,
             }}
