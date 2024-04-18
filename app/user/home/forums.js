@@ -94,6 +94,27 @@ const Forums = () => {
     );
     setForumData(tempData);
   };
+
+  const handleApprove = async (id) => {
+    try {
+      const response = await axios.put(
+        process.env.API_HOST + "/api/user/approve/" + id
+      );
+      getForumData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(
+        process.env.API_HOST + "/api/user/deleteComment/" + id
+      );
+      getForumData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <Stack.Screen
@@ -201,7 +222,11 @@ const Forums = () => {
                                       Approve?
                                     </Text>
                                     <View style={styles.approveButtons}>
-                                      <TouchableOpacity>
+                                      <TouchableOpacity
+                                        onPress={() =>
+                                          handleApprove(comment.comment_id)
+                                        }
+                                      >
                                         <Icon2
                                           size={14}
                                           name="check"
@@ -210,7 +235,11 @@ const Forums = () => {
                                           }}
                                         />
                                       </TouchableOpacity>
-                                      <TouchableOpacity>
+                                      <TouchableOpacity
+                                        onPress={() => {
+                                          handleDelete(comment.comment_id);
+                                        }}
+                                      >
                                         <Icon2
                                           size={14}
                                           name="close"
