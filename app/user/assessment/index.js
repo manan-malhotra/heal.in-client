@@ -48,6 +48,7 @@ const Assessment = () => {
                         test: item.test_id.test_name,
                         testId,
                         firstName: user.firstName,
+                        email: user.email
                     },
                 });
             }
