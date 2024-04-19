@@ -58,7 +58,6 @@ function generateRoomId(length) {
   return result;
 }
 const ChatRoom = () => {
-  const [codeSnippet, setCodeSnippet] = useState("");
   const data = useLocalSearchParams();
   const [messages, setMessages] = useState([]);
   const textRef = useRef("");
@@ -297,7 +296,7 @@ const ChatRoom = () => {
                 } else if (data.role == "DOCTOR") {
                   Alert.alert(
                     "Room Id",
-                    codeSnippet,
+                    "You will need room id to access the video call. Do you want to copy the room id to the clipboard?",
                     [
                       {
                         text: "Copy",
