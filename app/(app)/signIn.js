@@ -42,11 +42,11 @@ export default function SignIn() {
         } else if (response === 502) {
           errors.mainError = "Our servers are down. Try again later.";
         }
-
-        setErrors(errors);
       } catch (error) {
-        console.log(error);
+        errors.mainError= "Our servers are down. Try again later.";
       }
+        setErrors(errors);
+      
     }
   };
   return (
