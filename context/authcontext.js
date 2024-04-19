@@ -80,17 +80,8 @@ export const AuthContextProvider = ({ children }) => {
             }
         } catch (error) {
             //Wrong Username
-            if (error.response.status == 404) {
-                return error.response.status;
-            }
-
-            // Wrong Password
-            if (error.response.status == 401) {
-                return error.response.status;
-            }
-
-            //Server Down
-            if (error.response.status == 502) {
+            // 404 - wrong username, 401 - wrong password, 502 - server down
+            if (error.response.status == 404 || error.response.status == 401 || error.response.status == 502) {
                 return error.response.status;
             }
 
