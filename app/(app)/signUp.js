@@ -143,7 +143,6 @@ export default function SignUp() {
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        console.log(userData);
         handleOTP();
       } catch (error) {
         console.log(error);
