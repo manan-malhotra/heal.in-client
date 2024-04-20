@@ -139,7 +139,13 @@ export default function SignIn() {
                 alignItems: "flex-end",
               }}
             >
-              <Link href="">Forgot Password?</Link>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push({ pathname: "enterEmail" });
+                }}
+              >
+                <Text>Forgot Password?</Text>
+              </TouchableOpacity>
             </View>
 
             <View style={{ padding: hp(1) }}></View>
