@@ -79,42 +79,10 @@ export const AuthContextProvider = ({ children }) => {
                 setIsAuthenticated(true);
             }
         } catch (error) {
-            console.log(error);
             //Wrong Username
-            if (error.response.status == 404) {
-                Toast.show({
-                    type: "error",
-                    text1: "Error",
-                    text2: "Entered Username is Wrong",
-                    position: "top",
-                    visibilityTime: 3000,
-                });
-
-                return;
-            }
-
-            // Wrong Password
-            if (error.response.status == 401) {
-                Toast.show({
-                    type: "error",
-                    text1: "Error",
-                    text2: "Entered Password is Wrong",
-                    position: "top",
-                    visibilityTime: 3000,
-                });
-                return;
-            }
-
-            //Server Down
-            if (error.response.status == 502) {
-                Toast.show({
-                    type: "error",
-                    text1: "Error",
-                    text2: "Currently Server is Down Try Again After Few Minutes",
-                    position: "top",
-                    visibilityTime: 3000,
-                });
-                return;
+            // 404 - wrong username, 401 - wrong password, 502 - server down
+            if (error.response.status == 404 || error.response.status == 401 || error.response.status == 502) {
+                return error.response.status;
             }
 
             console.log("Error logging in: ", error);

@@ -22,6 +22,11 @@ const AddUsers = () => {
           icon="user"
           route="/admin/home/addResponderFields"
         />
+        <AddCards
+          name="Moderator"
+          icon="user"
+          route="/admin/home/addModeratorFields"
+        />
       </View>
     </View>
   );

@@ -17,6 +17,7 @@ const Test = () => {
     const { testId } = useLocalSearchParams();
     const { userId } = useLocalSearchParams();
     const { firstName } = useLocalSearchParams();
+    const { email} = useLocalSearchParams();
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [data, setData] = useState([]);
     console.log(testId);
@@ -51,7 +52,7 @@ const Test = () => {
             router.dismissAll();
             router.push({
                 pathname: "./scoreCard",
-                params: { sum, total: data.length * 3, test, testId, firstName },
+                params: { sum, total: data.length * 3, test, testId, firstName, email },
             });
             console.log("Username : ", firstName);
             console.log("Test Name : ", test);
