@@ -1,8 +1,12 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApp, getApps } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { collection, getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -14,13 +18,13 @@ import "firebase/compat/storage";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyCGFPzKkIrNXLaP-Cw4vP7L6oKjFHQzTsY",
+  authDomain: "healin-45885.firebaseapp.com",
+  projectId: "healin-45885",
+  storageBucket: "healin-45885.appspot.com",
+  messagingSenderId: "157661679962",
+  appId: "1:157661679962:web:ae3a392c182abb6bffa363",
+  measurementId: "G-2V2FXPF80M",
 };
 
 // Initialize Firebase
@@ -41,25 +45,38 @@ function createRandomString(length) {
   return result;
 }
 
-const uploadImage = async (file) => {
-  const blob = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      resolve(xhr.response);
-    };
-    xhr.onerror = function () {
-      reject(new TypeError("Network request failed"));
-    };
-    xhr.responseType = "blob";
-    xhr.open("GET", file.uri, true);
-    xhr.send(null);
+const uploadToFirebase = async (uri) => {
+  console.log("Inside firebase function");
+  const fetchResponse = await fetch(uri);
+  const theBlob = await fetchResponse.blob();
+  const name = theBlob.data.name;
+  const imageRef = ref(getStorage(app), `images/${name}`);
+
+  const uploadTask = uploadBytesResumable(imageRef, theBlob);
+
+  return new Promise((resolve, reject) => {
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Progress: ", progress.toFixed(2));
+      },
+      (error) => {
+        console.log(error);
+        reject(error);
+      },
+      async () => {
+        theBlob.close();
+        const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+        resolve({
+          downloadUrl,
+          metadata: uploadTask.snapshot.metadata,
+        });
+      },
+    );
   });
-  const fileName = createRandomString(16);
-  const fileRef = firebase.storage().ref().child(`images/${fileName}.jpg`);
-  await fileRef.put(blob);
-  const url = await fileRef.getDownloadURL();
-  console.log("URL: ", url);
-  return url;
 };
+
 const db = getFirestore(app);
-export { fbStorage, db, uploadImage, firebase };
+export { fbStorage, db, uploadToFirebase };

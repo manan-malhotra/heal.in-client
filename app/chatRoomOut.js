@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import { uploadImage } from "../firebaseConfig";
+import { uploadImage, uploadToFirebase } from "../firebaseConfig";
 import {
   GiftedChat,
   Bubble,
@@ -98,18 +98,22 @@ const ChatRoom = () => {
     });
     return unsub;
   }, []);
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      allowsEditing: false,
       aspect: [4, 3],
       quality: 1,
+      includeBase64: true,
     });
 
+    console.log("Inside this 1");
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      firebaseImageURL = await uploadImage(result.assets[0]);
-      setImageURL(firebaseImageURL);
+      firebaseImageURL = await uploadToFirebase(result.assets[0].uri);
+      console.log("FIREBASE_IMAGE_URL: ", firebaseImageURL.downloadUrl);
+      setImageURL(firebaseImageURL.downloadUrl);
     }
   };
 
@@ -142,15 +146,6 @@ const ChatRoom = () => {
   };
 
   const handleBackPress = () => {
-    const user = {
-      userId: data.userId,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      contact: data.contact,
-      age: data.age,
-      gender: data.gender,
-    };
     router.dismiss();
   };
 
@@ -214,19 +209,6 @@ const ChatRoom = () => {
         </View>
       );
     }
-    // if (filePath) {
-    //   return (
-    //     <View style={styles.chatFooter}>
-    //       <InChatFileTransfer filePath={filePath} />
-    //       <TouchableOpacity
-    //         onPress={() => setFilePath("")}
-    //         style={styles.buttonFooterChat}
-    //       >
-    //         <Text style={styles.textFooterChat}>X</Text>
-    //       </TouchableOpacity>
-    //     </View>
-    //   );
-    // }
     return null;
   }, [image]);
 
@@ -258,20 +240,24 @@ const ChatRoom = () => {
             </View>
           </View>
           <View style={styles.rightContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                try {
-                  Alert;
-                  axios.post(process.env.TWILIO_API_HOST + "initiate-call", {
-                    to: "+917756994033",
-                  });
-                } catch (error) {
-                  console.log(error);
-                }
-              }}
-            >
-              <Feather name="phone" size={hp(2.5)} color={"#000000"} />
-            </TouchableOpacity>
+            {data.role == "USER" ? (
+              <TouchableOpacity
+                onPress={() => {
+                  try {
+                    Alert;
+                    axios.post(process.env.TWILIO_API_HOST + "initiate-call", {
+                      to: "+917756994033",
+                    });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }}
+              >
+                <Feather name="phone" size={hp(2.5)} color={"#000000"} />
+              </TouchableOpacity>
+            ) : (
+              <></>
+            )}
             <TouchableOpacity
               onPress={() => {
                 if (data.role == "USER") {
@@ -480,12 +466,6 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     backgroundColor: "gray",
   },
-  messageContainer: {
-    flex: 1,
-    paddingHorizontal: wp(2),
-    paddingVertical: wp(3),
-    marginBottom: wp(2),
-  },
   inputContainer: {
     height: hp(5),
     width: wp(85),
@@ -537,24 +517,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "gray",
-  },
-  textInputContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#f1f1f1",
-    borderRadius: 15,
-    borderWidth: 1,
-    paddingHorizontal: wp(3),
-  },
-  textInput: {
-    flex: 1,
-    fontSize: hp(1.5),
-    paddingVertical: Platform.OS === "ios" ? hp(1) : 0,
-  },
-  sendButton: {
-    padding: wp(2.5),
-    borderRadius: 999,
   },
   leftContainer: {
     flexDirection: "row",
