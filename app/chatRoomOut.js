@@ -1,6 +1,5 @@
 import {
   ImageBackground,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,7 +10,7 @@ import {
 } from "react-native";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import { uploadImage, uploadToFirebase } from "../firebaseConfig";
+import { uploadToFirebase } from "../firebaseConfig";
 import {
   GiftedChat,
   Bubble,
@@ -108,11 +107,9 @@ const ChatRoom = () => {
       includeBase64: true,
     });
 
-    console.log("Inside this 1");
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       firebaseImageURL = await uploadToFirebase(result.assets[0].uri);
-      console.log("FIREBASE_IMAGE_URL: ", firebaseImageURL.downloadUrl);
       setImageURL(firebaseImageURL.downloadUrl);
     }
   };
@@ -244,10 +241,31 @@ const ChatRoom = () => {
               <TouchableOpacity
                 onPress={() => {
                   try {
-                    Alert;
-                    axios.post(process.env.TWILIO_API_HOST + "initiate-call", {
-                      to: "+917756994033",
-                    });
+                    Alert.alert(
+                      "Voice Call",
+                      "You will now receive a call from the doctor. Please keep your phone ready.",
+                      [
+                        {
+                          text: "Cancel",
+                          onPress: () => {},
+                          style: "destructive",
+                        },
+                        {
+                          text: "OK",
+                          onPress: () => {
+                            axios.post(
+                              process.env.TWILIO_API_HOST + "initiate-call",
+                              {
+                                to: "+917756994033",
+                              },
+                            );
+                          },
+                        },
+                      ],
+                    );
+                    // axios.post(process.env.TWILIO_API_HOST + "initiate-call", {
+                    //   to: "+917756994033",
+                    // });
                   } catch (error) {
                     console.log(error);
                   }
@@ -268,7 +286,7 @@ const ChatRoom = () => {
                       {
                         text: "Cancel",
                         onPress: () => {},
-                        style: "cancel",
+                        style: "destructive",
                       },
                       {
                         text: "OK",
