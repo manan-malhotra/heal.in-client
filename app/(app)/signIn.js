@@ -43,10 +43,9 @@ export default function SignIn() {
           errors.mainError = "Our servers are down. Try again later.";
         }
       } catch (error) {
-        errors.mainError= "Our servers are down. Try again later.";
+        errors.mainError = "Our servers are down. Try again later.";
       }
-        setErrors(errors);
-      
+      setErrors(errors);
     }
   };
   return (
@@ -108,8 +107,8 @@ export default function SignIn() {
         <View style={{ backgroundColor: "white" }}>
           {errors.mainError && <ErrorView error={errors.mainError} />}
           <MyTextInput
-            placeholderText={"Username"}
-            icon={"user"}
+            placeholderText={"Email"}
+            icon={"mail"}
             isEmail={true}
             onChangeText={setEmail}
           ></MyTextInput>
