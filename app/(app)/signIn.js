@@ -43,10 +43,9 @@ export default function SignIn() {
           errors.mainError = "Our servers are down. Try again later.";
         }
       } catch (error) {
-        errors.mainError= "Our servers are down. Try again later.";
+        errors.mainError = "Our servers are down. Try again later.";
       }
-        setErrors(errors);
-      
+      setErrors(errors);
     }
   };
   return (
