@@ -107,8 +107,8 @@ export default function SignIn() {
         <View style={{ backgroundColor: "white" }}>
           {errors.mainError && <ErrorView error={errors.mainError} />}
           <MyTextInput
-            placeholderText={"Username"}
-            icon={"user"}
+            placeholderText={"Email"}
+            icon={"mail"}
             isEmail={true}
             onChangeText={setEmail}
           ></MyTextInput>
