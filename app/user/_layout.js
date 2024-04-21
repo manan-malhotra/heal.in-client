@@ -1,6 +1,5 @@
-import { View, Text } from "react-native";
-import React, { useEffect } from "react";
-import { Stack, Tabs, useLocalSearchParams } from "expo-router";
+import React from "react";
+import { Tabs, useLocalSearchParams } from "expo-router";
 import Icon from "react-native-vector-icons/AntDesign";
 import Icon3 from "react-native-vector-icons/FontAwesome";
 import Icon2 from "react-native-vector-icons/Feather";
