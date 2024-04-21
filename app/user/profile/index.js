@@ -6,7 +6,7 @@ import {
   Linking,
 } from "react-native";
 import React from "react";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../../context/authcontext";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -17,9 +17,9 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { theme } from "../../constants/Colors";
+import { theme } from "../../../constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
-import Avatar from "../../components/Avatar";
+import Avatar from "../../../components/Avatar";
 
 const Profile = () => {
   const user = useLocalSearchParams();
@@ -37,7 +37,7 @@ const Profile = () => {
         backgroundColor: "white",
       }}
     >
-      <View style={{ height: hp(11) }} />
+      <View style={{ height: hp(9) }} />
       <View
         style={{
           height: hp(20),
@@ -67,7 +67,7 @@ const Profile = () => {
           </Text>
         </View>
       </View>
-      <View style={{ padding: hp(2.5) }} />
+      <View style={{ padding: hp(1.5) }} />
       <View style={{ flex: 1 }}>
         <ProfileCard
           iconType="Material"
@@ -117,7 +117,22 @@ const Profile = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            router.push("../privacyPolicy");
+            router.push({
+              pathname: `./profile/changePassword`,
+              params: user,
+            });
+          }}
+        >
+          <ProfileCard
+            iconType="Feather"
+            icon="lock"
+            legend="Change Password"
+            legendColor={"#6D6D6D"}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            router.push("../../privacyPolicy");
           }}
         >
           <ProfileCard
