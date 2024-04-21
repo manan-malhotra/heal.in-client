@@ -8,39 +8,6 @@ import axios from "axios";
 import { TouchableOpacity } from "react-native";
 import { Alert } from "react-native";
 
-const addTest = () => {
-  const [tests, setTests] = useState([]);
-  return Alert.alert(
-    "Add Test",
-    "Enter the name of the test",
-    [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "destructive",
-      },
-      {
-        text: "Add",
-        onPress: async (testName) => {
-          try {
-            const response = await axios.post(
-              process.env.API_HOST + "/test/add",
-              {
-                test_name: testName,
-              },
-            );
-            console.log(response.data);
-            setTests(response.data);
-          } catch (error) {
-            console.log(error);
-          }
-        },
-      },
-    ],
-    "plain-text",
-  );
-};
-
 const AddTests = () => {
   const [tests, setTests] = useState([]);
   const getTests = async () => {
