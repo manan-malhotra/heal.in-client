@@ -118,7 +118,7 @@ const Profile = () => {
         <TouchableOpacity
           onPress={() => {
             router.push({
-              pathname: "../../user/profile/changePasswordProfile",
+              pathname: `./profile/changePassword`,
               params: user,
             });
           }}

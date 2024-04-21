@@ -8,7 +8,6 @@ import {
 import { theme } from "../../../constants/Colors";
 import CustomKeyboardView from "../../../components/CustomKeyboardView";
 import MyTextInput from "../../../components/TextInput";
-import Header from "../../../components/Header";
 import axios from "axios";
 
 const ChangePasswordProfile = () => {
@@ -46,7 +45,6 @@ const ChangePasswordProfile = () => {
   };
   return (
     <View style={styles.body}>
-      <Header />
       <View>
         <View
           style={{

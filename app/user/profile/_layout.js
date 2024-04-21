@@ -18,9 +18,9 @@ const _layout = () => {
         }}
       />
       <Stack.Screen
-        name="changePasswordProfile"
+        name="changePassword"
         options={{
-          headerShown: false,
+          headerShown: true,
           headerTitle: "",
           headerBackTitleVisible: false,
           headerTintColor: "black",
