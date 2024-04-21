@@ -20,6 +20,7 @@ export default function SignIn() {
     function validateRegistrationData(email, password) {
       let errors = {};
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      errors = {};
       if (!email || !emailRegex.test(email)) {
         errors.email = "Email must be a valid email address";
       }
@@ -32,11 +33,11 @@ export default function SignIn() {
     const validationErrors = validateRegistrationData(email, password);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
+      const errors = {};
       try {
         const response = await login(email, password);
-        const errors = {};
-        if (response === 404) {
-          errors.email = "Account with that email does not exist.";
+        if (response === 409) {
+          errors.email = "Account does not exist.";
         } else if (response === 401) {
           errors.password = "Entered password is wrong.";
         } else if (response === 502) {
