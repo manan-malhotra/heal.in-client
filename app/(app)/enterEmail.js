@@ -13,9 +13,10 @@ import axios from "axios";
 
 const EnterEmail = () => {
   const [email, setEmail] = useState("");
-  const [generatedOtp, setGeneratedOtp] = useState(null);
+  const [error, setError] = useState("");
 
   const sendEmail = async () => {
+    setError("");
     try {
       const response = await axios.post(
         process.env.API_HOST + "/api/user/forgotPassword",
@@ -31,6 +32,7 @@ const EnterEmail = () => {
       router.push({ pathname: "/forgotPassword", params: data });
     } catch (error) {
       console.log(error);
+      setError("Email not found");
     }
   };
   return (
@@ -91,6 +93,7 @@ const EnterEmail = () => {
       </View>
       <CustomKeyboardView inChat={false}>
         <View style={{ backgroundColor: "white" }}>
+          {error && <ErrorView error={error} />}
           <MyTextInput
             placeholderText={"Email"}
             icon={"mail"}
@@ -159,3 +162,22 @@ const styles = StyleSheet.create({
     color: theme.colors.error,
   },
 });
+
+const ErrorView = ({ error }) => {
+  return (
+    <View
+      style={{
+        justifyContent: "flex-start",
+        paddingBottom: 10,
+        width: wp(80),
+        marginLeft: "auto",
+        marginRight: "auto",
+        marginTop: hp(-1),
+        paddingTop: hp(1),
+        marginBottom: hp(0.45),
+      }}
+    >
+      <Text style={styles.error}>{error}</Text>
+    </View>
+  );
+};

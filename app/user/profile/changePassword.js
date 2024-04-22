@@ -27,16 +27,21 @@ const ChangePasswordProfile = () => {
         );
         console.log("Strong Password required");
       } else {
-        const response = await axios.post(
-          process.env.API_HOST + "/api/user/updatePassword",
-          {
-            email: data.email,
-            currentPassword,
-            password,
-          },
-        );
-        console.log("RESPONSE STATUS: ", response.status);
-        router.back();
+        try {
+          const response = await axios.post(
+            process.env.API_HOST + "/api/user/updatePassword",
+            {
+              email: data.email,
+              currentPassword,
+              password,
+            },
+          );
+          console.log("RESPONSE STATUS: ", response.status);
+          router.back();
+        } catch (error) {
+          setPasswordError("Incorrect Password");
+          console.log("Error: ", error);
+        }
       }
     } else {
       setPasswordError("Passwords do not match");
@@ -110,7 +115,6 @@ const ChangePasswordProfile = () => {
             fontSize={20}
           />
         </View>
-        {passwordError && <ErrorView error={passwordError} />}
         <View style={{ backgroundColor: "white" }}>
           <MyTextInput
             placeholderText={"Password"}
@@ -131,6 +135,8 @@ const ChangePasswordProfile = () => {
             fontSize={20}
           />
         </View>
+        {passwordError && <ErrorView error={passwordError} />}
+
         <View
           style={{ width: wp(100), alignItems: "center", paddingTop: hp(3) }}
         >
