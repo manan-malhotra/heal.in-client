@@ -132,7 +132,10 @@ const Home = () => {
                         <Pressable
                             onPress={() =>
                                 router.push(
-                                    user.role.toLowerCase() + "/home/relax"
+                                    {
+                                        pathname: user.role.toLowerCase() + "/home/relax",
+                                        params: {role: user.role}
+                                    }
                                 )
                             }
                         >
@@ -169,11 +172,14 @@ const Home = () => {
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() =>
-                                router.push(
-                                    user.role.toLowerCase() + "/home/relax"
-                                )
-                            }
+                        onPress={() =>
+                            router.push(
+                                {
+                                    pathname: user.role.toLowerCase() + "/home/relax",
+                                    params: {role: user.role}
+                                }
+                            )
+                        }
                         >
                             <View style={styles.itemText}>
                                 <Text style={styles.itemHeading}>Relax</Text>
@@ -245,8 +251,8 @@ const styles = StyleSheet.create({
         marginRight: "auto",
         width: "91%",
         height: 120,
-        backgroundColor: theme.colors.background,
         borderRadius: 10,
+        backgroundColor: theme.colors.background,
         borderBlockColor: theme.colors.primary,
         borderWidth: 1,
         marginVertical: 10,
@@ -308,9 +314,9 @@ const styles = StyleSheet.create({
     item: {
         width: 110,
         height: 110,
-        borderRadius: "100%",
         backgroundColor: theme.colors.background,
         marginHorizontal: 15,
+        borderRadius: "100%",
         borderBlockColor: theme.colors.primary,
         borderWidth: 1,
         flexDirection: "row",

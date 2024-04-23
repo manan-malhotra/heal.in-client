@@ -14,12 +14,12 @@ import {
 import { Feather } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { theme } from "../../../constants/Colors";
+import { theme } from "../../../../constants/Colors";
 
 const { width } = Dimensions.get("window");
 const squareWidth = width / 2;
 
-const breathing_square = () => {
+const BreathingSquare = () => {
   const move = useRef(new Animated.Value(0)).current;
   const textOpacity = useRef(new Animated.Value(1)).current;
   const [isAnimating, setIsAnimating] = useState(false);
@@ -220,7 +220,7 @@ const breathing_square = () => {
   );
 };
 
-export default breathing_square;
+export default BreathingSquare;
 
 const TimerInput = ({ onIntervalChange }) => {
   const intervals = [

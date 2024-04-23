@@ -1,6 +1,6 @@
 import SelectDropdown from "react-native-select-dropdown";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { theme } from "../../../constants/Colors";
+import { theme } from "../../../../constants/Colors";
 import React, { useRef, useState, useEffect } from "react";
 import {
     StyleSheet,
@@ -11,17 +11,15 @@ import {
     TouchableOpacity,
 } from "react-native";
 import {
-    heightPercentageToDP,
     heightPercentageToDP as hp,
-    widthPercentageToDP,
-    widthPercentageToDP as wp,
+    widthPercentageToDP as wp
 } from "react-native-responsive-screen";
 import { Entypo, Feather } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 const circleWidth = width / 2;
 
-const breathing_E478 = () => {
+const Breathing478 = () => {
     const move = useRef(new Animated.Value(0)).current;
     const textOpacity = useRef(new Animated.Value(0)).current; 
     const [isAnimating, setIsAnimating] = useState(false);
@@ -154,6 +152,9 @@ const breathing_E478 = () => {
         setTimerRunning(false);
         move.resetAnimation();
         textOpacity.resetAnimation();
+        inhaleOpacity.resetAnimation();
+        holdOpacity.resetAnimation();
+        exhaleOpacity.resetAnimation();
     };
 
     const handleIntervalChange = (value) => {
@@ -252,8 +253,8 @@ const breathing_E478 = () => {
                                 style={{
                                     opacity: 0.25,
                                     backgroundColor: "rgba(69,105,144,0.7)",
-                                    width: widthPercentageToDP(50),
-                                    height: heightPercentageToDP(25),
+                                    width: wp(50),
+                                    height: hp(25),
                                     borderRadius: circleWidth / 3,
                                     ...StyleSheet.absoluteFill,
                                     transform: [
@@ -366,7 +367,7 @@ const TimerInput = ({ onIntervalChange }) => {
     );
 };
 
-export default breathing_E478;
+export default Breathing478;
 
 const styles = StyleSheet.create({
     container: {

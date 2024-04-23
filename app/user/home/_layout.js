@@ -69,6 +69,7 @@ const _layout = () => {
                 name="relax"
                 options={{
                     headerTitle: "",
+                    headerShown: false,
                     headerBackTitleVisible: false,
                     headerShadowVisible: false,
                     headerStyle: {
