@@ -6,10 +6,14 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { theme } from "../../../constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
 import axios from "axios";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+  } from "react-native-responsive-screen";
 const newJournal = () => {
     const {
         id,
@@ -18,8 +22,25 @@ const newJournal = () => {
     } = useLocalSearchParams();
     const [title, setTitle] = useState(oldTitle || "");
     const [description, setDescription] = useState(oldDescription || "");
+    const [error, setError] = useState("");
+    useEffect(() => {
+        if(title.trim() != "" && description.trim() !=""){
+            setError("")
+        }
+    }, [title, description]);
     const handleSubmit = async () => {
-        if (title.trim() === "" || description.trim() === "") {
+        function validateFormData(title, description) {
+            let error = "";
+            if(title.trim() === "" || description.trim() ===""){
+                console.log(error);
+                error = "Title or description cannot be empty."
+            }
+            return error;
+        }
+        const validationError = validateFormData(title, description);
+        setError(validationError);
+        if(validationError!=""){
+            console.log(error);
             return;
         }
         const json = {
@@ -53,6 +74,7 @@ const newJournal = () => {
     return (
         <>
             <View style={styles.body}>
+                {error!="" && <ErrorView error={error} />}
                 <View style={styles.heading}>
                     <TextInput
                         placeholder="Title"
@@ -91,6 +113,25 @@ const newJournal = () => {
 };
 
 export default newJournal;
+
+const ErrorView = ({ error }) => {
+    return (
+      <View
+        style={{
+          justifyContent: "flex-start",
+          paddingBottom: 10,
+          width: wp(80),
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: hp(-1),
+          paddingTop: hp(1),
+          marginBottom: hp(0.45),
+        }}
+      >
+        <Text style={styles.error}>{error}</Text>
+      </View>
+    );
+  };
 
 const styles = StyleSheet.create({
     body: {
@@ -153,5 +194,8 @@ const styles = StyleSheet.create({
         color: "white",
         textAlign: "center",
         zIndex: 1,
+    },
+    error: {
+        color: theme.colors.error,
     },
 });
