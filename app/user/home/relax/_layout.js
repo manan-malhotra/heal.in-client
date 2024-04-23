@@ -1,22 +1,40 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams } from 'expo-router'
+import React from 'react'
 
-const _layout = () => {
-    const user = useLocalSearchParams();
-    return (
-        <Stack>
-            <Stack.Screen
-                name="index"
-                initialParams={user}
+function _layout() {
+    const name = useLocalSearchParams();
+  return (
+    <Stack>
+            <Stack.Screen 
+                name="index" 
                 options={{
-                    headerTitle: "heal.in",
+                    headerTitle: "Relaxation Exercise",
+                    headerShown: true,
+                    headerBackTitleVisible: false,
+                    headerShadowVisible: false,
+                    headerStyle: {
+                        backgroundColor: "white",
+                    },
+                    headerTintColor: "black",
                 }}
             />
-            <Stack.Screen
-                name="selfHelpVideos"
+            <Stack.Screen 
+                name="breathingCircle" 
                 options={{
-                    headerTitle: "",
+                    headerTitle: "Circle",
+                    headerShown: true,
+                    headerBackTitleVisible: false,
+                    headerShadowVisible: false,
+                    headerStyle: {
+                        backgroundColor: "white",
+                    },
+                    headerTintColor: "black",
+                }}
+            />
+            <Stack.Screen 
+                name="breathingSquare" 
+                options={{
+                    headerTitle: "Square",
                     headerShown: false,
                     headerBackTitleVisible: false,
                     headerShadowVisible: false,
@@ -26,35 +44,10 @@ const _layout = () => {
                     headerTintColor: "black",
                 }}
             />
-            <Stack.Screen
-                name="blogs/index"
+            <Stack.Screen 
+                name="breathing4-7-8" 
                 options={{
-                    headerTitle: "Blogs",
-                    headerBackTitleVisible: false,
-                    headerShadowVisible: false,
-                    headerStyle: {
-                        backgroundColor: "white",
-                    },
-                    headerTintColor: "black",
-                }}
-            />
-            <Stack.Screen
-                name="forums"
-                initialParams={user}
-                options={{
-                    headerTitle: "Forums",
-                    headerBackTitleVisible: false,
-                    headerShadowVisible: false,
-                    headerStyle: {
-                        backgroundColor: "white",
-                    },
-                    headerTintColor: "black",
-                }}
-            />
-            <Stack.Screen
-                name="relax"
-                options={{
-                    headerTitle: "",
+                    headerTitle: "4-7-8",
                     headerShown: false,
                     headerBackTitleVisible: false,
                     headerShadowVisible: false,
@@ -64,8 +57,8 @@ const _layout = () => {
                     headerTintColor: "black",
                 }}
             />
-        </Stack>
-    );
-};
+    </Stack>
+  )
+}
 
-export default _layout;
+export default _layout

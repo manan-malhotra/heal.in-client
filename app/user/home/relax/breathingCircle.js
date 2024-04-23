@@ -1,6 +1,6 @@
 import SelectDropdown from "react-native-select-dropdown";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { theme } from "../../../constants/Colors";
+import { theme } from "../../../../constants/Colors";
 import React, { useRef, useState, useEffect } from "react";
 import {
     StyleSheet,
@@ -19,7 +19,7 @@ import { Feather } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 const circleWidth = width / 2;
 
-const breathing_circle = () => {
+const BreathingCircle = () => {
     const move = useRef(new Animated.Value(0)).current;
     const textOpacity = useRef(new Animated.Value(1)).current;
     const [isAnimating, setIsAnimating] = useState(false);
@@ -252,7 +252,7 @@ const breathing_circle = () => {
     );
 };
 
-export default breathing_circle;
+export default BreathingCircle;
 
 const TimerInput = ({ onIntervalChange }) => {
     const intervals = [
