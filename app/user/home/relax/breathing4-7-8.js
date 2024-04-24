@@ -166,9 +166,24 @@ const Breathing478 = () => {
         startAnimation();
     };
 
-    const translate = move.interpolate({
+    const translateRight = move.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, circleWidth / 5],
+        outputRange: [0, 150],
+    });
+
+    const translateLeft = move.interpolate({
+        inputRange: [0, 1],
+        outputRange: [150, 0],
+    });
+
+    const translateUp = move.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 150],
+    });
+
+    const translateDown = move.interpolate({
+        inputRange: [0, 1],
+        outputRange: [150, 0],
     });
 
     return (
@@ -239,35 +254,81 @@ const Breathing478 = () => {
                     >
                         <Text style={styles.timerText}>Exhale</Text>
                     </Animated.View>
-                    {[0, 1, 2, 3].map((item) => {
-                        const rotation = move.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [
-                                `${item * 0}deg`,
-                                `${item * 90 + 45}deg`,
-                            ],
-                        });
-                        return (
-                            <Animated.View
-                                key={item}
-                                style={{
-                                    opacity: 0.25,
-                                    backgroundColor: "rgba(69,105,144,0.7)",
-                                    width: wp(50),
-                                    height: hp(25),
-                                    borderRadius: circleWidth / 3,
-                                    ...StyleSheet.absoluteFill,
-                                    transform: [
-                                        {
-                                            rotateZ: rotation,
-                                        },
-                                        { translateX: translate },
-                                        { translateY: translate },
-                                    ],
-                                }}
-                            ></Animated.View>
-                        );
-                    })}
+                    <>
+                        <Animated.View
+                            style={{
+                                opacity: 0.8,
+                                backgroundColor: "rgba(69,105,144,1)",
+                                width: wp(50),
+                                height: hp(25),
+                                borderRadius: circleWidth/3,
+                                ...StyleSheet.absoluteFill,
+                                transform: [{
+                                    rotateZ: move.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: ['-90deg', '90deg']
+                                    })
+                                }]
+                            }}
+                        />
+                        <Animated.View
+                            style={{
+                                opacity: 0.8,
+                                backgroundColor: "rgba(69,105,144,1)",
+                                width: wp(10),
+                                height: hp(5),
+                                borderRadius: circleWidth,
+                                ...StyleSheet.absoluteFill,
+                                transform: [
+                                    { translateY: -50 },
+                                    { translateX: translateRight }
+                                ]
+                            }}
+                        />
+                        <Animated.View
+                            style={{
+                                opacity: 0.8,
+                                backgroundColor: "rgba(69,105,144,1)",
+                                width: wp(10),
+                                height: hp(5),
+                                borderRadius: circleWidth,
+                                ...StyleSheet.absoluteFill,
+                                transform: [
+                                    { translateY: 195 },
+                                    { translateX: translateLeft }
+                                ]
+                            }}
+                        />
+                        <Animated.View
+                            style={{
+                                opacity: 0.8,
+                                backgroundColor: "rgba(69,105,144,1)",
+                                width: wp(10),
+                                height: hp(5),
+                                borderRadius: circleWidth,
+                                ...StyleSheet.absoluteFill,
+                                transform: [
+                                    { translateY: translateDown },
+                                    { translateX: 200 }
+                                ]
+                            }}
+                        />
+                        <Animated.View
+                            style={{
+                                opacity: 0.8,
+                                backgroundColor: "rgba(69,105,144,1)",
+                                width: wp(10),
+                                height: hp(5),
+                                borderRadius: circleWidth,
+                                ...StyleSheet.absoluteFill,
+                                transform: [
+                                    { translateY: translateUp },
+                                    { translateX: -50 }
+                                ]
+                            }}
+                        />
+                    </>
+
                 </View>
                 <View style={{ paddingTop: "80%" }}>
                     <View style={styles.timerContainer}>
@@ -396,6 +457,7 @@ const styles = StyleSheet.create({
     timerText: {
         fontSize: 23,
         textAlign: "center",
+        fontWeight: 'bold'
     },
     dropdownButtonStyle: {
         width: 170,

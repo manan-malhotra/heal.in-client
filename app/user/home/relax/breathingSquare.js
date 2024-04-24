@@ -161,36 +161,80 @@ const BreathingSquare = () => {
           >
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>Exhale</Text>
           </Animated.View>
-          {[0, 1, 2, 3, 4, 5, 6, 7].map((item) => {
-            const rotation = move.interpolate({
-              inputRange: [0, 1],
-              outputRange: [
-                `${item * 0}deg`,
-                `${item * 90}deg`,
-              ],
-            });
-            return (
+          <>
+            <Animated.View
+                style={{
+                    opacity: 0.60,
+                    backgroundColor: "rgba(69,105,144,1)",
+                    width: squareWidth,
+                    height: squareWidth,
+                    borderRadius: squareWidth / 5,
+                    ...StyleSheet.absoluteFill,
+                    transform: [
+                    {
+                        scale: move.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0.6, 0.6], 
+                        }),
+                    },
+                    ],
+                }}
+                />
+              <Animated.View
+                style={{
+                    opacity: 0.40,
+                    backgroundColor: "rgba(69,105,144,1)",
+                    width: squareWidth,
+                    height: squareWidth,
+                    borderRadius: squareWidth / 5,
+                    ...StyleSheet.absoluteFill,
+                    transform: [
+                    {
+                        scale: move.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0.6, 1], 
+                        }),
+                    },
+                    ],
+                }}
+                />
+              <Animated.View
+                style={{
+                    opacity: 0.30,
+                    backgroundColor: "rgba(69,105,144,1)",
+                    width: squareWidth,
+                    height: squareWidth,
+                    borderRadius: squareWidth / 5,
+                    ...StyleSheet.absoluteFill,
+                    transform: [
+                    {
+                        scale: move.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0.6, 1.4], 
+                        }),
+                    },
+                    ],
+                }}
+                />
                 <Animated.View
-                    key={item}
-                    style={{
-                        opacity: 0.25,
-                        backgroundColor: "rgba(69,105,144,0.7)",
-                        width: squareWidth,
-                        height: squareWidth,
-                        borderRadius: squareWidth / 5,
-                        ...StyleSheet.absoluteFill,
-                        transform: [
-                        {
-                            scale: move.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [1, 1.3], 
-                            }),
-                        },
-                        ],
-                    }}
-                    ></Animated.View>
-            );
-          })}
+                style={{
+                    opacity: 0.20,
+                    backgroundColor: "rgba(69,105,144,1)",
+                    width: squareWidth,
+                    height: squareWidth,
+                    borderRadius: squareWidth / 5,
+                    ...StyleSheet.absoluteFill,
+                    transform: [
+                    {
+                        scale: move.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0.6, 1.8], 
+                        }),
+                    },
+                    ],
+                }}
+                />
+              </>
         </View>
         <View style={{ paddingTop: "80%" }}>
           <View style={styles.timerContainer}>
@@ -288,7 +332,7 @@ const TimerInput = ({ onIntervalChange }) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: hp(14),
-    left: wp(24),
+    left: wp(25),
   },
   timerContainer: {
     flexDirection: "row",

@@ -112,7 +112,7 @@ const BreathingCircle = () => {
 
     const translate = move.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, circleWidth/5],
+        outputRange: [0, circleWidth/6],
     });
 
     const exhale = textOpacity.interpolate({
@@ -191,18 +191,15 @@ const BreathingCircle = () => {
                         </Text>
                     </Animated.View>
                     {[0, 1, 2, 3, 4, 5, 6, 7].map((item) => {
-                        const rotation = move.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [
-                                `${item * 0}deg`,
-                                `${item * 45 + 90}deg`,
-                            ],
-                        });
+                    const rotation = move.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [`${item * 45}deg`, `${item * 45 + 180}deg`],
+                    });
                         return (
                             <Animated.View
                                 key={item}
                                 style={{
-                                    opacity: 0.25,
+                                    opacity: 0.28,
                                     backgroundColor: "rgba(69,105,144,0.7)",
                                     width: circleWidth,
                                     height: circleWidth,
