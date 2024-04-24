@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { theme } from "../../../constants/Colors";
@@ -62,9 +63,11 @@ const NewForum = () => {
       );
       if (response.status === 200) {
         console.log("success");
-        //change if using on android
-        // router.push("./");
-        router.dismissAll();
+        if (Platform.OS === 'ios') {
+            router.dismissAll();
+          } else {
+            router.push('./');
+          }
       }
     } catch (error) {
       console.log(error);
@@ -73,7 +76,7 @@ const NewForum = () => {
   return (
     <View style={styles.body}>
       <ScrollView style={styles.question}>
-        <ErrorView error={error} />
+        {error && <ErrorView error={error} />}
         <View style={styles.query}>
           <TextInput
             placeholder="Ask your question..."

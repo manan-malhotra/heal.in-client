@@ -87,7 +87,7 @@ export default function SignUp() {
       if (!data.firstName || data.firstName.trim() === "") {
           errors.fullName = "Name cannot be empty";
       }
-      if (!data.lastName || data.firstName.trim() === "") {
+      if (!data.lastName || data.lastName.trim() === "") {
           errors.fullName = "Last name needed";
       }
       if (!data.age || isNaN(data.age)) {
