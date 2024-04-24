@@ -15,6 +15,7 @@ import { Feather } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { theme } from "../../../../constants/Colors";
+import { Stack } from "expo-router";
 
 const { width } = Dimensions.get("window");
 const squareWidth = width / 2;
@@ -98,7 +99,7 @@ const BreathingSquare = () => {
     resetAnimation();
     setShowPicker(true);
     setTimer(0);
-};
+  };
 
   const handleIntervalChange = (value) => {
     const numVal = parseInt(value);
@@ -121,6 +122,17 @@ const BreathingSquare = () => {
 
   return (
     <>
+      <Stack.Screen
+        options={{
+          headerTitle: "",
+          headerBackTitleVisible: false,
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: "white",
+          },
+          headerTintColor: "black",
+        }}
+      />
       <View
         style={{
           backgroundColor: "white",
@@ -163,78 +175,78 @@ const BreathingSquare = () => {
           </Animated.View>
           <>
             <Animated.View
-                style={{
-                    opacity: 0.60,
-                    backgroundColor: "rgba(69,105,144,1)",
-                    width: squareWidth,
-                    height: squareWidth,
-                    borderRadius: squareWidth / 5,
-                    ...StyleSheet.absoluteFill,
-                    transform: [
-                    {
-                        scale: move.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.6, 0.6], 
-                        }),
-                    },
-                    ],
-                }}
-                />
-              <Animated.View
-                style={{
-                    opacity: 0.40,
-                    backgroundColor: "rgba(69,105,144,1)",
-                    width: squareWidth,
-                    height: squareWidth,
-                    borderRadius: squareWidth / 5,
-                    ...StyleSheet.absoluteFill,
-                    transform: [
-                    {
-                        scale: move.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.6, 1], 
-                        }),
-                    },
-                    ],
-                }}
-                />
-              <Animated.View
-                style={{
-                    opacity: 0.30,
-                    backgroundColor: "rgba(69,105,144,1)",
-                    width: squareWidth,
-                    height: squareWidth,
-                    borderRadius: squareWidth / 5,
-                    ...StyleSheet.absoluteFill,
-                    transform: [
-                    {
-                        scale: move.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.6, 1.4], 
-                        }),
-                    },
-                    ],
-                }}
-                />
-                <Animated.View
-                style={{
-                    opacity: 0.20,
-                    backgroundColor: "rgba(69,105,144,1)",
-                    width: squareWidth,
-                    height: squareWidth,
-                    borderRadius: squareWidth / 5,
-                    ...StyleSheet.absoluteFill,
-                    transform: [
-                    {
-                        scale: move.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.6, 1.8], 
-                        }),
-                    },
-                    ],
-                }}
-                />
-              </>
+              style={{
+                opacity: 0.6,
+                backgroundColor: "rgba(69,105,144,1)",
+                width: squareWidth,
+                height: squareWidth,
+                borderRadius: squareWidth / 5,
+                ...StyleSheet.absoluteFill,
+                transform: [
+                  {
+                    scale: move.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.6, 0.6],
+                    }),
+                  },
+                ],
+              }}
+            />
+            <Animated.View
+              style={{
+                opacity: 0.4,
+                backgroundColor: "rgba(69,105,144,1)",
+                width: squareWidth,
+                height: squareWidth,
+                borderRadius: squareWidth / 5,
+                ...StyleSheet.absoluteFill,
+                transform: [
+                  {
+                    scale: move.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.6, 1],
+                    }),
+                  },
+                ],
+              }}
+            />
+            <Animated.View
+              style={{
+                opacity: 0.3,
+                backgroundColor: "rgba(69,105,144,1)",
+                width: squareWidth,
+                height: squareWidth,
+                borderRadius: squareWidth / 5,
+                ...StyleSheet.absoluteFill,
+                transform: [
+                  {
+                    scale: move.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.6, 1.4],
+                    }),
+                  },
+                ],
+              }}
+            />
+            <Animated.View
+              style={{
+                opacity: 0.2,
+                backgroundColor: "rgba(69,105,144,1)",
+                width: squareWidth,
+                height: squareWidth,
+                borderRadius: squareWidth / 5,
+                ...StyleSheet.absoluteFill,
+                transform: [
+                  {
+                    scale: move.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.6, 1.8],
+                    }),
+                  },
+                ],
+              }}
+            />
+          </>
         </View>
         <View style={{ paddingTop: "80%" }}>
           <View style={styles.timerContainer}>
@@ -313,10 +325,7 @@ const TimerInput = ({ onIntervalChange }) => {
               ...(isSelected && { backgroundColor: "#D2D9DF" }),
             }}
           >
-            <Icon
-              name={item.icon}
-              style={styles.dropdownItemIconStyle}
-            />
+            <Icon name={item.icon} style={styles.dropdownItemIconStyle} />
             <Text style={styles.dropdownItemTxtStyle}>
               {item.title + " " + item.unit}
             </Text>
