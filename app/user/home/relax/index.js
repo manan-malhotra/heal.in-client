@@ -16,14 +16,17 @@ const Relax = () => {
     const exerciseData=[
         {
             id: 0,
-            name: 'Circle'
+            path: 'Circle',
+            name: 'Vim Hoff'
         },
         {
             id: 1,
-            name: 'Square'
+            path: 'Square',
+            name: 'Box Breathing'
         },
         {
             id: 2,
+            path: '4-7-8',
             name: '4-7-8'
         }
     ];
@@ -31,7 +34,7 @@ const Relax = () => {
         <>
             <View style={styles.body}>
                 <View style = {{alignSelf: 'center',flex:1,justifyContent: 'center'}}>
-                    <Image source = {require("../../../../assets/images/meditation.png")} style = {{alignSelf: 'center' ,height: heightPercentageToDP(41),width: widthPercentageToDP(83), opacity: 0.85}}/>
+                    <Image source = {require("../../../../assets/images/meditation.png")} style = {{alignSelf: 'center' ,height: heightPercentageToDP(41),width: widthPercentageToDP(83), opacity: 0.70}}/>
                 </View>
                 {exerciseData.map((exercise) => (
                     <TouchableOpacity
@@ -41,7 +44,7 @@ const Relax = () => {
                             console.log("User: ", role);
                             console.log("Exercise: ", exercise.name);
                             router.push({
-                                pathname: role.toLowerCase() + `/home/relax/breathing` + `${exercise.name}`,
+                                pathname: role.toLowerCase() + `/home/relax/breathing` + `${exercise.path}`,
                             });
                         }}
                     >
