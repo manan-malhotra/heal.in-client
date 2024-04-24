@@ -8,7 +8,7 @@ function _layout() {
             <Stack.Screen 
                 name="index" 
                 options={{
-                    headerTitle: "Relaxation Exercise",
+                    headerTitle: "Breathing Exercise",
                     headerShown: true,
                     headerBackTitleVisible: false,
                     headerShadowVisible: false,
@@ -21,7 +21,7 @@ function _layout() {
             <Stack.Screen 
                 name="breathingCircle" 
                 options={{
-                    headerTitle: "Circle",
+                    headerTitle: "Breathing Exercise",
                     headerShown: true,
                     headerBackTitleVisible: false,
                     headerShadowVisible: false,
@@ -34,8 +34,8 @@ function _layout() {
             <Stack.Screen 
                 name="breathingSquare" 
                 options={{
-                    headerTitle: "Square",
-                    headerShown: false,
+                    headerTitle: "Breathing Exercise",
+                    headerShown: true,
                     headerBackTitleVisible: false,
                     headerShadowVisible: false,
                     headerStyle: {
@@ -47,8 +47,8 @@ function _layout() {
             <Stack.Screen 
                 name="breathing4-7-8" 
                 options={{
-                    headerTitle: "4-7-8",
-                    headerShown: false,
+                    headerTitle: "Breathing Exercise",
+                    headerShown: true,
                     headerBackTitleVisible: false,
                     headerShadowVisible: false,
                     headerStyle: {
