@@ -23,7 +23,7 @@ const ChangePasswordProfile = () => {
     if (password === confirmPassword) {
       if (!passwordRegex.test(password)) {
         setPasswordError(
-          "Password must be at least 8 characters long and must contain atleast - \n \u2022 one uppercase letter \n \u2022 one lowercase letter \n \u2022 one number \n \u2022 one special character",
+          "Password must be at least 8 characters long and must contain atleast - \n \u2022 one uppercase letter \n \u2022 one lowercase letter \n \u2022 one number \n \u2022 one special character"
         );
         console.log("Strong Password required");
       } else {
@@ -34,7 +34,7 @@ const ChangePasswordProfile = () => {
               email: data.email,
               currentPassword,
               password,
-            },
+            }
           );
           console.log("RESPONSE STATUS: ", response.status);
           router.back();
@@ -117,7 +117,7 @@ const ChangePasswordProfile = () => {
         </View>
         <View style={{ backgroundColor: "white" }}>
           <MyTextInput
-            placeholderText={"Password"}
+            placeholderText={"New Password"}
             icon={""}
             isPassword={true}
             onChangeText={setPassword}
