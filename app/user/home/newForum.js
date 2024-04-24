@@ -76,7 +76,7 @@ const NewForum = () => {
   return (
     <View style={styles.body}>
       <ScrollView style={styles.question}>
-        <ErrorView error={error} />
+        {error && <ErrorView error={error} />}
         <View style={styles.query}>
           <TextInput
             placeholder="Ask your question..."
