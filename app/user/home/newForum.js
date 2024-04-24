@@ -62,9 +62,9 @@ const NewForum = () => {
       );
       if (response.status === 200) {
         console.log("success");
-        //changed because not working
-        router.push("./");
-        // router.dismissAll();
+        //change if using on android
+        // router.push("./");
+        router.dismissAll();
       }
     } catch (error) {
       console.log(error);
