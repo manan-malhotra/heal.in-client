@@ -13,13 +13,35 @@ import { theme } from "../../../constants/Colors";
 import axios from "axios";
 import { router, useLocalSearchParams } from "expo-router";
 import { sentimentScore } from "../../../common/sentiment";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
 const NewForum = () => {
   const user = useLocalSearchParams();
   const [query, setQuery] = useState("");
+  const [error, setError] = useState("");
+  useEffect(() => {
+    if(query.trim() != ""){
+      setError("");
+    }
+  },[query])
   const handleSubmit = async () => {
-    if (query.trim() === "") {
+    function validateFormData(query) {
+      let error = "";
+      if(query.trim() === ""){
+        error = "Query cannot be empty."
+      }
+      return error;
+    }
+    const validationError = validateFormData(query);
+    setError(validationError);
+
+    
+    if (validationError != "") {
       return;
     }
+
     try {
       const score = await sentimentScore(query);
       if (score < -0.2) {
@@ -40,6 +62,8 @@ const NewForum = () => {
       );
       if (response.status === 200) {
         console.log("success");
+        //change if using on android
+        // router.push("./");
         router.dismissAll();
       }
     } catch (error) {
@@ -49,6 +73,7 @@ const NewForum = () => {
   return (
     <View style={styles.body}>
       <ScrollView style={styles.question}>
+        <ErrorView error={error} />
         <View style={styles.query}>
           <TextInput
             placeholder="Ask your question..."
@@ -81,6 +106,25 @@ const NewForum = () => {
 };
 
 export default NewForum;
+
+const ErrorView = ({ error }) => {
+  return (
+    <View
+      style={{
+        justifyContent: "flex-start",
+        paddingBottom: 10,
+        width: wp(80),
+        marginLeft: "auto",
+        marginRight: "auto",
+        marginTop: hp(-1),
+        paddingTop: hp(3),
+        marginBottom: hp(0.45),
+      }}
+    >
+      <Text style={styles.error}>{error}</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   body: {
@@ -137,5 +181,8 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     zIndex: 1,
+  },
+  error: {
+    color: theme.colors.error,
   },
 });
