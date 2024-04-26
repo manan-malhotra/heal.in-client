@@ -11,19 +11,18 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { theme } from "../../../constants/Colors";
-import { Entypo, Feather, FontAwesome } from "@expo/vector-icons";
-import RNPickerSelect from "react-native-picker-select";
-import AddCardUsers from "../../../components/AddCardUsers";
+// import { Entypo, Feather, FontAwesome } from "@expo/vector-icons";
+// import RNPickerSelect from "react-native-picker-select";
+// import AddCardUsers from "../../../components/AddCardUsers";
 import Header from "../../../components/Header";
 import MyTextInput from "../../../components/TextInput";
 import axios from "axios";
 import GenderDropDown from "../../../components/GenderDropDown";
 
 const AddDoctorFields = () => {
-  const [selectedGender, setSelectedGender] = useState(null);
   const [fullName, setFullName] = useState("");
   const [degree, setDegree] = useState("");
   const [email, setEmail] = useState("");
@@ -34,10 +33,129 @@ const AddDoctorFields = () => {
   const [specialization, setSpecialization] = useState("");
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(0);
+  const [validationError, setValidationError] = useState("");
+  const passwordRegex =
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const contactRegex = /^\d{10}$/;
+  const nameRegex = /^[a-zA-Z]+(?: [a-zA-Z]+)+$/;
+  useEffect(() => {
+    if (
+      fullName.trim() != "" &&
+      email.trim() != "" &&
+      phoneNumber &&
+      password.trim() != "" &&
+      gender &&
+      age &&
+      degree.trim() != "" &&
+      specialization.trim() != "" &&
+      experience &&
+      licenseNumber &&
+      validationError === "Please fill all the entries"
+    ) {
+      setValidationError("");
+    }
+    if (
+      nameRegex.test(fullName) &&
+      validationError ===
+        "Please enter first name and last name separated by a space"
+    ) {
+      setValidationError("");
+    }
+    if (
+      emailRegex.test(email) &&
+      validationError === "Please enter a valid email"
+    ) {
+      setValidationError("");
+    }
+    if (contactRegex.test(phoneNumber)) {
+      setValidationError("");
+    }
+    if (
+      passwordRegex.test(password) &&
+      validationError === "Please enter a valid password"
+    ) {
+      setValidationError("");
+    }
+  }, [
+    fullName,
+    email,
+    phoneNumber,
+    gender,
+    age,
+    password,
+    degree,
+    specialization,
+    experience,
+    licenseNumber,
+  ]);
   const handleSubmit = () => {
     handleSave();
   };
   const handleSave = async () => {
+    function validateFormData(
+      fullName,
+      email,
+      phoneNumber,
+      gender,
+      age,
+      password,
+      degree,
+      specialization,
+      experience,
+      licenseNumber
+    ) {
+      if (
+        fullName.trim() === "" ||
+        email.trim() === "" ||
+        !phoneNumber ||
+        password.trim() === "" ||
+        !gender ||
+        !age ||
+        degree.trim() === "" ||
+        specialization.trim() === "" ||
+        !experience ||
+        !licenseNumber
+      ) {
+        setValidationError("Please fill all the entries");
+        return false;
+      }
+      if (!nameRegex.test(fullName)) {
+        setValidationError(
+          "Please enter first name and last name separated by a space"
+        );
+        return false;
+      }
+      if (!emailRegex.test(email)) {
+        setValidationError("Please enter a valid email");
+        return false;
+      }
+      if (!contactRegex.test(phoneNumber)) {
+        setValidationError("Please enter a valid 10 digit phone number");
+        return false;
+      }
+      if (!passwordRegex.test(password)) {
+        setValidationError("Please enter a valid password");
+        return false;
+      }
+      setValidationError("");
+      return true;
+    }
+    const valid = validateFormData(
+      fullName,
+      email,
+      phoneNumber,
+      gender,
+      age,
+      password,
+      degree,
+      specialization,
+      experience,
+      licenseNumber
+    );
+    if (!valid) {
+      return;
+    }
     const [firstName, lastName] = fullName.split(" ");
     try {
       const response = await axios.post(
@@ -62,8 +180,12 @@ const AddDoctorFields = () => {
         router.back();
       }
     } catch (error) {
-      console.log("Error saving post: " + error);
-      console.log(error.data.message);
+      if (error.response.status === 409) {
+        setValidationError("Email ID is taken.");
+      } else {
+        console.log("Error saving post: " + error);
+        console.log(error.data.message);
+      }
     }
   };
 
@@ -73,6 +195,7 @@ const AddDoctorFields = () => {
       <View
         style={{ backgroundColor: "white", height: hp(70), paddingTop: "8%" }}
       >
+        {validationError && <ErrorView error={validationError} />}
         <ScrollView>
           <MyTextInput
             icon="user"
@@ -116,7 +239,10 @@ const AddDoctorFields = () => {
               <View style={styles.card}>
                 <TextInput
                   placeholder="Age"
+                  placeholderTextColor="#ADADAD"
                   style={styles.textInput}
+                  keyboardType="numeric"
+                  secureTextEntry={false}
                   value={age}
                   onChangeText={(text) => setAge(text)}
                 />
@@ -143,6 +269,7 @@ const AddDoctorFields = () => {
             placeholderText="Experience"
             icon="briefcase"
             onChangeText={setExperience}
+            isNum={true}
           />
           <MyTextInput
             placeholderText="License Number"
@@ -180,6 +307,24 @@ const AddDoctorFields = () => {
 };
 export default AddDoctorFields;
 
+const ErrorView = ({ error }) => {
+  return (
+    <View
+      style={{
+        justifyContent: "flex-start",
+        paddingBottom: 10,
+        width: wp(80),
+        marginLeft: "auto",
+        marginRight: "auto",
+        marginTop: hp(-1),
+        marginBottom: hp(0.45),
+      }}
+    >
+      <Text style={styles.error}>{error}</Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   body: {
     flex: 1,
@@ -207,5 +352,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 20,
     fontWeight: "600",
+  },
+  error: {
+    color: theme.colors.error,
   },
 });

@@ -122,7 +122,6 @@ const AddUsersFields = () => {
       password
     );
     if (!valid) {
-      console.log("One is empty");
       return;
     }
     const [firstName, lastName] = fullName.split(" ");
