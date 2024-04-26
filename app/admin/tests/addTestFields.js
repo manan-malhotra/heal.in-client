@@ -9,7 +9,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import Header from "../../../components/Header";
@@ -23,12 +23,34 @@ const AddTestFields = () => {
   const [option2, setOption2] = useState("Several Days");
   const [option3, setOption3] = useState("More than half the days");
   const [option4, setOption4] = useState("Nearly every day");
-
+  const [error, setError] = useState("");
+  useEffect(() => {
+    if (question.trim() != "" && option1.trim() != "" && option2.trim() != "" && option3.trim() != "" && option4.trim() != "") {
+      setError("");
+    }
+  }, [question, option1, option2, option3, option4]);
   const handleSubmit = () => {
-    console.log("Resources: ", question, option1, option2, option3, option4);
     handleAddQuestion();
   };
   const handleAddQuestion = async () => {
+    function validateFormData(question, option1, option2, option3, option4){
+      let error = "";
+      if(
+        question.trim() === "" ||
+        option1.trim() === "" ||
+        option2.trim() === "" ||
+        option3.trim() === "" ||
+        option4.trim() === ""
+      ){
+        error = "The question and options cannot be empty";
+      }
+      return error;
+    }
+    const validationError = validateFormData(question, option1, option2, option3, option4)
+    setError(validationError);
+    if(validationError){
+      return;
+    }
     try {
       const response = await axios.post(
         process.env.API_HOST + "/test/addQuestion",
@@ -51,8 +73,12 @@ const AddTestFields = () => {
         router.back();
       }
     } catch (error) {
-      console.log("Error saving post: " + error);
-      console.log(error.data.message);
+      if (error.response.status === 502) {
+        setError("Our servers are offline, try again later.");
+      } else {
+        setError("Unknown error.");
+        console.log("Error saving post: " + error);
+      }
     }
   };
 
@@ -79,7 +105,7 @@ const AddTestFields = () => {
             marginRight: "auto",
             marginLeft: "auto",
           }}
-        >
+        >{error != "" && <ErrorView error={error} />}
           <View style={styles.card}>
             <TextInput
               placeholder="Question"
@@ -154,6 +180,25 @@ const AddTestFields = () => {
 };
 export default AddTestFields;
 
+const ErrorView = ({ error }) => {
+  return (
+    <View
+      style={{
+        justifyContent: "flex-start",
+        paddingBottom: 10,
+        width: wp(80),
+        marginLeft: "auto",
+        marginRight: "auto",
+        marginTop: hp(-1),
+        paddingTop: hp(0),
+        marginBottom: hp(0.45),
+      }}
+    >
+      <Text style={styles.error}>{error}</Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   body: {
     flex: 1,
@@ -184,5 +229,8 @@ const styles = StyleSheet.create({
   },
   bioInput: {
     height: 100,
+  },
+  error: {
+    color: theme.colors.error,
   },
 });

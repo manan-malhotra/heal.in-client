@@ -22,11 +22,29 @@ import { router, useLocalSearchParams } from "expo-router";
 const AddBlogsFields = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
   const user = useLocalSearchParams();
+  useEffect(() => {
+    if (title.trim() != "" && description.trim() != "") {
+      setError("");
+    }
+  }, [title, description]);
   const handleSubmit = () => {
     handleAddBlog();
   };
   const handleAddBlog = async () => {
+    function validateFormData(title, description) {
+      let error = "";
+      if (title.trim() === "" || description.trim() === "") {
+        error = "Title or description cannot be empty.";
+      }
+      return error;
+    }
+    const validationError = validateFormData(title, description);
+    setError(validationError);
+    if (validationError != "") {
+      return;
+    }
     try {
       const json = {
         description: description,
@@ -44,14 +62,19 @@ const AddBlogsFields = () => {
         router.back();
       }
     } catch (error) {
-      console.log("Error saving post: " + error);
-      console.log(error.data.message);
+      if (error.response.status === 502) {
+        setError("Our servers are offline, try again later.");
+      } else {
+        setError("Unknown error.");
+        console.log("Error saving post: " + error);
+      }
     }
   };
 
   return (
     <View style={styles.body}>
       <Header title="Blogs" />
+
       <View
         style={{
           backgroundColor: "white",
@@ -59,10 +82,11 @@ const AddBlogsFields = () => {
           paddingTop: "8%",
         }}
       >
+        {error != "" && <ErrorView error={error} />}
         <MyTextInput
           placeholderText="Title"
           icon=""
-          isEmail={true}
+          keyboardType="default"
           onChangeText={setTitle}
         />
         <View
@@ -124,6 +148,25 @@ const AddBlogsFields = () => {
 };
 export default AddBlogsFields;
 
+const ErrorView = ({ error }) => {
+  return (
+    <View
+      style={{
+        justifyContent: "flex-start",
+        paddingBottom: 10,
+        width: wp(80),
+        marginLeft: "auto",
+        marginRight: "auto",
+        marginTop: hp(-1),
+        paddingTop: hp(0),
+        marginBottom: hp(0.45),
+      }}
+    >
+      <Text style={styles.error}>{error}</Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   body: {
     flex: 1,
@@ -153,6 +196,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   bioInput: {
-    height: 400,
+    height: 392,
+  },
+  error: {
+    color: theme.colors.error,
   },
 });
