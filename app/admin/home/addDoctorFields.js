@@ -23,7 +23,6 @@ import axios from "axios";
 import GenderDropDown from "../../../components/GenderDropDown";
 
 const AddDoctorFields = () => {
-  const [selectedGender, setSelectedGender] = useState(null);
   const [fullName, setFullName] = useState("");
   const [degree, setDegree] = useState("");
   const [email, setEmail] = useState("");
@@ -139,7 +138,6 @@ const AddDoctorFields = () => {
         setValidationError("Please enter a valid password");
         return false;
       }
-
       setValidationError("");
       return true;
     }
