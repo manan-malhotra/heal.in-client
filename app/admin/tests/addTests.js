@@ -26,7 +26,28 @@ const AddTests = () => {
       });
       getTests();
     } catch (error) {
-      console.log(error);
+      if(error.response.status === 400){
+        Alert.alert(
+          'The name of the test cannot be empty.', 
+          null, 
+          [
+            {
+              text: 'Okay',
+            },
+          ],
+        );
+      }
+      else {
+        Alert.alert(
+          'Our servers are down at the moment, try again later.', 
+          null, 
+          [
+            {
+              text: 'Okay',
+            },
+          ],
+        );
+      }
     }
   };
   useEffect(() => {
