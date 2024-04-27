@@ -14,9 +14,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { theme } from "../../../constants/Colors";
-// import { Entypo, Feather, FontAwesome } from "@expo/vector-icons";
-// import RNPickerSelect from "react-native-picker-select";
-// import AddCardUsers from "../../../components/AddCardUsers";
 import Header from "../../../components/Header";
 import MyTextInput from "../../../components/TextInput";
 import axios from "axios";
