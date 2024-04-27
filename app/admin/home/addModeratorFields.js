@@ -10,7 +10,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { theme } from "../../../constants/Colors";
 import Header from "../../../components/Header";
@@ -57,9 +57,7 @@ const AddModeratorFields = () => {
     ) {
       setValidationError("");
     }
-    if (
-      contactRegex.test(phoneNumber)
-    ) {
+    if (contactRegex.test(phoneNumber)) {
       setValidationError("");
     }
     if (
@@ -203,6 +201,7 @@ const AddModeratorFields = () => {
             <View style={styles.card}>
               <TextInput
                 placeholder="Age"
+                placeholderTextColor="#ADADAD"
                 style={styles.textInput}
                 keyboardType="numeric"
                 secureTextEntry={false}

@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import FloatingButton from "../../../components/floatingButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -26,26 +26,27 @@ const AddTests = () => {
       });
       getTests();
     } catch (error) {
-      if(error.response.status === 400){
+      if (error.response.status === 400) {
+        Alert.alert("The name of the test cannot be empty.", null, [
+          {
+            text: "Okay",
+          },
+        ]);
+      } else if (error.response.status === 409) {
+        Alert.alert("The name of the test already exists.", null, [
+          {
+            text: "Okay",
+          },
+        ]);
+      } else {
         Alert.alert(
-          'The name of the test cannot be empty.', 
-          null, 
+          "Our servers are down at the moment, try again later.",
+          null,
           [
             {
-              text: 'Okay',
+              text: "Okay",
             },
-          ],
-        );
-      }
-      else {
-        Alert.alert(
-          'Our servers are down at the moment, try again later.', 
-          null, 
-          [
-            {
-              text: 'Okay',
-            },
-          ],
+          ]
         );
       }
     }
@@ -57,17 +58,19 @@ const AddTests = () => {
     <View style={styles.body}>
       <View style={{ paddingBottom: 0 }}></View>
       <Title title="Add Tests" />
-      <View style={{ backgroundColor: "#ffffff", flex: 1 }}>
-        {tests.map((test) => (
-          <AddCards
-            name={test.test_name}
-            icon="book-open"
-            route="/admin/tests/addTestFields"
-            data={{ id: test.test_id }}
-            key={test.test_id}
-          />
-        ))}
-      </View>
+      <ScrollView>
+        <View style={{ backgroundColor: "#ffffff", flex: 1 }}>
+          {tests.map((test) => (
+            <AddCards
+              name={test.test_name}
+              icon="book-open"
+              route="/admin/tests/addTestFields"
+              data={{ id: test.test_id }}
+              key={test.test_id}
+            />
+          ))}
+        </View>
+      </ScrollView>
       <TouchableOpacity
         onPress={() => {
           Alert.prompt(
@@ -87,7 +90,7 @@ const AddTests = () => {
                 },
               },
             ],
-            "plain-text",
+            "plain-text"
           );
         }}
       >
