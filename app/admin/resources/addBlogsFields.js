@@ -101,6 +101,7 @@ const AddBlogsFields = () => {
             <Feather name="" size={22} color="black" style={styles.icon} />
             <TextInput
               placeholder="Description"
+              placeholderTextColor="#ADADAD"
               style={[styles.textInput, styles.bioInput]}
               keyboardType="default"
               multiline={true}
