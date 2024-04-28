@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+import { Alert } from "react-native";
 
 export const AuthContext = createContext();
 
@@ -21,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
 
         try {
           const profileResponse = await axios.get(
-            process.env.API_HOST + "/api/user/getProfile"
+            process.env.API_HOST + "/api/user/getProfile",
           );
           if (profileResponse.status === 200) {
             const data = profileResponse.data;
@@ -66,7 +67,7 @@ export const AuthContextProvider = ({ children }) => {
         {
           email: email,
           password: password,
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -98,7 +99,7 @@ export const AuthContextProvider = ({ children }) => {
     try {
       const response = await axios.post(
         process.env.API_HOST + "/api/user/register",
-        userData
+        userData,
       );
 
       if (response.status === 200) {
@@ -134,6 +135,53 @@ export const AuthContextProvider = ({ children }) => {
       console.error("Error logging out: ", error);
     }
   };
+
+  const deleteData = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.delete(
+        process.env.API_HOST + "/api/user/deleteData",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        console.log("Data deleted successfully");
+        return response.status;
+      }
+    } catch (error) {
+      console.error("Error deleting data: ", error);
+      return error.response.status;
+    }
+  };
+
+  const deleteAccount = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.delete(
+        process.env.API_HOST + "/api/user/deleteProfile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.status === 200) {
+        logout();
+      } else {
+        Alert.alert(
+          "Error",
+          "Failed to delete account. Please try again later.",
+        );
+      }
+    } catch (error) {
+      console.log("Error deleting account: ", error);
+      Alert.alert("Error", "Failed to delete account. Please try again later.");
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -142,6 +190,8 @@ export const AuthContextProvider = ({ children }) => {
         login,
         register,
         logout,
+        deleteData,
+        deleteAccount,
         role,
         userId,
       }}
