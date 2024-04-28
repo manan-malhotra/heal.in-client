@@ -1,22 +1,22 @@
 import {
+  Clipboard,
+  Image,
   ImageBackground,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
-  Image,
-  Clipboard,
-  Linking,
   View,
 } from "react-native";
-import React, { useEffect, useRef, useCallback, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { uploadToFirebase } from "../firebaseConfig";
 import {
-  GiftedChat,
   Bubble,
+  GiftedChat,
   InputToolbar,
-  SystemMessage,
   Send,
+  SystemMessage,
 } from "react-native-gifted-chat";
 import { db } from "../firebaseConfig";
 import { router, useLocalSearchParams } from "expo-router";
@@ -116,7 +116,7 @@ const ChatRoom = () => {
 
   const onSend = useCallback((messages = [], url) => {
     setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages),
+      GiftedChat.append(previousMessages, messages)
     );
     handleSendMessage(messages[0], url);
   }, []);
@@ -156,7 +156,7 @@ const ChatRoom = () => {
         { messagesExist: true },
         {
           merge: true,
-        },
+        }
       );
       textRef.current = "";
       if (inputRef) inputRef?.current?.clear();
@@ -210,8 +210,8 @@ const ChatRoom = () => {
   }, [image]);
 
   const handleVideoCall = () => {
-    // Linking.openURL(`https://shepherd-casual-subtly.ngrok-free.app/`);
-    Linking.openURL(`http://172.16.129.74:3000/`);
+    Linking.openURL(`https://sure-moray-actually.ngrok-free.app/`);
+    // Linking.openURL(`http://172.16.129.74:3000/`);
   };
   return (
     <View style={styles.container}>
@@ -257,11 +257,11 @@ const ChatRoom = () => {
                               process.env.TWILIO_API_HOST + "initiate-call",
                               {
                                 to: "+917756994033",
-                              },
+                              }
                             );
                           },
                         },
-                      ],
+                      ]
                     );
                     // axios.post(process.env.TWILIO_API_HOST + "initiate-call", {
                     //   to: "+917756994033",
@@ -295,7 +295,7 @@ const ChatRoom = () => {
                         },
                       },
                     ],
-                    { cancelable: false },
+                    { cancelable: false }
                   );
                 } else if (data.role == "DOCTOR") {
                   Alert.alert(
@@ -325,7 +325,7 @@ const ChatRoom = () => {
                                   handleVideoCall();
                                 },
                               },
-                            ],
+                            ]
                           );
                         },
                       },
@@ -335,7 +335,7 @@ const ChatRoom = () => {
                         style: "cancel",
                       },
                     ],
-                    { cancelable: false },
+                    { cancelable: false }
                   );
                 }
               }}

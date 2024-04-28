@@ -1,9 +1,10 @@
 import {
+  Alert,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Linking,
 } from "react-native";
 import React from "react";
 import { useAuth } from "../../../context/authcontext";
@@ -20,16 +21,63 @@ import {
 import { theme } from "../../../constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
 import Avatar from "../../../components/Avatar";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  or,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
 
 const Profile = () => {
   const user = useLocalSearchParams();
-  const { logout } = useAuth();
+  const { logout, deleteData, deleteAccount } = useAuth();
   const phoneNumber = "9152987821";
 
   const handleCallNumber = () => {
     const phoneUrl = `tel:${phoneNumber}`;
     Linking.openURL(phoneUrl);
   };
+  const deleteInnerData = async () => {
+    const collectionRef = collection(db, "rooms");
+    const q = query(
+      collectionRef,
+      or(
+        where("userId1", "==", user.userId),
+        where("userId2", "==", user.userId),
+      ),
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const innerDoc = doc.ref;
+      const innerDocRef = collection(innerDoc, "messages");
+      const innerQuery = query(innerDocRef);
+      getDocs(innerQuery).then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          deleteDoc(doc.ref);
+        });
+      });
+      deleteDoc(doc.ref);
+    });
+  };
+  const dataDeletion = async () => {
+    const res = await deleteInnerData();
+    const response = await deleteData();
+    if (response === 200) {
+      Alert.alert("Success", "Data deleted successfully");
+    } else {
+      Alert.alert("Error", "Failed to delete data");
+    }
+  };
+
+  const accountDeletion = async () => {
+    await deleteInnerData();
+    await deleteAccount();
+  };
+
   return (
     <View
       style={{
@@ -37,7 +85,7 @@ const Profile = () => {
         backgroundColor: "white",
       }}
     >
-      <View style={{ height: hp(9) }} />
+      <View style={{ height: hp(7) }} />
       <View
         style={{
           height: hp(20),
@@ -67,7 +115,7 @@ const Profile = () => {
           </Text>
         </View>
       </View>
-      <View style={{ padding: hp(1.5) }} />
+      <View style={{ padding: hp(0.5) }} />
       <View style={{ flex: 1 }}>
         <ProfileCard
           iconType="Material"
@@ -142,6 +190,54 @@ const Profile = () => {
             legendColor={"#6D6D6D"}
           />
         </TouchableOpacity>
+        {user.role !== "USER" ? <></> : (
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert(
+                "Deletion",
+                "Deleting Your Data is Permanent. Do you want to delete your account or just the data we have stored?",
+                [
+                  {
+                    text: "Delete Data",
+                    onPress: () => {
+                      dataDeletion();
+                    },
+                    style: "destructive",
+                  },
+                  {
+                    text: "Delete Account",
+                    onPress: () => {
+                      Alert.alert(
+                        "Delete Account",
+                        "Are you sure you want to delete your account?",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel",
+                          },
+                          {
+                            text: "Delete",
+                            onPress: () => accountDeletion(),
+                            style: "destructive",
+                          },
+                        ],
+                      );
+                    },
+                    style: "destructive",
+                  },
+                ],
+              );
+            }}
+          >
+            <ProfileCard
+              iconType="Feather"
+              icon="user-x"
+              legend="Deletion"
+              legendColor={"#6D6D6D"}
+            />
+          </TouchableOpacity>
+        )}
         <TouchableOpacity onPress={() => logout()}>
           <ProfileCard
             iconType="Feather"
