@@ -47,8 +47,8 @@ const Profile = () => {
       collectionRef,
       or(
         where("userId1", "==", user.userId),
-        where("userId2", "==", user.userId),
-      ),
+        where("userId2", "==", user.userId)
+      )
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -190,7 +190,9 @@ const Profile = () => {
             legendColor={"#6D6D6D"}
           />
         </TouchableOpacity>
-        {user.role !== "USER" ? <></> : (
+        {user.role !== "USER" ? (
+          <></>
+        ) : (
           <TouchableOpacity
             onPress={() => {
               Alert.alert(
@@ -221,12 +223,16 @@ const Profile = () => {
                             onPress: () => accountDeletion(),
                             style: "destructive",
                           },
-                        ],
+                        ]
                       );
                     },
                     style: "destructive",
                   },
-                ],
+                  {
+                    text: "Cancel",
+                    style: "cancel",
+                  },
+                ]
               );
             }}
           >
