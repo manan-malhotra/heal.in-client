@@ -25,7 +25,13 @@ const AddTestFields = () => {
   const [option4, setOption4] = useState("Nearly every day");
   const [error, setError] = useState("");
   useEffect(() => {
-    if (question.trim() != "" && option1.trim() != "" && option2.trim() != "" && option3.trim() != "" && option4.trim() != "") {
+    if (
+      question.trim() != "" &&
+      option1.trim() != "" &&
+      option2.trim() != "" &&
+      option3.trim() != "" &&
+      option4.trim() != ""
+    ) {
       setError("");
     }
   }, [question, option1, option2, option3, option4]);
@@ -33,22 +39,28 @@ const AddTestFields = () => {
     handleAddQuestion();
   };
   const handleAddQuestion = async () => {
-    function validateFormData(question, option1, option2, option3, option4){
+    function validateFormData(question, option1, option2, option3, option4) {
       let error = "";
-      if(
+      if (
         question.trim() === "" ||
         option1.trim() === "" ||
         option2.trim() === "" ||
         option3.trim() === "" ||
         option4.trim() === ""
-      ){
+      ) {
         error = "The question and options cannot be empty";
       }
       return error;
     }
-    const validationError = validateFormData(question, option1, option2, option3, option4)
+    const validationError = validateFormData(
+      question,
+      option1,
+      option2,
+      option3,
+      option4
+    );
     setError(validationError);
-    if(validationError){
+    if (validationError) {
       return;
     }
     try {
@@ -64,7 +76,6 @@ const AddTestFields = () => {
         }
       );
       if (response.status === 200) {
-        console.log("SUCCESS");
         setQuestion("");
         setOption1("");
         setOption2("");
@@ -105,7 +116,8 @@ const AddTestFields = () => {
             marginRight: "auto",
             marginLeft: "auto",
           }}
-        >{error != "" && <ErrorView error={error} />}
+        >
+          {error != "" && <ErrorView error={error} />}
           <View style={styles.card}>
             <TextInput
               placeholder="Question"

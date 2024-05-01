@@ -30,7 +30,6 @@ const DoctorDescription = () => {
       other_last_name: userData.doctorLastName,
       other_userId: userData.doctorId,
     };
-    console.log("FINAL DATA: ", finalData);
     router.push({
       pathname: "/chatRoomOut",
       params: finalData,

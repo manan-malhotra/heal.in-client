@@ -46,8 +46,6 @@ const Relax = () => {
             key={exercise.id} // Added key prop for React
             style={styles.buttonCard}
             onPress={() => {
-              console.log("User: ", role);
-              console.log("Exercise: ", exercise.name);
               router.push({
                 pathname:
                   role.toLowerCase() +

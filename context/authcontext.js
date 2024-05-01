@@ -22,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
 
         try {
           const profileResponse = await axios.get(
-            process.env.API_HOST + "/api/user/getProfile",
+            process.env.API_HOST + "/api/user/getProfile"
           );
           if (profileResponse.status === 200) {
             const data = profileResponse.data;
@@ -60,14 +60,13 @@ export const AuthContextProvider = ({ children }) => {
   }, [isAuthenticated]);
 
   const login = async (email, password) => {
-    console.log("aagya");
     try {
       const response = await axios.post(
         process.env.API_HOST + "/api/user/login",
         {
           email: email,
           password: password,
-        },
+        }
       );
 
       if (response.status === 200) {
@@ -78,7 +77,6 @@ export const AuthContextProvider = ({ children }) => {
         setIsAuthenticated(true);
       }
     } catch (error) {
-      console.log(error);
       //Wrong Username
       // 409 - wrong username, 401 - wrong password, 502 - server down
       if (
@@ -86,11 +84,9 @@ export const AuthContextProvider = ({ children }) => {
         error.response.status == 401 ||
         error.response.status == 502
       ) {
-        console.log(error.response.status);
         return error.response.status;
       }
 
-      console.log("Error logging in: ", error);
       setIsAuthenticated(false);
     }
   };
@@ -99,7 +95,7 @@ export const AuthContextProvider = ({ children }) => {
     try {
       const response = await axios.post(
         process.env.API_HOST + "/api/user/register",
-        userData,
+        userData
       );
 
       if (response.status === 200) {
@@ -110,7 +106,6 @@ export const AuthContextProvider = ({ children }) => {
         setIsAuthenticated(true);
       }
     } catch (error) {
-      console.log("Error registering: ", error);
       if (error.response.status == 403) {
         Toast.show({
           type: "error",
@@ -145,11 +140,10 @@ export const AuthContextProvider = ({ children }) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       if (response.status === 200) {
-        console.log("Data deleted successfully");
         return response.status;
       }
     } catch (error) {
@@ -167,18 +161,17 @@ export const AuthContextProvider = ({ children }) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       if (response.status === 200) {
         logout();
       } else {
         Alert.alert(
           "Error",
-          "Failed to delete account. Please try again later.",
+          "Failed to delete account. Please try again later."
         );
       }
     } catch (error) {
-      console.log("Error deleting account: ", error);
       Alert.alert("Error", "Failed to delete account. Please try again later.");
     }
   };

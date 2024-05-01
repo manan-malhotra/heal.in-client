@@ -85,7 +85,6 @@ const AddTests = () => {
               {
                 text: "Add",
                 onPress: async (testName) => {
-                  console.log("Test Name: ", testName);
                   addTest(testName);
                 },
               },

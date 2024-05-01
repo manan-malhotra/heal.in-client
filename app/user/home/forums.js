@@ -40,7 +40,6 @@ const Forums = () => {
       if (user.role == "USER") {
         for (let i = 0; i < response.data.length; i++) {
           for (let j = 0; j < response.data[i].comments.length; j++) {
-            console.log(response.data[i].comments[j].approved);
             if (!response.data[i].comments[j].approved) {
               response.data[i].comments.splice(j, 1);
               j--;
@@ -80,7 +79,6 @@ const Forums = () => {
         process.env.API_HOST + "/api/user/comment",
         json
       );
-      console.log(response.data);
       getForumData();
     } catch (error) {
       console.log(error);

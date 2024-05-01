@@ -13,7 +13,6 @@ import axios from "axios";
 
 const ChangePassword = () => {
   const data = useLocalSearchParams();
-  console.log("DATA: ", data);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null);
@@ -26,7 +25,6 @@ const ChangePassword = () => {
         setPasswordError(
           "Password must be at least 8 characters long and must contain atleast - \n \u2022 one uppercase letter \n \u2022 one lowercase letter \n \u2022 one number \n \u2022 one special character"
         );
-        console.log("Strong Password required");
       } else {
         const response = await axios.post(
           process.env.API_HOST + "/api/user/changePassword",
@@ -35,12 +33,10 @@ const ChangePassword = () => {
             password,
           }
         );
-        console.log("RESPONSE STATUS: ", response.status);
         router.push({ pathname: "/signIn" });
       }
     } else {
       setPasswordError("Passwords do not match");
-      console.log("Passwords do not match");
     }
   };
   return (

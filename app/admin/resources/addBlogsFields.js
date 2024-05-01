@@ -56,7 +56,6 @@ const AddBlogsFields = () => {
         json
       );
       if (response.status === 200) {
-        console.log("SUCCESS");
         setTitle("");
         setDescription("");
         router.back();

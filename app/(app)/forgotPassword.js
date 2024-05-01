@@ -19,7 +19,6 @@ const ForgotPassword = () => {
     if (code.length === 4) {
       try {
         if (code === data.otp) {
-          console.log("OTP verified successfully");
           const email = data.email;
           router.push({ pathname: "/changePassword", params: { email } });
           try {
@@ -31,7 +30,7 @@ const ForgotPassword = () => {
           setOTPError("Incorrect OTP");
         }
       } catch (err) {
-        console.log(response);
+        console.log(err);
       }
     } else {
       console.log("Please enter a valid 4-digit OTP.");

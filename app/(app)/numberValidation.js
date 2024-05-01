@@ -13,7 +13,6 @@ import { AuthContext } from "../../context/authcontext";
 
 export default function numberValidation() {
   const userData = useLocalSearchParams();
-  //   console.log(userData.contact);
   const [code, setCode] = useState("");
   const [attempts, setAttempts] = useState(2);
   const [countDown, setCountDown] = useState(30);
@@ -44,7 +43,6 @@ export default function numberValidation() {
         setAttempts((prevAttempts) => prevAttempts - 1);
       } else if (response.message) {
         setOTPError(response.message);
-        console.log(response.message);
       } else {
         console.error(response.message);
       }
@@ -57,7 +55,6 @@ export default function numberValidation() {
       try {
         const response = await verifyOTP(phoneNumber, code);
         if (response && response.message === "OTP verified successfully") {
-          console.log("OTP verified successfully");
           try {
             setOTPError(null);
             register(userData);
@@ -77,10 +74,9 @@ export default function numberValidation() {
           setOTPError("Unable to verify OTP. Try again later.");
         } else {
           setOTPError(response.message);
-          console.log(response.message);
         }
       } catch (err) {
-        console.log(response);
+        console.log(err);
       }
     } else {
       console.log("Please enter a valid 4-digit OTP.");

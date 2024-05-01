@@ -108,7 +108,6 @@ const BreathingCircle = () => {
 
   const handleIntervalChange = (value) => {
     const numVal = parseInt(value);
-    console.log(numVal);
     setSelectedInterval(numVal);
     updateTimerText(numVal);
     setTimer(numVal);

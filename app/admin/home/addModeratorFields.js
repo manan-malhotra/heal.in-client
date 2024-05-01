@@ -139,7 +139,6 @@ const AddModeratorFields = () => {
         }
       );
       if (response.status === 200) {
-        console.log("SUCCESS");
         router.back();
       }
     } catch (error) {

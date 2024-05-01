@@ -56,9 +56,7 @@ const AddUsersFields = () => {
     ) {
       setValidationError("");
     }
-    if (
-      contactRegex.test(phoneNumber)
-    ) {
+    if (contactRegex.test(phoneNumber)) {
       setValidationError("");
     }
     if (
@@ -140,14 +138,12 @@ const AddUsersFields = () => {
         }
       );
       if (response.status === 200) {
-        console.log("SUCCESS");
         router.back();
       }
     } catch (error) {
       if (error.response.status === 409) {
         setValidationError("Email ID is taken.");
       } else {
-        console.log("Error saving post: " + error.response.status);
         console.log(error);
       }
     }

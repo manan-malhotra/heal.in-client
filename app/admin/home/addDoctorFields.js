@@ -173,7 +173,6 @@ const AddDoctorFields = () => {
         }
       );
       if (response.status === 200) {
-        console.log("SUCCESS");
         router.back();
       }
     } catch (error) {
@@ -181,7 +180,6 @@ const AddDoctorFields = () => {
         setValidationError("Email ID is taken.");
       } else {
         console.log("Error saving post: " + error);
-        console.log(error.data.message);
       }
     }
   };

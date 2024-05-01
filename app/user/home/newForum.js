@@ -23,22 +23,21 @@ const NewForum = () => {
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   useEffect(() => {
-    if(query.trim() != ""){
+    if (query.trim() != "") {
       setError("");
     }
-  },[query])
+  }, [query]);
   const handleSubmit = async () => {
     function validateFormData(query) {
       let error = "";
-      if(query.trim() === ""){
-        error = "Query cannot be empty."
+      if (query.trim() === "") {
+        error = "Query cannot be empty.";
       }
       return error;
     }
     const validationError = validateFormData(query);
     setError(validationError);
 
-    
     if (validationError != "") {
       return;
     }
@@ -62,12 +61,11 @@ const NewForum = () => {
         }
       );
       if (response.status === 200) {
-        console.log("success");
-        if (Platform.OS === 'ios') {
-            router.dismissAll();
-          } else {
-            router.push('./');
-          }
+        if (Platform.OS === "ios") {
+          router.dismissAll();
+        } else {
+          router.push("./");
+        }
       }
     } catch (error) {
       console.log(error);

@@ -85,35 +85,35 @@ export default function SignUp() {
       let errors = {};
 
       if (!data.firstName || data.firstName.trim() === "") {
-          errors.fullName = "Name cannot be empty";
+        errors.fullName = "Name cannot be empty";
       }
       if (!data.lastName || data.lastName.trim() === "") {
-          errors.fullName = "Last name needed";
+        errors.fullName = "Last name needed";
       }
       if (!data.age || isNaN(data.age)) {
-          errors.age = "Enter Valid age";
+        errors.age = "Enter Valid age";
       }
 
       if (!data.gender) {
-          errors.gender = "Select gender";
+        errors.gender = "Select gender";
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!data.email || !emailRegex.test(data.email)) {
-          errors.email = "Email must be a valid email address";
+        errors.email = "Email must be a valid email address";
       }
 
       const contactRegex = /^\d{10}$/;
       if (!data.contact || !contactRegex.test(data.contact)) {
-          errors.phoneNumber = "Must be a valid 10-digit phone number";
+        errors.phoneNumber = "Must be a valid 10-digit phone number";
       }
 
       if (!data.password) {
-          errors.password = "Password is required";
+        errors.password = "Password is required";
       }
       if (!passwordRegex.test(data.password)) {
-          errors.password =
-              "Password must be at least 8 characters long and must contain atleast - \n \u2022 one uppercase letter \n \u2022 one lowercase letter \n \u2022 one number \n \u2022 one special character";
+        errors.password =
+          "Password must be at least 8 characters long and must contain atleast - \n \u2022 one uppercase letter \n \u2022 one lowercase letter \n \u2022 one number \n \u2022 one special character";
       }
 
       return errors;
@@ -125,8 +125,10 @@ export default function SignUp() {
     const handleOTP = async () => {
       const phNumber = "+91" + userData.contact;
       const response = await sendOTP(phNumber);
-      console.log(response.message);
-      if (response.message === "Request failed with status code 500" || response.message === "Request failed with status code 502") {
+      if (
+        response.message === "Request failed with status code 500" ||
+        response.message === "Request failed with status code 502"
+      ) {
         setOtpError("Could not send OTP, try again later");
       } else if (response.message === "OTP sent successfully") {
         router.push({
@@ -135,7 +137,6 @@ export default function SignUp() {
         });
       } else if (response.message) {
         setOtpError(response.message);
-        console.log(response.message);
       } else {
         console.error(response.message);
       }

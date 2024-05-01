@@ -14,16 +14,20 @@ const AddVideosFields = () => {
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
   const [error, setError] = useState("");
-  const urlRegex1 = /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[\w-]{11}$/  
+  const urlRegex1 = /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[\w-]{11}$/;
   // const urlRegex2 = /^https?:\/\/youtu\.be\/[\w-]{11}(\?[\w=&-]*)?$/
   useEffect(() => {
-    if(title.trim() != "" && url.trim() != "" && error === "Title or URL cannot be empty."){
-      setError("");
-    } 
-    if(urlRegex1.test(url)){
+    if (
+      title.trim() != "" &&
+      url.trim() != "" &&
+      error === "Title or URL cannot be empty."
+    ) {
       setError("");
     }
-  }, [url, title])
+    if (urlRegex1.test(url)) {
+      setError("");
+    }
+  }, [url, title]);
 
   const handleSubmit = () => {
     handleAddVideo();
@@ -32,18 +36,19 @@ const AddVideosFields = () => {
   const handleAddVideo = async () => {
     function validateFormData(title, url) {
       let error = "";
-      if(title.trim() === "" || url.trim() ===""){
-        error = "Title or URL cannot be empty."
-      }
-      else if(!urlRegex1.test(url)) {
-        error = "Enter a valid Youtube video link."
+      if (title.trim() === "" || url.trim() === "") {
+        error = "Title or URL cannot be empty.";
+      } else if (!urlRegex1.test(url)) {
+        error = "Enter a valid Youtube video link.";
       }
       return error;
     }
 
     const validationError = validateFormData(title, url);
     setError(validationError);
-    if(validationError){ return }
+    if (validationError) {
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -54,8 +59,6 @@ const AddVideosFields = () => {
         }
       );
       if (response.status === 200) {
-        console.log("SUCCESS");
-
         setTitle("");
         setURL("");
         router.back();

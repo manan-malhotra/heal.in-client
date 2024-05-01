@@ -22,13 +22,12 @@ const EnterEmail = () => {
         process.env.API_HOST + "/api/user/forgotPassword",
         {
           email,
-        },
+        }
       );
       const data = {
         email,
         otp: response.data,
       };
-      console.log("RESPONSE DATA: ", response.data);
       router.push({ pathname: "/forgotPassword", params: data });
     } catch (error) {
       console.log(error);

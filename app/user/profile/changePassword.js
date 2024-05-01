@@ -25,7 +25,6 @@ const ChangePasswordProfile = () => {
         setPasswordError(
           "Password must be at least 8 characters long and must contain atleast - \n \u2022 one uppercase letter \n \u2022 one lowercase letter \n \u2022 one number \n \u2022 one special character"
         );
-        console.log("Strong Password required");
       } else {
         try {
           const response = await axios.post(
@@ -36,16 +35,13 @@ const ChangePasswordProfile = () => {
               password,
             }
           );
-          console.log("RESPONSE STATUS: ", response.status);
           router.back();
         } catch (error) {
           setPasswordError("Incorrect Password");
-          console.log("Error: ", error);
         }
       }
     } else {
       setPasswordError("Passwords do not match");
-      console.log("Passwords do not match");
     }
   };
   return (
