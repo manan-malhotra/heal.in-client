@@ -307,7 +307,7 @@ const ChatRoom = () => {
                         onPress: () => {
                           const videoId = generateRoomId(5);
                           copyCodeToClipboard(videoId);
-                          const sendMessage = "Room id: " + videoId;
+                          const sendMessage = "Room id";
                           textRef.current = sendMessage;
                           const message = {
                             _id: Math.random(),
@@ -315,6 +315,12 @@ const ChatRoom = () => {
                             createdAt: new Date(),
                           };
                           handleSendMessage(message, null);
+                          const room_id = {
+                            _id: Math.random(),
+                            text: videoId,
+                            createdAt: new Date(),
+                          };
+                          handleSendMessage(room_id, null);
                           Alert.alert(
                             "Copied",
                             "The room id has been copied to the clipboard.",
